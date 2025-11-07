@@ -7,5 +7,12 @@
       "jsxQuoteStyle": "double",
       "quoteStyle": "single"
     }
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "noParameterProperties": "off"
+      }
+    }
   }
 }
