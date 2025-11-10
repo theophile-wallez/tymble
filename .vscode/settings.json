@@ -5,8 +5,5 @@
     "source.organizeImports.biome": "always"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "emmet.showExpandedAbbreviation": "never",
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
-  }
+  "emmet.showExpandedAbbreviation": "never"
 }
