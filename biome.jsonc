@@ -12,6 +12,9 @@
     "rules": {
       "style": {
         "noParameterProperties": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off"
       }
     }
   }

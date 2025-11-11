@@ -1,4 +1,9 @@
-import { Controller, Get, Headers, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Headers,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { SupabaseService } from './supabase/supabase.service';
 
@@ -6,12 +11,12 @@ import { SupabaseService } from './supabase/supabase.service';
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly supabaseService: SupabaseService,
+    private readonly supabaseService: SupabaseService
   ) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getFirstUser() {
+    return this.appService.getFirstUser();
   }
 
   @Get('me')
