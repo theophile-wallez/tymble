@@ -2,13 +2,16 @@ import 'dotenv/config';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { usersTable } from '@/db/schema';
+import { usersTable } from '@/db/schemas/_index';
 
 const connectionString = process.env.DATABASE_URL ?? '';
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
 const client = postgres(connectionString, { prepare: false });
-const db = drizzle(client);
+const db = drizzle({
+  client,
+  casing: 'snake_case'
+});
 
 async function main() {
   const user = {

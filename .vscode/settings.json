@@ -5,5 +5,8 @@
     "source.organizeImports.biome": "always"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "emmet.showExpandedAbbreviation": "never"
+  "emmet.showExpandedAbbreviation": "never",
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
 }
