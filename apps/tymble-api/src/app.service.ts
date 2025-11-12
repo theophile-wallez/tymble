@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import * as schema from '@repo/db/index';
+import * as schema from '@repo/db';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DrizzleAsyncProvider } from './drizzle/drizzle.provider';
 
@@ -10,8 +10,10 @@ export class AppService {
     private readonly db: NodePgDatabase<typeof schema>
   ) {}
 
-  async getFirstUser() {
-    const existingUser = await this.db.query.usersTable.findFirst({});
-    return existingUser;
+  async getFirstUsers() {
+    const existingUsers = await this.db.query.usersTable.findMany({
+      limit: 100,
+    });
+    return existingUsers;
   }
 }
