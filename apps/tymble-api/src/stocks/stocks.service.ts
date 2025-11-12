@@ -1,21 +1,28 @@
-// src/stocks/stocks.service.ts
-
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import YahooFinance from 'yahoo-finance2';
-import type {
-  SearchResult,
-  SearchOptions as YFSearchOptions,
-} from 'yahoo-finance2/modules/search';
+import type { ChartOptions } from 'yahoo-finance2/modules/chart';
+import type { SearchResult } from 'yahoo-finance2/modules/search';
 
 @Injectable()
 export class StocksService {
+  private readonly logger = new Logger(StocksService.name);
+
+  private readonly yf = new YahooFinance({
+    validation: {
+      logErrors: true,
+      logOptionsErrors: true,
+    },
+    logger: {
+      info: this.logger.log,
+      warn: this.logger.warn,
+      error: this.logger.error,
+      debug: this.logger.debug,
+      dir: this.logger.debug,
+    },
+  });
+
   async getQuote(ticker: string) {
-    const yf = new YahooFinance({
-      validation: {
-        logErrors: true,
-      },
-    });
-    const quote = await yf.quote(ticker);
+    const quote = await this.yf.quote(ticker);
     return {
       ticker,
       longName: quote.longName ?? quote.shortName,
@@ -33,12 +40,7 @@ export class StocksService {
   }
 
   async getCompanyProfile(ticker: string) {
-    const yf = new YahooFinance({
-      validation: {
-        logErrors: true,
-      },
-    });
-    const { price, assetProfile } = await yf.quoteSummary(ticker, {
+    const { price, assetProfile } = await this.yf.quoteSummary(ticker, {
       modules: ['price', 'assetProfile'],
     });
 
@@ -54,46 +56,50 @@ export class StocksService {
     };
   }
 
-  async getHistory(
+  async getChart(
     ticker: string,
-    period = '1mo',
-    interval: '1d' | '1wk' | '1mo' = '1d'
+    interval: ChartOptions['interval'],
+    period1: ChartOptions['period1'] = new Date(
+      Date.now() - 30 * 24 * 60 * 60 * 1000
+    ),
+    period2: ChartOptions['period2'] = new Date(Date.now())
   ) {
-    const yf = new YahooFinance({
-      validation: {
-        logErrors: true,
-      },
-    });
-    const rows = await yf.historical(ticker, {
-      period1: period,
+    console.log('🍏 period2', period2);
+
+    console.log('🍤 period1', period1);
+
+    console.log('🦄 interval', interval);
+
+    console.log('🍅 ticker', ticker);
+
+    const chart = await this.yf.chart(ticker, {
       interval,
+      period1,
+      period2,
+      return: 'object',
     });
-    return rows.map((row) => ({
-      date: row.date.toISOString().slice(0, 10),
-      ticker,
-      open: row.open,
-      high: row.high,
-      low: row.low,
-      close: row.close,
-      volume: row.volume,
-    }));
+    return chart;
   }
 
-  async searchTickersByName(name: string, options?: YFSearchOptions) {
-    const yf = new YahooFinance({
-      validation: {
-        logErrors: true,
+  async getInsights(symbol: string) {
+    this.logger.log(`Getting insights for ${symbol}`);
+    return await this.yf.insights(symbol);
+  }
+
+  async searchTickersByName(name: string) {
+    const res = await this.yf.search(
+      name,
+      {
+        enableCb: false,
+        lang: 'en-US',
+        newsCount: 0,
+        enableFuzzyQuery: true,
       },
-    });
-    const res = await yf.search(name, options);
+      {
+        validateResult: true,
+      }
+    );
     const quotes: SearchResult['quotes'] = res?.quotes ?? [];
-    return quotes.map((quote) => ({
-      ticker: String(quote.symbol),
-      shortName: quote.shortname ?? quote.shortName,
-      longName: quote.longname ?? quote.longName,
-      exchange: quote.exchDisp ?? quote.exchange,
-      type: quote.quoteType,
-      currency: quote.currency,
-    }));
+    return quotes;
   }
 }

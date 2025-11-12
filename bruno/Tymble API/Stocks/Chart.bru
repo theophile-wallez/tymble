@@ -1,0 +1,15 @@
+meta {
+  name: Chart
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{host}}/stocks/chart?ticker=AAPL
+  body: none
+  auth: none
+}
+
+query {
+  ticker: AAPL
+}
