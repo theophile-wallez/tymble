@@ -5,7 +5,15 @@ meta {
 }
 
 get {
-  url: 
+  url: {{host}}/stocks/search?name={{name}}
   body: none
   auth: none
+}
+
+query {
+  name: {{name}}
+}
+
+vars:pre-request {
+  name: S&P 500
 }
