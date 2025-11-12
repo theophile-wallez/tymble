@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import * as schema from '@repo/db/index';
+import * as schema from '@repo/db';
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
@@ -15,7 +15,9 @@ export const drizzleProvider = [
         connectionString,
       });
 
-      return drizzle(pool, { schema }) as NodePgDatabase<typeof schema>;
+      return drizzle(pool, { schema, casing: 'snake_case' }) as NodePgDatabase<
+        typeof schema
+      >;
     },
   },
 ];
