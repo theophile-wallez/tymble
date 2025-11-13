@@ -1,25 +1,15 @@
-import { Injectable, Logger } from '@nestjs/common';
-import YahooFinance from 'yahoo-finance2';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { ChartOptions } from 'yahoo-finance2/modules/chart';
+import { PredefinedScreenerModules } from 'yahoo-finance2/modules/screener';
 import type { SearchResult } from 'yahoo-finance2/modules/search';
+import { YAHOO_FINANCE } from './yahoo-finance.constants';
+import type { YahooFinanceType } from './yahoo-finance.provider';
 
 @Injectable()
 export class StocksService {
   private readonly logger = new Logger(StocksService.name);
 
-  private readonly yf = new YahooFinance({
-    validation: {
-      logErrors: true,
-      logOptionsErrors: true,
-    },
-    logger: {
-      info: this.logger.log,
-      warn: this.logger.warn,
-      error: this.logger.error,
-      debug: this.logger.debug,
-      dir: this.logger.debug,
-    },
-  });
+  constructor(@Inject(YAHOO_FINANCE) private readonly yf: YahooFinanceType) {}
 
   async getQuote(ticker: string) {
     const quote = await this.yf.quote(ticker);
@@ -58,27 +48,27 @@ export class StocksService {
 
   async getChart(
     ticker: string,
-    interval: ChartOptions['interval'],
+    interval: ChartOptions['interval'] = '1d',
     period1: ChartOptions['period1'] = new Date(
       Date.now() - 30 * 24 * 60 * 60 * 1000
     ),
     period2: ChartOptions['period2'] = new Date(Date.now())
   ) {
-    console.log('🍏 period2', period2);
-
-    console.log('🍤 period1', period1);
-
-    console.log('🦄 interval', interval);
-
-    console.log('🍅 ticker', ticker);
-
     const chart = await this.yf.chart(ticker, {
       interval,
       period1,
       period2,
-      return: 'object',
+      return: 'array',
+      events: 'history',
     });
+
     return chart;
+  }
+
+  async getScreener(scrIds: PredefinedScreenerModules) {
+    return await this.yf.screener({
+      scrIds,
+    });
   }
 
   async getInsights(symbol: string) {
