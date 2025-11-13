@@ -2,14 +2,13 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { ChartOptions } from 'yahoo-finance2/modules/chart';
 import { PredefinedScreenerModules } from 'yahoo-finance2/modules/screener';
 import type { SearchResult } from 'yahoo-finance2/modules/search';
-import { YAHOO_FINANCE } from './yahoo-finance.constants';
 import type { YahooFinanceType } from './yahoo-finance.provider';
 
 @Injectable()
 export class StocksService {
   private readonly logger = new Logger(StocksService.name);
 
-  constructor(@Inject(YAHOO_FINANCE) private readonly yf: YahooFinanceType) {}
+  constructor(@Inject('YAHOO_FINANCE') private readonly yf: YahooFinanceType) {}
 
   async getQuote(ticker: string) {
     const quote = await this.yf.quote(ticker);

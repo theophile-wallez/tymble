@@ -21,6 +21,10 @@ const screenerModules = [
 
 export class GetScreenerDto {
   @IsString()
-  @IsIn(screenerModules, { message: 'Invalid screener value' })
+  @IsIn(screenerModules, {
+    message(validationArguments) {
+      return `Invalid screener value: ${validationArguments.value}`;
+    },
+  })
   scrIds: screener.PredefinedScreenerModules;
 }

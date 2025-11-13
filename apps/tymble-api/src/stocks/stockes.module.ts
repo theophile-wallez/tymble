@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
+import { StocksController } from './stocks.controller';
 import { StocksService } from './stocks.service';
 import { yahooFinanceProvider } from './yahoo-finance.provider';
-import { StocksController } from './stocks.controller';
 
 @Module({
   providers: [StocksService, yahooFinanceProvider],
-  controllers: [StocksController],
   exports: [StocksService],
+  controllers: [StocksController],
 })
 export class StocksModule {}
