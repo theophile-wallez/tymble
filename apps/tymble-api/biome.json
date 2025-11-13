@@ -9,6 +9,9 @@
       },
       "complexity": {
         "useSimplifiedLogicExpression": "off"
+      },
+      "correctness": {
+        "useHookAtTopLevel": "off"
       }
     }
   },
