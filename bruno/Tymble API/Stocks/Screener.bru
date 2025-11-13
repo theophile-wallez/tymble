@@ -1,0 +1,15 @@
+meta {
+  name: Screener
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{host}}/stocks/screener?scrIds=day_gainers
+  body: none
+  auth: none
+}
+
+query {
+  scrIds: day_gainers
+}

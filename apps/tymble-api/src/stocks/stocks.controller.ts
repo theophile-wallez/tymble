@@ -1,5 +1,6 @@
 // src/stocks/stocks.controller.ts
 import { Controller, Get, Query } from '@nestjs/common';
+import { GetScreenerDto } from './dto/get.screener.dto';
 import { GetChartDto } from './dto/get-history.dto';
 import { StocksService } from './stocks.service';
 
@@ -25,6 +26,11 @@ export class StocksController {
       query.period1,
       query.period2
     );
+  }
+
+  @Get('screener')
+  getScreener(@Query() query: GetScreenerDto) {
+    return this.svc.getScreener(query.scrIds);
   }
 
   @Get('insights')

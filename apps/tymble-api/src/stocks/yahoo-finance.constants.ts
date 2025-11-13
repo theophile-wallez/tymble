@@ -1,0 +1,1 @@
+export const YAHOO_FINANCE = 'YAHOO_FINANCE';
