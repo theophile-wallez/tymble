@@ -1,11 +1,11 @@
 meta {
-  name: Chart
+  name: Quote Summary
   type: http
-  seq: 3
+  seq: 6
 }
 
 get {
-  url: {{host}}/stocks/chart?ticker={{ticker}}
+  url: {{host}}/stocks/quote-summary?ticker={{ticker}}
   body: none
   auth: none
 }

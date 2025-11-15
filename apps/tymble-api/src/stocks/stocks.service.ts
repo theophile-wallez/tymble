@@ -11,21 +11,26 @@ export class StocksService {
   constructor(@Inject('YAHOO_FINANCE') private readonly yf: YahooFinanceType) {}
 
   async getQuote(ticker: string) {
-    const quote = await this.yf.quote(ticker);
-    return {
-      ticker,
-      longName: quote.longName ?? quote.shortName,
-      exchange: quote.fullExchangeName,
-      currency: quote.currency,
-      marketCap: quote.marketCap,
-      fiftyTwoWeekHigh: quote.fiftyTwoWeekHigh,
-      fiftyTwoWeekLow: quote.fiftyTwoWeekLow,
-      trailingPE: quote.trailingPE,
-      forwardPE: quote.forwardPE,
-      dividendYield: quote.trailingAnnualDividendYield,
-      beta: quote.beta,
-      updated: new Date().toISOString(),
-    };
+    return await this.yf.quote(ticker);
+  }
+
+  async getQuoteLogo(ticker: string) {
+    const data = await this.yf.quoteSummary(ticker, {
+      modules: 'all',
+    });
+
+    const website = data.assetProfile?.website;
+
+    if (!website) {
+      throw new Error(`No website found for ${ticker}`);
+    }
+
+    const domain = new URL(website).hostname.replace(/^www\./, '');
+
+    const params = new URLSearchParams();
+    params.set('token', process.env.LOGO_DEV_PUBLIC_KEY ?? '');
+    params.set('format', 'webp');
+    return `https://img.logo.dev/${domain}?${params.toString()}`;
   }
 
   async getCompanyProfile(ticker: string) {
@@ -76,18 +81,12 @@ export class StocksService {
   }
 
   async searchTickersByName(name: string) {
-    const res = await this.yf.search(
-      name,
-      {
-        enableCb: false,
-        lang: 'en-US',
-        newsCount: 0,
-        enableFuzzyQuery: true,
-      },
-      {
-        validateResult: true,
-      }
-    );
+    const res = await this.yf.search(name, {
+      enableCb: false,
+      lang: 'en-US',
+      newsCount: 0,
+      enableFuzzyQuery: true,
+    });
     const quotes: SearchResult['quotes'] = res?.quotes ?? [];
     return quotes;
   }

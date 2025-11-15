@@ -13,6 +13,11 @@ export class StocksController {
     return this.svc.getQuote(ticker);
   }
 
+  @Get('quote-summary')
+  getQuoteSummary(@Query('ticker') ticker: string) {
+    return this.svc.getQuoteLogo(ticker);
+  }
+
   @Get('profile')
   getProfile(@Query('ticker') ticker: string) {
     return this.svc.getCompanyProfile(ticker);
