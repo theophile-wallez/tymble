@@ -5,11 +5,15 @@ meta {
 }
 
 get {
-  url: {{host}}/stocks/screener?scrIds=day_gainer
+  url: {{host}}/stocks/screener?scrIds={{scrIds}}
   body: none
   auth: none
 }
 
 query {
-  scrIds: day_gainer
+  scrIds: {{scrIds}}
+}
+
+vars:pre-request {
+  scrIds: day_gainers
 }
