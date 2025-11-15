@@ -1,6 +1,7 @@
 // src/stocks/stocks.controller.ts
 import { Controller, Get, Query } from '@nestjs/common';
-import { GetScreenerDto } from './dto/get.screener.dto';
+import { ZodResponse } from 'nestjs-zod';
+import { GetScreenerDto, ScreenerResponseDto } from './dto/get.screener.dto';
 import { GetChartDto } from './dto/get-history.dto';
 import { StocksService } from './stocks.service';
 
@@ -34,9 +35,10 @@ export class StocksController {
   }
 
   @Get('screener')
-  getScreener(@Query() query: GetScreenerDto) {
+  @ZodResponse({ type: ScreenerResponseDto })
+  async getScreener(@Query() query: GetScreenerDto) {
     console.log('query: ', query);
-    return this.svc.getScreener(query.scrIds);
+    return await this.svc.getScreener(query.scrIds);
   }
 
   @Get('insights')

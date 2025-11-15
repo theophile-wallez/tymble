@@ -25,3 +25,10 @@ const GetScreenerSchema = z.object({
 });
 
 export class GetScreenerDto extends createZodDto(GetScreenerSchema) {}
+
+const ScreenerResponseSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+});
+
+export class ScreenerResponseDto extends createZodDto(ScreenerResponseSchema) {}
