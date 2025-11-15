@@ -35,6 +35,7 @@ export class StocksController {
 
   @Get('screener')
   getScreener(@Query() query: GetScreenerDto) {
+    console.log('query: ', query);
     return this.svc.getScreener(query.scrIds);
   }
 

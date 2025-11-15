@@ -1,5 +1,6 @@
-import { IsIn, IsString } from 'class-validator';
+import { createZodDto } from 'nestjs-zod';
 import * as screener from 'yahoo-finance2/modules/screener';
+import { z } from 'zod';
 
 const screenerModules = [
   'aggressive_small_caps',
@@ -19,12 +20,8 @@ const screenerModules = [
   'undervalued_large_caps',
 ] as const satisfies screener.PredefinedScreenerModules[];
 
-export class GetScreenerDto {
-  @IsString()
-  @IsIn(screenerModules, {
-    message(validationArguments) {
-      return `Invalid screener value: ${validationArguments.value}`;
-    },
-  })
-  scrIds: screener.PredefinedScreenerModules;
-}
+const GetScreenerSchema = z.object({
+  scrIds: z.enum(screenerModules),
+});
+
+export class GetScreenerDto extends createZodDto(GetScreenerSchema) {}

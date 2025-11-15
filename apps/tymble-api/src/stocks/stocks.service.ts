@@ -1,8 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import type { ChartOptions } from 'yahoo-finance2/modules/chart';
 import { PredefinedScreenerModules } from 'yahoo-finance2/modules/screener';
 import type { SearchResult } from 'yahoo-finance2/modules/search';
 import type { YahooFinanceType } from './yahoo-finance.provider';
+
+const HOST_REGEX = /^www\./;
 
 @Injectable()
 export class StocksService {
@@ -25,7 +27,7 @@ export class StocksService {
       throw new Error(`No website found for ${ticker}`);
     }
 
-    const domain = new URL(website).hostname.replace(/^www\./, '');
+    const domain = new URL(website).hostname.replace(HOST_REGEX, '');
 
     const params = new URLSearchParams();
     params.set('token', process.env.LOGO_DEV_PUBLIC_KEY ?? '');
@@ -70,9 +72,15 @@ export class StocksService {
   }
 
   async getScreener(scrIds: PredefinedScreenerModules) {
-    return await this.yf.screener({
-      scrIds,
-    });
+    this.logger.log(`Getting screener for ${scrIds}`);
+    try {
+      return await this.yf.screener({
+        scrIds,
+      });
+    } catch (error) {
+      this.logger.error(`Error getting screener for ${scrIds}`, error);
+      throw new HttpException(error, 500);
+    }
   }
 
   async getInsights(symbol: string) {

@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: {{host}}/stocks/search?name={{name}}
+  url: {{base_url}}/stocks/search?name={{name}}
   body: none
   auth: none
 }
@@ -15,5 +15,5 @@ query {
 }
 
 vars:pre-request {
-  name: ese.pa
+  name: bnp
 }
