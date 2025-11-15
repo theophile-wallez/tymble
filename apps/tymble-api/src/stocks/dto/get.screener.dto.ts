@@ -20,15 +20,19 @@ const screenerModules = [
   'undervalued_large_caps',
 ] as const satisfies screener.PredefinedScreenerModules[];
 
-const GetScreenerSchema = z.object({
-  scrIds: z.enum(screenerModules),
+const GetScreenerQuerySchema = z.object({
+  scrIds: z
+    .enum(screenerModules)
+    .describe('The screener module ID to retrieve'),
 });
 
-export class GetScreenerDto extends createZodDto(GetScreenerSchema) {}
+export class GetScreenerQueryDto extends createZodDto(GetScreenerQuerySchema) {}
 
-const ScreenerResponseSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-});
+const GetScreenerResSchema = z
+  .object({
+    id: z.string().describe('Unique identifier for the screener'),
+    title: z.string().describe('Display name of the screener'),
+  })
+  .strict();
 
-export class ScreenerResponseDto extends createZodDto(ScreenerResponseSchema) {}
+export class GetScreenerResDto extends createZodDto(GetScreenerResSchema) {}

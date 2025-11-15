@@ -1,6 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {
+  DocumentBuilder,
+  SwaggerCustomOptions,
+  SwaggerModule,
+} from '@nestjs/swagger';
 import { cleanupOpenApiDoc } from 'nestjs-zod';
+import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -15,6 +20,7 @@ async function bootstrap() {
     ],
     credentials: true,
   });
+
   const port = Number(process.env.PORT ?? 3000);
   const host = process.env.HOST ?? '0.0.0.0';
   const publicUrl =
@@ -25,11 +31,25 @@ async function bootstrap() {
     app,
     new DocumentBuilder()
       .setTitle('Tymble API')
-      // .setDescription('Tymble API description')
+      .setDescription('Tymble API description')
       .setVersion('1.0')
+      .setContact(
+        'Théophile Wallez',
+        'https://theophilewallez.com',
+        'theophile.wall@gmail.com'
+      )
       .build()
   );
-  SwaggerModule.setup('api', app, cleanupOpenApiDoc(openApiDoc));
+  const theme = new SwaggerTheme();
+  const options = {
+    explorer: false,
+    customSiteTitle: 'Tymble Docs',
+    useGlobalPrefix: true,
+    customCss: theme.getBuffer(SwaggerThemeNameEnum.DARK),
+    jsonDocumentUrl: '/docs/openapi.json',
+    yamlDocumentUrl: '/docs/openapi.yaml',
+  } satisfies SwaggerCustomOptions;
+  SwaggerModule.setup('docs', app, cleanupOpenApiDoc(openApiDoc), options);
 
   await app.listen(port, host);
 }
