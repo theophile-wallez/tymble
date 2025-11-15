@@ -67,8 +67,15 @@ export class StocksService {
       return: 'array',
       events: 'history',
     });
-
-    return chart;
+    // Convert Date objects to ISO strings for validation
+    return {
+      // ...chart,
+      quotes: chart.quotes.map((quote) => ({
+        ...quote,
+        date:
+          quote.date instanceof Date ? quote.date.toISOString() : quote.date,
+      })),
+    };
   }
 
   async getScreener(scrIds: PredefinedScreenerModules) {
