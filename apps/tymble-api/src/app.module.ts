@@ -8,12 +8,14 @@ import { DrizzleModule } from './drizzle/drizzle.module';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { StocksModule } from './stocks/stockes.module';
 import { UsersModule } from './users/users.module';
+import { TransactionModule } from './transaction/transaction.module';
 @Module({
   imports: [
     DrizzleModule,
     StocksModule,
     ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,4 +1,8 @@
-import { HttpException, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 import {
   DrizzleError,
@@ -22,34 +26,22 @@ export function HandleErrors() {
       try {
         return await original.apply(this, args);
       } catch (err: unknown) {
-        // -------------------------------------
-        // 6. Query errors → 500
-        // -------------------------------------
         if (err instanceof DrizzleQueryError) {
-          throw new InternalServerErrorException(err.message);
+          throw new BadRequestException(err.message);
         }
 
-        // -------------------------------------
-        // 8. Base drizzle error → 500
-        // -------------------------------------
         if (err instanceof DrizzleError) {
-          throw new InternalServerErrorException(err.message);
+          throw new InternalServerErrorException(err.message, _propertyKey);
         }
 
         if (err instanceof TransactionRollbackError) {
           throw new InternalServerErrorException('Transaction was rolled back');
         }
 
-        // -------------------------------------
-        // 9. HttpExceptions → rethrow
-        // -------------------------------------
         if (isHttpException(err)) {
           throw err;
         }
 
-        // -------------------------------------
-        // 10. Unknown errors → 500
-        // -------------------------------------
         const message =
           typeof err === 'object' &&
           err !== null &&
