@@ -10,6 +10,7 @@ import {
 
 import { instrumentTable } from './instrument.schema';
 import { portfolioTable } from './portfolio.schema';
+import { usersTable } from './users.schema';
 
 /**
  * Transaction table.
@@ -26,7 +27,7 @@ export const transactionTable = d.pgTable(
 
     portfolioId: drizzleRef(portfolioTable.id),
     assetId: drizzleRef(instrumentTable.id),
-    userId: drizzleRef(portfolioTable.userId),
+    userId: drizzleRef(usersTable.id),
 
     side: transactionSideEnum('side').notNull(),
     quantity: d.numeric({ precision: 28, scale: 18 }).notNull(),
