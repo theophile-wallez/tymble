@@ -1,4 +1,6 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreatePortfolioDto } from './create-portfolio.dto';
+import { createZodDto } from 'nestjs-zod';
+import { createPortfolioSchema } from './create-portfolio.dto';
 
-export class UpdatePortfolioDto extends PartialType(CreatePortfolioDto) {}
+const updatePortfolioSchema = createPortfolioSchema.partial();
+
+export class UpdatePortfolioDto extends createZodDto(updatePortfolioSchema) {}
