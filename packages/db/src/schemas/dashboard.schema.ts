@@ -9,13 +9,7 @@ import { instrumentTable } from './instrument.schema';
 import { portfolioTable } from './portfolio.schema';
 import { usersTable } from './users.schema';
 
-/**
- * Assets table.
- *
- * @description
- * This table stores the assets of the users. An asset is a financial instrument held in a portfolio.
- */
-export const assetsTable = d.pgTable('assets', {
+export const dashboardsTable = d.pgTable('dashboards', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
   userId: drizzleRef(usersTable.id, 'cascade'),
   instrumentId: drizzleRef(instrumentTable.id, 'no action'),
@@ -27,8 +21,8 @@ export const assetsTable = d.pgTable('assets', {
   ...timestamps,
 });
 
-export type AssetInsert = typeof assetsTable.$inferInsert;
-export type AssetSelect = typeof assetsTable.$inferSelect;
+export type DashboardInsert = typeof dashboardsTable.$inferInsert;
+export type DashboardSelect = typeof dashboardsTable.$inferSelect;
 
-export const assetSelectSchema = zodSelectGenerator(assetsTable);
-export const assetInsertSchema = zodInsertGenerator(assetsTable);
+export const dashboardSelectSchema = zodSelectGenerator(dashboardsTable);
+export const dashboardInsertSchema = zodInsertGenerator(dashboardsTable);
