@@ -1,5 +1,5 @@
 import { seedUsers } from './users';
-import { getSeedDatabase } from './utils/getDatabase.utils';
+import { getSeedDatabase } from './utils/getSeedDatabase.utils';
 
 async function main() {
   const db = getSeedDatabase();
