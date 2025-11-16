@@ -9,7 +9,7 @@ export class AssetService {
   }
 
   findAll() {
-    return `This action returns all asset`;
+    return 'This action returns all asset';
   }
 
   findOne(id: number) {

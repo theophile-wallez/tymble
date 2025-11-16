@@ -24,6 +24,7 @@ export const portfolioTable = d.pgTable('portfolios', {
   type: d.varchar({ length: 255 }).notNull(),
   provider: d.varchar({ length: 255 }).notNull(),
   description: d.varchar({ length: 255 }),
+  name: d.varchar({ length: 50 }).notNull(),
   ...timestamps,
 });
 

@@ -1,7 +1,6 @@
 import * as d from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { languageCodeEnum, themeEnum } from '../enums';
-import { timestamps } from '../helpers';
+import { timestamps, zodInsertGenerator, zodSelectGenerator } from '../helpers';
 
 export const usersTable = d.pgTable('users', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -24,5 +23,5 @@ export const usersTable = d.pgTable('users', {
 export type UserInsert = typeof usersTable.$inferInsert;
 export type UserSelect = typeof usersTable.$inferSelect;
 
-export const userSelectSchema = createSelectSchema(usersTable);
-export const userInsertSchema = createInsertSchema(usersTable);
+export const userSelectSchema = zodSelectGenerator(usersTable);
+export const userInsertSchema = zodInsertGenerator(usersTable);

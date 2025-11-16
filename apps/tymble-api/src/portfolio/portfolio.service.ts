@@ -1,15 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import * as schema from '@repo/db';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { DrizzleAsyncProvider } from '@/drizzle/drizzle.provider';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
-
 @Injectable()
 export class PortfolioService {
+  constructor(
+    @Inject(DrizzleAsyncProvider)
+    private readonly db: NodePgDatabase<typeof schema>
+  ) {}
   create(createPortfolioDto: CreatePortfolioDto) {
-    return 'This action adds a new portfolio';
+    this.db.insert(schema.portfolioTable).values(createPortfolioDto).returning({
+      id: schema.portfolioTable.id,
+    });
   }
 
   findAll() {
-    return `This action returns all portfolio`;
+    return 'This action returns all portfolio';
   }
 
   findOne(id: number) {
