@@ -1,6 +1,6 @@
 import { userInsertSchema, usersTable } from '@repo/db/index';
 import { z } from 'zod';
-import { SeedDatabase } from '../utils/getDatabase.utils';
+import { SeedDatabase } from '../utils/getSeedDatabase.utils';
 
 export const seedMockUsers = async (db: SeedDatabase) => {
   const mockarooKey = process.env.MOCKAROO_KEY;

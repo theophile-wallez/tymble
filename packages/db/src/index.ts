@@ -1,1 +1,2 @@
-export * from './schemas/users.schema';
+export * from './enums';
+export * from './schemas';
