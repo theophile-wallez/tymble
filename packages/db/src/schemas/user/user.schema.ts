@@ -3,7 +3,6 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { languageCodeEnum } from '../../enums/language.enum';
 import { themeEnum } from '../../enums/theme.enum';
 import { timestamps } from '../../helpers/timestamps.helpers';
-import { languageTable } from '../language/language.schema';
 
 export const usersTable = d.pgTable('users', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -17,10 +16,7 @@ export const usersTable = d.pgTable('users', {
   emailVerified: d.boolean().notNull().default(false),
   countryCode: d.varchar({ length: 2 }),
   theme: themeEnum('theme').notNull().default('dark'),
-  language: languageCodeEnum('language')
-    .notNull()
-    .references(() => languageTable.code)
-    .default('en'),
+  language: languageCodeEnum('language').notNull().default('en'),
   ...timestamps,
 });
 
