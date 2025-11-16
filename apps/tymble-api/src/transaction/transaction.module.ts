@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TransactionService } from './transaction.service';
+import { DrizzleModule } from '@/drizzle/drizzle.module';
 import { TransactionController } from './transaction.controller';
+import { TransactionService } from './transaction.service';
 
 @Module({
+  imports: [DrizzleModule],
   controllers: [TransactionController],
   providers: [TransactionService],
 })

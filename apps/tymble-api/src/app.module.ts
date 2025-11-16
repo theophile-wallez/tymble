@@ -9,6 +9,8 @@ import { HttpExceptionFilter } from './http-exception.filter';
 import { StocksModule } from './stocks/stockes.module';
 import { UsersModule } from './users/users.module';
 import { TransactionModule } from './transaction/transaction.module';
+import { PortfolioModule } from './portfolio/portfolio.module';
+import { AssetModule } from './asset/asset.module';
 @Module({
   imports: [
     DrizzleModule,
@@ -16,6 +18,8 @@ import { TransactionModule } from './transaction/transaction.module';
     ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
     TransactionModule,
+    PortfolioModule,
+    AssetModule,
   ],
   controllers: [AppController],
   providers: [
