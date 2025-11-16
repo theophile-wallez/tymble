@@ -3,7 +3,7 @@ import * as d from 'drizzle-orm/pg-core';
 import { transactionSideEnum } from '../enums';
 import {
   drizzleRef,
-  timestamps,
+  withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
@@ -42,7 +42,7 @@ export const transactionTable = d.pgTable(
 
     note: d.varchar({ length: 255 }),
 
-    ...timestamps,
+    ...withTimestamps,
   },
   (table) => {
     return {

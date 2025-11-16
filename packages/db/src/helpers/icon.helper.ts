@@ -1,6 +1,6 @@
 import * as d from 'drizzle-orm/pg-core';
 
-export const withTimestamps = {
+export const withIcon = {
   updatedAt: d
     .timestamp({
       mode: 'string',
