@@ -1,13 +1,6 @@
-import { userInsertSchema } from '@repo/db';
 import { createZodDto } from 'nestjs-zod';
+import { createUserSchema } from './create-user.dto';
 
-const updateUserSchema = userInsertSchema
-  .omit({
-    emailVerified: true,
-    isSuperuser: true,
-    createdAt: true,
-    updatedAt: true,
-  })
-  .partial();
+const updateUserSchema = createUserSchema.partial();
 
 export class UpdateUserDto extends createZodDto(updateUserSchema) {}
