@@ -1,4 +1,8 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateTransactionDto } from './create-transaction.dto';
+import { createZodDto } from 'nestjs-zod';
+import { createTransactionSchema } from './create-transaction.dto';
 
-export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {}
+const updateTransactionSchema = createTransactionSchema.partial();
+
+export class UpdateTransactionDto extends createZodDto(
+  updateTransactionSchema
+) {}
