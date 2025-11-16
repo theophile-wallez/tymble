@@ -1,6 +1,10 @@
 import * as d from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { drizzleRef, timestamps } from '../helpers';
+import {
+  drizzleRef,
+  timestamps,
+  zodInsertGenerator,
+  zodSelectGenerator,
+} from '../helpers';
 import { instrumentTable } from './instrument.schema';
 import { portfolioTable } from './portfolio.schema';
 import { usersTable } from './users.schema';
@@ -29,5 +33,5 @@ export const assetsTable = d.pgTable('portfolios', {
 export type AssetInsert = typeof assetsTable.$inferInsert;
 export type AssetSelect = typeof assetsTable.$inferSelect;
 
-export const assetSelectSchema = createSelectSchema(assetsTable);
-export const assetInsertSchema = createInsertSchema(assetsTable);
+export const assetSelectSchema = zodSelectGenerator(assetsTable);
+export const assetInsertSchema = zodInsertGenerator(assetsTable);

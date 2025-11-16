@@ -1,8 +1,13 @@
 import { sql } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { transactionSideEnum } from '../enums';
-import { drizzleRef, timestamps } from '../helpers';
+import {
+  drizzleRef,
+  timestamps,
+  zodInsertGenerator,
+  zodSelectGenerator,
+} from '../helpers';
+
 import { instrumentTable } from './instrument.schema';
 import { portfolioTable } from './portfolio.schema';
 
@@ -72,5 +77,5 @@ export const transactionTable = d.pgTable(
 export type TransactionInsert = typeof transactionTable.$inferInsert;
 export type TransactionSelect = typeof transactionTable.$inferSelect;
 
-export const transactionSelectSchema = createSelectSchema(transactionTable);
-export const transactionInsertSchema = createInsertSchema(transactionTable);
+export const transactionSelectSchema = zodSelectGenerator(transactionTable);
+export const transactionInsertSchema = zodInsertGenerator(transactionTable);
