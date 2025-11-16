@@ -9,7 +9,7 @@ export class TransactionService {
   }
 
   findAll() {
-    return `This action returns all transaction`;
+    return 'This action returns all transaction';
   }
 
   findOne(id: number) {

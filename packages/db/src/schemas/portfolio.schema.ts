@@ -1,6 +1,10 @@
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import * as d from 'drizzle-orm/pg-core';
-import { timestamps } from '../helpers';
+import {
+  drizzleRef,
+  timestamps,
+  zodInsertGenerator,
+  zodSelectGenerator,
+} from '../helpers';
 import { usersTable } from './users.schema';
 
 /**
@@ -16,12 +20,7 @@ import { usersTable } from './users.schema';
  */
 export const portfolioTable = d.pgTable('portfolios', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: d
-    .integer()
-    .notNull()
-    .references(() => usersTable.id, {
-      onDelete: 'cascade',
-    }),
+  userId: drizzleRef(usersTable.id, 'cascade'),
   type: d.varchar({ length: 255 }).notNull(),
   provider: d.varchar({ length: 255 }).notNull(),
   description: d.varchar({ length: 255 }),
@@ -31,5 +30,5 @@ export const portfolioTable = d.pgTable('portfolios', {
 export type PortfolioInsert = typeof portfolioTable.$inferInsert;
 export type PortfolioSelect = typeof portfolioTable.$inferSelect;
 
-export const portfolioSelectSchema = createSelectSchema(portfolioTable);
-export const portfolioInsertSchema = createInsertSchema(portfolioTable);
+export const portfolioSelectSchema = zodSelectGenerator(portfolioTable);
+export const portfolioInsertSchema = zodInsertGenerator(portfolioTable);
