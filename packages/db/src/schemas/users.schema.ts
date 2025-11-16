@@ -1,6 +1,10 @@
 import * as d from 'drizzle-orm/pg-core';
 import { languageCodeEnum, themeEnum } from '../enums';
-import { timestamps, zodInsertGenerator, zodSelectGenerator } from '../helpers';
+import {
+  withTimestamps,
+  zodInsertGenerator,
+  zodSelectGenerator,
+} from '../helpers';
 
 export const usersTable = d.pgTable('users', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -17,7 +21,7 @@ export const usersTable = d.pgTable('users', {
   countryCode: d.varchar({ length: 2 }),
   theme: themeEnum('theme').notNull().default('dark'),
   language: languageCodeEnum('language').notNull().default('en'),
-  ...timestamps,
+  ...withTimestamps,
 });
 
 export type UserInsert = typeof usersTable.$inferInsert;

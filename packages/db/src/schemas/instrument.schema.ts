@@ -1,6 +1,10 @@
 import * as d from 'drizzle-orm/pg-core';
 import { instrumentTypeEnum } from '../enums';
-import { timestamps, zodInsertGenerator, zodSelectGenerator } from '../helpers';
+import {
+  withTimestamps,
+  zodInsertGenerator,
+  zodSelectGenerator,
+} from '../helpers';
 
 /**
  * Instrument table.
@@ -17,7 +21,7 @@ export const instrumentTable = d.pgTable('instruments', {
   type: instrumentTypeEnum('type').notNull(),
   exchange: d.varchar({ length: 100 }),
   currency: d.varchar({ length: 10 }),
-  ...timestamps,
+  ...withTimestamps,
 });
 
 export type InstrumentInsert = typeof instrumentTable.$inferInsert;

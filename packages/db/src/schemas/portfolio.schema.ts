@@ -1,7 +1,7 @@
 import * as d from 'drizzle-orm/pg-core';
 import {
   drizzleRef,
-  timestamps,
+  withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
@@ -18,15 +18,28 @@ import { usersTable } from './users.schema';
  * A portfolio can be of type PEA, PEE, PEA-PME, CTO, etc.
  * We store the type of the portfolio in the type column.
  */
-export const portfolioTable = d.pgTable('portfolios', {
-  id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: drizzleRef(usersTable.id, 'cascade'),
-  type: d.varchar({ length: 255 }).notNull(),
-  provider: d.varchar({ length: 255 }).notNull(),
-  description: d.varchar({ length: 255 }),
-  name: d.varchar({ length: 50 }).notNull(),
-  ...timestamps,
-});
+export const portfolioTable = d.pgTable(
+  'portfolios',
+  {
+    id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
+    userId: drizzleRef(usersTable.id, 'cascade'),
+    type: d.varchar({ length: 255 }).notNull(),
+    provider: d.varchar({ length: 255 }).notNull(),
+    description: d.varchar({ length: 255 }),
+    name: d.varchar({ length: 50 }).notNull(),
+    emoji: d.varchar({ length: 10 }),
+
+    ...withTimestamps,
+  },
+  (table) => ({
+    /**
+     * Unique constraint on userId and name to ensure a user cannot have two portfolios with the same name
+     */
+    userNameUnique: d
+      .uniqueIndex('uq_portfolios_user_name')
+      .on(table.userId, table.name),
+  })
+);
 
 export type PortfolioInsert = typeof portfolioTable.$inferInsert;
 export type PortfolioSelect = typeof portfolioTable.$inferSelect;

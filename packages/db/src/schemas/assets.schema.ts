@@ -1,7 +1,7 @@
 import * as d from 'drizzle-orm/pg-core';
 import {
   drizzleRef,
-  timestamps,
+  withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
@@ -24,7 +24,7 @@ export const assetsTable = d.pgTable('assets', {
   averagePrice: d.numeric({ precision: 18, scale: 18 }).notNull(),
   lastFees: d.numeric({ precision: 18, scale: 18 }).notNull().default('0'),
   lastTaxes: d.numeric({ precision: 18, scale: 8 }).notNull().default('0'),
-  ...timestamps,
+  ...withTimestamps,
 });
 
 export type AssetInsert = typeof assetsTable.$inferInsert;

@@ -21,8 +21,8 @@ export class PortfolioController {
   }
 
   @Get()
-  findAll() {
-    return this.portfolioService.findAll();
+  findAllByUserId(@Param('userId') userId: string) {
+    return this.portfolioService.findAllByUserId(+userId);
   }
 
   @Get(':id')
