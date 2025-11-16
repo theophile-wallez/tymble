@@ -1,7 +1,7 @@
 import * as d from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { languageCodeEnum, themeEnum } from '@/enums';
-import { timestamps } from '@/helpers';
+import { languageCodeEnum, themeEnum } from '../enums';
+import { timestamps } from '../helpers';
 
 export const usersTable = d.pgTable('users', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),

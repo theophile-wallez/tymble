@@ -1,6 +1,6 @@
-import * as d from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { timestamps } from '@/helpers';
+import * as d from 'drizzle-orm/pg-core';
+import { timestamps } from '../helpers';
 import { usersTable } from './users.schema';
 
 /**

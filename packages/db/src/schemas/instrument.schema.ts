@@ -1,7 +1,7 @@
 import * as d from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { instrumentTypeEnum } from '@/enums';
-import { timestamps } from '@/helpers';
+import { instrumentTypeEnum } from '../enums';
+import { timestamps } from '../helpers';
 
 /**
  * Instrument table.
