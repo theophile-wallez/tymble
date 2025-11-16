@@ -1,13 +1,8 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import * as schema from '@repo/db';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { HandleErrors } from '@/decorators/handle-errors.decorator';
 import { DrizzleAsyncProvider } from '../drizzle/drizzle.provider';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,19 +16,16 @@ export class UsersService {
     private readonly db: NodePgDatabase<typeof schema>
   ) {}
 
+  @HandleErrors()
   async create(createUserDto: CreateUserDto) {
-    try {
-      const [user] = await this.db
-        .insert(schema.usersTable)
-        .values(createUserDto)
-        .returning({
-          id: schema.usersTable.id,
-        });
-      return user;
-    } catch (error) {
-      this.logger.error('Error creating user:', error);
-      throw new BadRequestException(error.message);
-    }
+    this.logger.log(`Creating user with email: ${createUserDto.email}`);
+    const [user] = await this.db
+      .insert(schema.usersTable)
+      .values(createUserDto)
+      .returning({
+        id: schema.usersTable.id,
+      });
+    return user;
   }
 
   findAll() {
