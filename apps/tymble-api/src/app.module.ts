@@ -7,11 +7,13 @@ import { AppService } from './app.service';
 import { DrizzleModule } from './drizzle/drizzle.module';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { StocksModule } from './stocks/stockes.module';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     DrizzleModule,
     StocksModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
