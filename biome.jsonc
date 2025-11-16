@@ -15,6 +15,9 @@
       },
       "performance": {
         "noNamespaceImport": "off"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off"
       }
     }
   }

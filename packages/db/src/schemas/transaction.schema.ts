@@ -1,9 +1,10 @@
 import { sql } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { timestamps } from '../helpers/timestamps.helpers';
+import { transactionSideEnum } from '@/enums';
+import { drizzleRef, timestamps } from '@/helpers';
+import { instrumentTable } from './instrument.schema';
 import { portfolioTable } from './portfolio.schema';
-import { transactionSideEnum } from '../enums/transactionSide.enum';
 
 /**
  * Transaction table.
@@ -18,25 +19,20 @@ export const transactionTable = d.pgTable(
   {
     id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
 
-    portfolioId: d
-      .integer()
-      .notNull()
-      .references(() => portfolioTable.id, { onDelete: 'cascade' }),
+    portfolioId: drizzleRef(portfolioTable.id),
+    assetId: drizzleRef(instrumentTable.id),
+    userId: drizzleRef(portfolioTable.userId),
 
     side: transactionSideEnum('side').notNull(),
-
-    // Consider replacing with instrumentId -> instruments.id (FK)
-    symbol: d.varchar({ length: 64 }).notNull(),
     quantity: d.numeric({ precision: 28, scale: 18 }).notNull(),
-
     price: d.numeric({ precision: 18, scale: 18 }).notNull(),
 
     fees: d.numeric({ precision: 18, scale: 18 }).notNull().default('0'),
-
     taxes: d.numeric({ precision: 18, scale: 8 }).notNull().default('0'),
 
-    executedAt: d.timestamp('executed_at', { withTimezone: true }).notNull(),
-    settledAt: d.timestamp('settled_at', { withTimezone: true }),
+    executedAt: d
+      .timestamp('executed_at', { withTimezone: true, mode: 'string' })
+      .notNull(),
 
     note: d.varchar({ length: 255 }),
 
@@ -48,9 +44,9 @@ export const transactionTable = d.pgTable(
         .index('idx_transactions_portfolio_date')
         .on(table.portfolioId, table.executedAt),
 
-      byPortfolioSymbolDate: d
-        .index('idx_transactions_portfolio_symbol_date')
-        .on(table.portfolioId, table.symbol, table.executedAt),
+      byPortfolioAssetDate: d
+        .index('idx_transactions_portfolio_asset_date')
+        .on(table.portfolioId, table.assetId, table.executedAt),
 
       // Guardrails
       qtyPositive: d.check(

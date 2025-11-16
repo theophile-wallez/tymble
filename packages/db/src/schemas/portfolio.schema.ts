@@ -1,7 +1,7 @@
 import * as d from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { timestamps } from '../helpers/timestamps.helpers';
-import { usersTable } from './user/user.schema';
+import { timestamps } from '@/helpers';
+import { usersTable } from './users.schema';
 
 /**
  * Portfolio table.
@@ -21,7 +21,6 @@ export const portfolioTable = d.pgTable('portfolios', {
     .notNull()
     .references(() => usersTable.id, {
       onDelete: 'cascade',
-      onUpdate: 'cascade',
     }),
   type: d.varchar({ length: 255 }).notNull(),
   provider: d.varchar({ length: 255 }).notNull(),
