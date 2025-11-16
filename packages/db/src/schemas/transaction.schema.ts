@@ -1,9 +1,9 @@
 import { sql } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
-
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { timestamps } from '../helpers/timestamps.helpers';
 import { portfolioTable } from './portfolio.schema';
+import { transactionSideEnum } from '../enums/transactionSide.enum';
 
 /**
  * Transaction table.
@@ -12,8 +12,6 @@ import { portfolioTable } from './portfolio.schema';
  * This table stores the transactions of the users.
  * A transaction is a purchase or a sale of an asset.
  */
-
-const transactionSide = d.pgEnum('transaction_side', ['buy', 'sell']);
 
 export const transactionTable = d.pgTable(
   'transactions',
@@ -25,7 +23,7 @@ export const transactionTable = d.pgTable(
       .notNull()
       .references(() => portfolioTable.id, { onDelete: 'cascade' }),
 
-    side: transactionSide('side').notNull(),
+    side: transactionSideEnum('side').notNull(),
 
     // Consider replacing with instrumentId -> instruments.id (FK)
     symbol: d.varchar({ length: 64 }).notNull(),

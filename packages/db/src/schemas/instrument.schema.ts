@@ -1,5 +1,6 @@
 import * as d from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { instrumentTypeEnum } from '../enums/instrumentType.enum';
 import { timestamps } from '../helpers/timestamps.helpers';
 
 /**
@@ -10,18 +11,11 @@ import { timestamps } from '../helpers/timestamps.helpers';
  * Each instrument has a symbol, name, and type (e.g. stock, bond, ETF).
  */
 
-const instrumentType = d.pgEnum('instrument_type', [
-  'stock',
-  'bond',
-  'etf',
-  'crypto',
-]);
-
 export const instrumentTable = d.pgTable('instruments', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
   symbol: d.varchar({ length: 64 }).notNull().unique(),
   name: d.varchar({ length: 255 }).notNull(),
-  type: instrumentType('type').notNull(),
+  type: instrumentTypeEnum('type').notNull(),
   exchange: d.varchar({ length: 100 }),
   currency: d.varchar({ length: 10 }),
   ...timestamps,
