@@ -1,4 +1,10 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import * as schema from '@repo/db';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -8,17 +14,26 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(
     @Inject(DrizzleAsyncProvider)
     private readonly db: NodePgDatabase<typeof schema>
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const [user] = await this.db
-      .insert(schema.usersTable)
-      .values(createUserDto)
-      .returning();
-    return user;
+    try {
+      const [user] = await this.db
+        .insert(schema.usersTable)
+        .values(createUserDto)
+        .returning({
+          id: schema.usersTable.id,
+        });
+      return user;
+    } catch (error) {
+      this.logger.error('Error creating user:', error);
+      throw new BadRequestException(error.message);
+    }
   }
 
   findAll() {
@@ -40,7 +55,7 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     const [user] = await this.db
       .update(schema.usersTable)
-      .set({ ...updateUserDto, updatedAt: new Date() })
+      .set({ ...updateUserDto, updatedAt: new Date().toISOString() })
       .where(eq(schema.usersTable.id, id))
       .returning();
     if (!user) {

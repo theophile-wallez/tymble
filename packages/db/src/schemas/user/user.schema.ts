@@ -9,7 +9,9 @@ export const usersTable = d.pgTable('users', {
   email: d.varchar({ length: 255 }).notNull().unique(),
   firstName: d.varchar({ length: 255 }).notNull(),
   lastName: d.varchar().notNull(),
-  birthdate: d.date(),
+  birthdate: d.date({
+    mode: 'string',
+  }),
   bio: d.varchar(),
   isSuperuser: d.boolean().notNull().default(false),
   avatarUrl: d.varchar(),
