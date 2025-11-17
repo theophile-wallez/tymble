@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import {
   drizzleRef,
@@ -5,6 +6,7 @@ import {
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
+import { assetsTable } from './assets.schema';
 import { usersTable } from './users.schema';
 
 /**
@@ -18,7 +20,7 @@ import { usersTable } from './users.schema';
  * A portfolio can be of type PEA, PEE, PEA-PME, CTO, etc.
  * We store the type of the portfolio in the type column.
  */
-export const portfolioTable = d.pgTable(
+export const portfoliosTable = d.pgTable(
   'portfolios',
   {
     id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -41,8 +43,19 @@ export const portfolioTable = d.pgTable(
   })
 );
 
-export type PortfolioInsert = typeof portfolioTable.$inferInsert;
-export type PortfolioSelect = typeof portfolioTable.$inferSelect;
+export const portfoliosRelations = relations(
+  portfoliosTable,
+  ({ one, many }) => ({
+    user: one(usersTable, {
+      fields: [portfoliosTable.userId],
+      references: [usersTable.id],
+    }),
+    assets: many(assetsTable),
+  })
+);
 
-export const portfolioSelectSchema = zodSelectGenerator(portfolioTable);
-export const portfolioInsertSchema = zodInsertGenerator(portfolioTable);
+export type PortfolioInsert = typeof portfoliosTable.$inferInsert;
+export type PortfolioSelect = typeof portfoliosTable.$inferSelect;
+
+export const portfolioSelectSchema = zodSelectGenerator(portfoliosTable);
+export const portfolioInsertSchema = zodInsertGenerator(portfoliosTable);
