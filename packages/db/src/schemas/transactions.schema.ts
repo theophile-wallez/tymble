@@ -9,7 +9,7 @@ import {
 } from '../helpers';
 
 import { instrumentTable } from './instrument.schema';
-import { portfolioTable } from './portfolio.schema';
+import { portfoliosTable } from './portfolios.schema';
 import { usersTable } from './users.schema';
 
 /**
@@ -25,7 +25,7 @@ export const transactionTable = d.pgTable(
   {
     id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
 
-    portfolioId: drizzleRef(portfolioTable.id),
+    portfolioId: drizzleRef(portfoliosTable.id),
     assetId: drizzleRef(instrumentTable.id),
     userId: drizzleRef(usersTable.id),
 

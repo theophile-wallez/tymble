@@ -17,34 +17,51 @@ export class PortfolioService {
     this.logger.log(
       `Creating a new portfolio with name: "${createPortfolioDto.name}" for userId: "${createPortfolioDto.userId}"`
     );
-    this.db.insert(schema.portfolioTable).values(createPortfolioDto).returning({
-      id: schema.portfolioTable.id,
-    });
+    this.db
+      .insert(schema.portfoliosTable)
+      .values(createPortfolioDto)
+      .returning({
+        id: schema.portfoliosTable.id,
+      });
   }
 
   findAllByUserId(userId: number) {
     this.logger.log(`Finding all portfolios for user with id ${userId}`);
     return this.db
       .select()
-      .from(schema.portfolioTable)
-      .where(eq(schema.portfolioTable.userId, userId));
+      .from(schema.portfoliosTable)
+      .where(eq(schema.portfoliosTable.userId, userId));
   }
 
   findOne(id: number) {
     this.logger.log(`Finding portfolio with id ${id}`);
-    return this.db
-      .select()
-      .from(schema.portfolioTable)
-      .where(eq(schema.portfolioTable.id, id))
-      .limit(1)
-      .then((rows) => rows[0]);
+    return this.db.query.portfoliosTable.findFirst({
+      where: eq(schema.portfoliosTable.id, id),
+      with: {
+        assets: true,
+      },
+      extras: {},
+    });
   }
 
   update(id: number, updatePortfolioDto: UpdatePortfolioDto) {
-    return `This action updates a #${id} portfolio`;
+    this.logger.log(`Updating portfolio with id ${id}`);
+    return this.db
+      .update(schema.portfoliosTable)
+      .set({ ...updatePortfolioDto, updatedAt: new Date().toISOString() })
+      .where(eq(schema.portfoliosTable.id, id))
+      .returning({
+        id: schema.portfoliosTable.id,
+      });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} portfolio`;
+    this.logger.log(`Removing portfolio with id ${id}`);
+    return this.db
+      .delete(schema.portfoliosTable)
+      .where(eq(schema.portfoliosTable.id, id))
+      .returning({
+        id: schema.portfoliosTable.id,
+      });
   }
 }

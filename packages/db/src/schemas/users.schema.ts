@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import { languageCodeEnum, themeEnum } from '../enums';
 import {
@@ -5,6 +6,7 @@ import {
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
+import { portfoliosTable } from '.';
 
 export const usersTable = d.pgTable('users', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -23,6 +25,10 @@ export const usersTable = d.pgTable('users', {
   language: languageCodeEnum('language').notNull().default('en'),
   ...withTimestamps,
 });
+
+export const usersRelations = relations(usersTable, ({ many }) => ({
+  portfolios: many(portfoliosTable),
+}));
 
 export type UserInsert = typeof usersTable.$inferInsert;
 export type UserSelect = typeof usersTable.$inferSelect;

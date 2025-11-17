@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import {
   drizzleRef,
@@ -6,7 +7,7 @@ import {
   zodSelectGenerator,
 } from '../helpers';
 import { instrumentTable } from './instrument.schema';
-import { portfolioTable } from './portfolio.schema';
+import { portfoliosTable } from './portfolios.schema';
 import { usersTable } from './users.schema';
 
 /**
@@ -19,13 +20,28 @@ export const assetsTable = d.pgTable('assets', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
   userId: drizzleRef(usersTable.id, 'cascade'),
   instrumentId: drizzleRef(instrumentTable.id, 'no action'),
-  portfolioId: drizzleRef(portfolioTable.id, 'cascade'),
+  portfolioId: drizzleRef(portfoliosTable.id, 'cascade'),
   quantity: d.numeric({ precision: 28, scale: 18 }).notNull(),
   averagePrice: d.numeric({ precision: 18, scale: 18 }).notNull(),
   lastFees: d.numeric({ precision: 18, scale: 18 }).notNull().default('0'),
   lastTaxes: d.numeric({ precision: 18, scale: 8 }).notNull().default('0'),
   ...withTimestamps,
 });
+
+export const assetsRelations = relations(assetsTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [assetsTable.userId],
+    references: [usersTable.id],
+  }),
+  instrument: one(instrumentTable, {
+    fields: [assetsTable.instrumentId],
+    references: [instrumentTable.id],
+  }),
+  portfolio: one(portfoliosTable, {
+    fields: [assetsTable.portfolioId],
+    references: [portfoliosTable.id],
+  }),
+}));
 
 export type AssetInsert = typeof assetsTable.$inferInsert;
 export type AssetSelect = typeof assetsTable.$inferSelect;
