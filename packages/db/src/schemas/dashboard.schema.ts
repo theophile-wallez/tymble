@@ -5,19 +5,17 @@ import {
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
-import { instrumentTable } from './instrument.schema';
-import { portfoliosTable } from './portfolios.schema';
+import { iconsTable } from './misc/icons.schema';
 import { usersTable } from './users.schema';
 
 export const dashboardsTable = d.pgTable('dashboards', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: drizzleRef(usersTable.id, 'cascade'),
-  instrumentId: drizzleRef(instrumentTable.id, 'no action'),
-  portfolioId: drizzleRef(portfoliosTable.id, 'cascade'),
-  quantity: d.numeric({ precision: 28, scale: 18 }).notNull(),
-  averagePrice: d.numeric({ precision: 18, scale: 18 }).notNull(),
-  lastFees: d.numeric({ precision: 18, scale: 18 }).notNull().default('0'),
-  lastTaxes: d.numeric({ precision: 18, scale: 8 }).notNull().default('0'),
+  iconId: drizzleRef(iconsTable.id),
+  userId: drizzleRef(usersTable.id),
+  title: d.varchar({ length: 255 }).notNull(),
+  description: d.varchar(),
+
+  // TODO: Define dashboard fields
   ...withTimestamps,
 });
 

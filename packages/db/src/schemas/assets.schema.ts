@@ -8,6 +8,7 @@ import {
 } from '../helpers';
 import { instrumentTable } from './instrument.schema';
 import { portfoliosTable } from './portfolios.schema';
+import { transactionTable } from './transactions.schema';
 import { usersTable } from './users.schema';
 
 /**
@@ -28,7 +29,7 @@ export const assetsTable = d.pgTable('assets', {
   ...withTimestamps,
 });
 
-export const assetsRelations = relations(assetsTable, ({ one }) => ({
+export const assetsRelations = relations(assetsTable, ({ one, many }) => ({
   user: one(usersTable, {
     fields: [assetsTable.userId],
     references: [usersTable.id],
@@ -41,6 +42,7 @@ export const assetsRelations = relations(assetsTable, ({ one }) => ({
     fields: [assetsTable.portfolioId],
     references: [portfoliosTable.id],
   }),
+  transactions: many(transactionTable),
 }));
 
 export type AssetInsert = typeof assetsTable.$inferInsert;

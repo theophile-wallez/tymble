@@ -20,10 +20,11 @@ export class PortfolioController {
     return this.portfolioService.create(createPortfolioDto);
   }
 
-  @Get()
+  @Get('user/:userId')
   findAllByUserId(@Param('userId') userId: string) {
     return this.portfolioService.findAllByUserId(+userId);
   }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

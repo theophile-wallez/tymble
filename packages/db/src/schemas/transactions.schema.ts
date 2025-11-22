@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import { transactionSideEnum } from '../enums';
 import {
@@ -7,10 +7,8 @@ import {
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
-
+import { assetsTable } from './assets.schema';
 import { instrumentTable } from './instrument.schema';
-import { portfoliosTable } from './portfolios.schema';
-import { usersTable } from './users.schema';
 
 /**
  * Transaction table.
@@ -24,10 +22,7 @@ export const transactionTable = d.pgTable(
   'transactions',
   {
     id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
-
-    portfolioId: drizzleRef(portfoliosTable.id),
     assetId: drizzleRef(instrumentTable.id),
-    userId: drizzleRef(usersTable.id),
 
     side: transactionSideEnum('side').notNull(),
     quantity: d.numeric({ precision: 28, scale: 18 }).notNull(),
@@ -41,39 +36,22 @@ export const transactionTable = d.pgTable(
       .notNull(),
 
     note: d.varchar({ length: 255 }),
-
     ...withTimestamps,
   },
-  (table) => {
-    return {
-      byPortfolioDate: d
-        .index('idx_transactions_portfolio_date')
-        .on(table.portfolioId, table.executedAt),
-
-      byPortfolioAssetDate: d
-        .index('idx_transactions_portfolio_asset_date')
-        .on(table.portfolioId, table.assetId, table.executedAt),
-
-      // Guardrails
-      qtyPositive: d.check(
-        'check_transactions_quantity_positive',
-        sql`${table.quantity} > 0`
-      ),
-      priceNonNegative: d.check(
-        'check_transactions_price_non_negative',
-        sql`${table.price} >= 0`
-      ),
-      feesNonNegative: d.check(
-        'check_transactions_fees_non_negative',
-        sql`${table.fees} >= 0`
-      ),
-      taxesNonNegative: d.check(
-        'check_transactions_taxes_non_negative',
-        sql`${table.taxes} >= 0`
-      ),
-    };
-  }
+  (table) => [
+    d.check('check_transactions_quantity_positive', sql`${table.quantity} > 0`),
+    d.check('check_transactions_price_non_negative', sql`${table.price} >= 0`),
+    d.check('check_transactions_fees_non_negative', sql`${table.fees} >= 0`),
+    d.check('check_transactions_taxes_non_negative', sql`${table.taxes} >= 0`),
+  ]
 );
+
+export const transactionRelations = relations(transactionTable, ({ one }) => ({
+  asset: one(assetsTable, {
+    fields: [transactionTable.assetId],
+    references: [assetsTable.id],
+  }),
+}));
 
 export type TransactionInsert = typeof transactionTable.$inferInsert;
 export type TransactionSelect = typeof transactionTable.$inferSelect;
