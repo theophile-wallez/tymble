@@ -1,5 +1,28 @@
 {
   "$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
   "root": false,
-  "extends": "//"
+  "extends": "//",
+  "linter": {
+    "rules": {
+      "correctness": {
+        "useExhaustiveDependencies": "info",
+        "useImageSize": "info"
+      },
+      "suspicious": {
+        "noDocumentCookie": "warn"
+      },
+      "nursery": {
+        "noShadow": "off"
+      },
+      "a11y": "info",
+      "style": {
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "filenameCases": ["kebab-case", "camelCase", "PascalCase"]
+          }
+        }
+      }
+    }
+  }
 }
