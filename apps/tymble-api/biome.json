@@ -1,7 +1,7 @@
 {
+  "$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
   "root": false,
   "extends": "//",
-  "$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
   "linter": {
     "rules": {
       "style": {
