@@ -8,7 +8,7 @@ import {
   zodSelectGenerator,
 } from '../helpers';
 import { assetsTable } from './assets.schema';
-import { instrumentTable } from './instrument.schema';
+import { instrumentTable } from './instruments.schema';
 
 /**
  * Transaction table.

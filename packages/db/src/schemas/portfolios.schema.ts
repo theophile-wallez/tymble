@@ -7,7 +7,8 @@ import {
   zodSelectGenerator,
 } from '../helpers';
 import { assetsTable } from './assets.schema';
-import { usersTable } from './users.schema';
+import { iconsTable } from './misc/icons.schema';
+import { usersTable } from './users/users.schema';
 
 /**
  * Portfolio table.
@@ -29,7 +30,7 @@ export const portfoliosTable = d.pgTable(
     provider: d.varchar({ length: 255 }).notNull(),
     description: d.varchar({ length: 255 }),
     name: d.varchar({ length: 50 }).notNull(),
-    emoji: d.varchar({ length: 10 }),
+    iconId: drizzleRef(iconsTable.id),
 
     ...withTimestamps,
   },

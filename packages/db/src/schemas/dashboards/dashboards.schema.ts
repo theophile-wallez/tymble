@@ -4,9 +4,9 @@ import {
   withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
-} from '../helpers';
-import { iconsTable } from './misc/icons.schema';
-import { usersTable } from './users.schema';
+} from '../../helpers';
+import { iconsTable } from '../misc/icons.schema';
+import { usersTable } from '../users/users.schema';
 
 export const dashboardsTable = d.pgTable('dashboards', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),

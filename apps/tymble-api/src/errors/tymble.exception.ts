@@ -3,7 +3,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 export class TymbleException extends HttpException {
   constructor(
     code: string,
-    message: string,
+    message: string | string[],
     status: HttpStatus,
     context?: Record<string, unknown>
   ) {

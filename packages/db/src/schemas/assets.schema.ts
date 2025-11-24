@@ -6,10 +6,9 @@ import {
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
-import { instrumentTable } from './instrument.schema';
+import { instrumentTable } from './instruments.schema';
 import { portfoliosTable } from './portfolios.schema';
 import { transactionTable } from './transactions.schema';
-import { usersTable } from './users.schema';
 
 /**
  * Assets table.
@@ -19,7 +18,6 @@ import { usersTable } from './users.schema';
  */
 export const assetsTable = d.pgTable('assets', {
   id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: drizzleRef(usersTable.id, 'cascade'),
   instrumentId: drizzleRef(instrumentTable.id, 'no action'),
   portfolioId: drizzleRef(portfoliosTable.id, 'cascade'),
   quantity: d.numeric({ precision: 28, scale: 18 }).notNull(),
@@ -30,10 +28,6 @@ export const assetsTable = d.pgTable('assets', {
 });
 
 export const assetsRelations = relations(assetsTable, ({ one, many }) => ({
-  user: one(usersTable, {
-    fields: [assetsTable.userId],
-    references: [usersTable.id],
-  }),
   instrument: one(instrumentTable, {
     fields: [assetsTable.instrumentId],
     references: [instrumentTable.id],
