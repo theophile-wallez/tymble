@@ -1,4 +1,3 @@
-import { relations } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import {
   drizzleRef,
@@ -6,7 +5,6 @@ import {
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
-import { assetsTable } from './assets.schema';
 import { iconsTable } from './misc/icons.schema';
 import { usersTable } from './users/users.schema';
 
@@ -41,17 +39,6 @@ export const portfoliosTable = d.pgTable(
     userNameUnique: d
       .uniqueIndex('uq_portfolios_user_name')
       .on(table.userId, table.name),
-  })
-);
-
-export const portfoliosRelations = relations(
-  portfoliosTable,
-  ({ one, many }) => ({
-    user: one(usersTable, {
-      fields: [portfoliosTable.userId],
-      references: [usersTable.id],
-    }),
-    assets: many(assetsTable),
   })
 );
 

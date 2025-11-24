@@ -1,4 +1,3 @@
-import { relations } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import { languageCodeEnum, themeEnum } from '../../enums';
 import {
@@ -6,8 +5,6 @@ import {
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../../helpers';
-import { portfoliosTable } from '..';
-import { authsTable } from './auths.schema';
 
 export const usersTable = d.pgTable(
   'users',
@@ -30,11 +27,6 @@ export const usersTable = d.pgTable(
   },
   (table) => [d.index('users_email_idx').on(table.email)]
 );
-
-export const usersRelations = relations(usersTable, ({ many }) => ({
-  portfolios: many(portfoliosTable),
-  auths: many(authsTable),
-}));
 
 export type UserInsert = typeof usersTable.$inferInsert;
 export type UserSelect = typeof usersTable.$inferSelect;

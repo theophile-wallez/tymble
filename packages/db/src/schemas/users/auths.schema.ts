@@ -1,4 +1,4 @@
-import { relations, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import { authProviderEnum } from '../../enums/authProvider.enum';
 import {
@@ -46,13 +46,6 @@ export const authsTable = d.pgTable(
     ),
   ]
 );
-
-export const authsRelations = relations(authsTable, ({ one }) => ({
-  user: one(usersTable, {
-    fields: [authsTable.userId],
-    references: [usersTable.id],
-  }),
-}));
 
 export type AuthInsert = typeof authsTable.$inferInsert;
 export type AuthSelect = typeof authsTable.$inferSelect;

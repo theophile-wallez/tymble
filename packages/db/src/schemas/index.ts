@@ -3,4 +3,4 @@ export * from './instruments.schema';
 export * from './misc/icons.schema';
 export * from './portfolios.schema';
 export * from './transactions.schema';
-export * from './users/users.schema';
+export * from './users';

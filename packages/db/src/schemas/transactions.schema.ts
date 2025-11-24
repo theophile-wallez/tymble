@@ -1,4 +1,4 @@
-import { relations, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import { transactionSideEnum } from '../enums';
 import {
@@ -7,7 +7,6 @@ import {
   zodInsertGenerator,
   zodSelectGenerator,
 } from '../helpers';
-import { assetsTable } from './assets.schema';
 import { instrumentTable } from './instruments.schema';
 
 /**
@@ -18,7 +17,7 @@ import { instrumentTable } from './instruments.schema';
  * A transaction is a purchase or a sale of an asset.
  */
 
-export const transactionTable = d.pgTable(
+export const transactionsTable = d.pgTable(
   'transactions',
   {
     id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -46,15 +45,8 @@ export const transactionTable = d.pgTable(
   ]
 );
 
-export const transactionRelations = relations(transactionTable, ({ one }) => ({
-  asset: one(assetsTable, {
-    fields: [transactionTable.assetId],
-    references: [assetsTable.id],
-  }),
-}));
+export type TransactionInsert = typeof transactionsTable.$inferInsert;
+export type TransactionSelect = typeof transactionsTable.$inferSelect;
 
-export type TransactionInsert = typeof transactionTable.$inferInsert;
-export type TransactionSelect = typeof transactionTable.$inferSelect;
-
-export const transactionSelectSchema = zodSelectGenerator(transactionTable);
-export const transactionInsertSchema = zodInsertGenerator(transactionTable);
+export const transactionSelectSchema = zodSelectGenerator(transactionsTable);
+export const transactionInsertSchema = zodInsertGenerator(transactionsTable);

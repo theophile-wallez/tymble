@@ -1,4 +1,3 @@
-import { relations } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
 import {
   drizzleRef,
@@ -8,7 +7,6 @@ import {
 } from '../helpers';
 import { instrumentTable } from './instruments.schema';
 import { portfoliosTable } from './portfolios.schema';
-import { transactionTable } from './transactions.schema';
 
 /**
  * Assets table.
@@ -26,18 +24,6 @@ export const assetsTable = d.pgTable('assets', {
   lastTaxes: d.numeric({ precision: 18, scale: 8 }).notNull().default('0'),
   ...withTimestamps,
 });
-
-export const assetsRelations = relations(assetsTable, ({ one, many }) => ({
-  instrument: one(instrumentTable, {
-    fields: [assetsTable.instrumentId],
-    references: [instrumentTable.id],
-  }),
-  portfolio: one(portfoliosTable, {
-    fields: [assetsTable.portfolioId],
-    references: [portfoliosTable.id],
-  }),
-  transactions: many(transactionTable),
-}));
 
 export type AssetInsert = typeof assetsTable.$inferInsert;
 export type AssetSelect = typeof assetsTable.$inferSelect;
