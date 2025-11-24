@@ -4,7 +4,7 @@ import {
   instrumentTable,
   portfoliosTable,
   transactionsTable,
-} from 'schemas';
+} from '../schemas';
 
 export const assetsRelations = relations(assetsTable, ({ one, many }) => ({
   instrument: one(instrumentTable, {

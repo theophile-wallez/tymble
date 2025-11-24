@@ -19,7 +19,8 @@
     },
     "dev": {
       "cache": false,
-      "dependsOn": ["@repo/db#build"]
+      "dependsOn": ["@repo/db#build"],
+      "persistent": true
     }
   }
 }
