@@ -12,11 +12,10 @@ export const passwordSchema = z
 
 export const createLocalUserSchema = userInsertSchema
   .omit({
-    id: true,
     emailVerifiedAt: true,
     isSuperuser: true,
   })
   .extend({
     password: passwordSchema,
   });
-export class CreateUserDto extends createZodDto(createLocalUserSchema) {}
+export class CreateLocalUserDto extends createZodDto(createLocalUserSchema) {}

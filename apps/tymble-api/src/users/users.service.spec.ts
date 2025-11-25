@@ -23,7 +23,7 @@ describe('UsersService', () => {
       email: 'john.doe@example.com',
     };
 
-    const user = await service.create(createUserDto);
+    const user = await service.createLocalUser(createUserDto);
     expect(user).toHaveProperty('id');
     expect(user.firstName).toBe(createUserDto.firstName);
     expect(user.lastName).toBe(createUserDto.lastName);

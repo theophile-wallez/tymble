@@ -1,4 +1,5 @@
 import * as d from 'drizzle-orm/pg-core';
+import type z from 'zod';
 import { languageCodeEnum, themeEnum } from '../../enums';
 import {
   withTimestamps,
@@ -28,8 +29,11 @@ export const usersTable = d.pgTable(
   (table) => [d.index('users_email_idx').on(table.email)]
 );
 
-export type UserInsert = typeof usersTable.$inferInsert;
-export type UserSelect = typeof usersTable.$inferSelect;
+// export type UserSelect = typeof usersTable.$inferSelect;
+// export type UserInsert = typeof usersTable.$inferInsert;
 
 export const userSelectSchema = zodSelectGenerator(usersTable);
 export const userInsertSchema = zodInsertGenerator(usersTable);
+
+export type UserSelect = z.infer<typeof userSelectSchema>;
+export type UserInsert = z.infer<typeof userInsertSchema>;

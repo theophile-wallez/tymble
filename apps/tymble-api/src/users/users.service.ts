@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import * as schema from '@repo/db';
+import * as bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { HandleErrors } from '@/decorators/handle-errors.decorator';
 import { DrizzleAsyncProvider } from '../drizzle/drizzle.provider';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateLocalUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
@@ -17,15 +17,32 @@ export class UsersService {
   ) {}
 
   @HandleErrors()
-  async create(createUserDto: CreateUserDto) {
+  async createLocalUser(createUserDto: CreateLocalUserDto) {
     this.logger.log(`Creating user with email: ${createUserDto.email}`);
-    const [user] = await this.db
-      .insert(schema.usersTable)
-      .values(createUserDto)
-      .returning({
-        id: schema.usersTable.id,
+    const userId = await this.db.transaction(async (tx) => {
+      const { password, ...userDto } = createUserDto;
+
+      const [user] = await tx
+        .insert(schema.usersTable)
+        .values(userDto)
+        .returning({
+          id: schema.usersTable.id,
+          email: schema.usersTable.email,
+        });
+
+      const passwordHash = await bcrypt.hash(password, 10);
+      await tx.insert(schema.authsTable).values({
+        userId: user.id,
+        provider: 'local',
+        providerAccountId: user.email,
+        passwordHash,
       });
-    return user;
+
+      return user.id;
+    });
+
+    this.logger.log(`Created user with ID: ${userId}`);
+    return userId;
   }
 
   findAll() {
