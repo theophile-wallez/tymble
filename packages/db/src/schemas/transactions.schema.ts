@@ -1,11 +1,13 @@
 import { sql } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
+import type z from 'zod';
 import { transactionSideEnum } from '../enums';
 import {
   drizzleRef,
   withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
+  zodUpdateGenerator,
 } from '../helpers';
 import { instrumentTable } from './instruments.schema';
 
@@ -45,8 +47,10 @@ export const transactionsTable = d.pgTable(
   ]
 );
 
-export type TransactionInsert = typeof transactionsTable.$inferInsert;
-export type TransactionSelect = typeof transactionsTable.$inferSelect;
-
 export const transactionSelectSchema = zodSelectGenerator(transactionsTable);
 export const transactionInsertSchema = zodInsertGenerator(transactionsTable);
+export const transactionUpdateSchema = zodUpdateGenerator(transactionsTable);
+
+export type TransactionSelect = z.infer<typeof transactionSelectSchema>;
+export type TransactionInsert = z.infer<typeof transactionInsertSchema>;
+export type TransactionUpdate = z.infer<typeof transactionUpdateSchema>;

@@ -5,6 +5,7 @@ import {
   withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
+  zodUpdateGenerator,
 } from '../../helpers';
 
 export const usersTable = d.pgTable(
@@ -34,6 +35,8 @@ export const usersTable = d.pgTable(
 
 export const userSelectSchema = zodSelectGenerator(usersTable);
 export const userInsertSchema = zodInsertGenerator(usersTable);
+export const userUpdateSchema = zodUpdateGenerator(usersTable);
 
 export type UserSelect = z.infer<typeof userSelectSchema>;
 export type UserInsert = z.infer<typeof userInsertSchema>;
+export type UserUpdate = z.infer<typeof userUpdateSchema>;

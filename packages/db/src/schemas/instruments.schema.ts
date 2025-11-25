@@ -1,9 +1,11 @@
 import * as d from 'drizzle-orm/pg-core';
+import type z from 'zod';
 import { instrumentTypeEnum } from '../enums';
 import {
   withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
+  zodUpdateGenerator,
 } from '../helpers';
 
 /**
@@ -24,8 +26,10 @@ export const instrumentTable = d.pgTable('instruments', {
   ...withTimestamps,
 });
 
-export type InstrumentInsert = typeof instrumentTable.$inferInsert;
-export type InstrumentSelect = typeof instrumentTable.$inferSelect;
-
 export const instrumentSelectSchema = zodSelectGenerator(instrumentTable);
 export const instrumentInsertSchema = zodInsertGenerator(instrumentTable);
+export const instrumentUpdateSchema = zodUpdateGenerator(instrumentTable);
+
+export type InstrumentSelect = z.infer<typeof instrumentSelectSchema>;
+export type InstrumentInsert = z.infer<typeof instrumentInsertSchema>;
+export type InstrumentUpdate = z.infer<typeof instrumentUpdateSchema>;

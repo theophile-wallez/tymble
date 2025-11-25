@@ -1,11 +1,13 @@
 import { sql } from 'drizzle-orm';
 import * as d from 'drizzle-orm/pg-core';
+import type z from 'zod';
 import { authProviderEnum } from '../../enums/authProvider.enum';
 import {
   drizzleRef,
   withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
+  zodUpdateGenerator,
 } from '../../helpers';
 import { usersTable } from './users.schema';
 
@@ -47,8 +49,10 @@ export const authsTable = d.pgTable(
   ]
 );
 
-export type AuthInsert = typeof authsTable.$inferInsert;
-export type AuthSelect = typeof authsTable.$inferSelect;
-
 export const authSelectSchema = zodSelectGenerator(authsTable);
 export const authInsertSchema = zodInsertGenerator(authsTable);
+export const authUpdateSchema = zodUpdateGenerator(authsTable);
+
+export type AuthSelect = z.infer<typeof authSelectSchema>;
+export type AuthInsert = z.infer<typeof authInsertSchema>;
+export type AuthUpdate = z.infer<typeof authUpdateSchema>;

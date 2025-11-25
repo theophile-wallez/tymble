@@ -1,9 +1,11 @@
 import * as d from 'drizzle-orm/pg-core';
+import type z from 'zod';
 import { iconTypeEnum } from '../../enums/iconType.enum';
 import {
   withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
+  zodUpdateGenerator,
 } from '../../helpers';
 
 /**
@@ -22,8 +24,10 @@ export const iconsTable = d.pgTable('icons', {
   ...withTimestamps,
 });
 
-export type IconInsert = typeof iconsTable.$inferInsert;
-export type IconSelect = typeof iconsTable.$inferSelect;
-
 export const iconSelectSchema = zodSelectGenerator(iconsTable);
 export const iconInsertSchema = zodInsertGenerator(iconsTable);
+export const iconUpdateSchema = zodUpdateGenerator(iconsTable);
+
+export type IconSelect = z.infer<typeof iconSelectSchema>;
+export type IconInsert = z.infer<typeof iconInsertSchema>;
+export type IconUpdate = z.infer<typeof iconUpdateSchema>;
