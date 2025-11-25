@@ -17,10 +17,10 @@ export class UsersService {
   ) {}
 
   @HandleErrors()
-  async createLocalUser(createUserDto: CreateLocalUserDto) {
-    this.logger.log(`Creating user with email: ${createUserDto.email}`);
+  async createLocalUser(dto: CreateLocalUserDto) {
+    this.logger.log(`Creating user with email: ${dto.email}`);
     const userId = await this.db.transaction(async (tx) => {
-      const { password, ...userDto } = createUserDto;
+      const { password, ...userDto } = dto;
 
       const [user] = await tx
         .insert(schema.usersTable)
