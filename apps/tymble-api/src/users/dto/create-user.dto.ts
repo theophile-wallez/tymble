@@ -18,4 +18,5 @@ export const createLocalUserSchema = userInsertSchema
   .extend({
     password: passwordSchema,
   });
+
 export class CreateLocalUserDto extends createZodDto(createLocalUserSchema) {}

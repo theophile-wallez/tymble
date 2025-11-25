@@ -24,7 +24,7 @@ async function bootstrap() {
   const port = Number(process.env.PORT ?? 3000);
   const host = process.env.HOST ?? '0.0.0.0';
   const publicUrl =
-    process.env.API_PUBLIC_URL ?? `http://api.local.tymble.com:${port}`;
+    process.env.API_PUBLIC_URL ?? `http://api.local.tymble.xyz:${port}`;
   console.log(`Application is running on: ${publicUrl}`);
 
   const openApiDoc = SwaggerModule.createDocument(

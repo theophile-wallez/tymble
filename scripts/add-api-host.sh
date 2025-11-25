@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-HOSTNAMES=("api.local.tymble.com" "local.tymble.com")
+HOSTNAMES=("api.local.tymble.xyz" "app.local.tymble.xyz")
 IP="127.0.0.1"
 HOSTS_FILE="/etc/hosts"
 
@@ -36,5 +36,5 @@ for HOSTNAME in "${missing[@]}"; do
 done
 
 echo "Done. You can test with:"
-echo "  curl -s http://api.local.tymble.com:3000 || true"
-echo "  curl -s http://local.tymble.com || true"
+echo "  curl -s http://api.local.tymble.xyz:3000 || true"
+echo "  curl -s http://app.local.tymble.xyz || true"
