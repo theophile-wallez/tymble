@@ -17,6 +17,15 @@ export const createLocalUserSchema = userInsertSchema
   })
   .extend({
     password: passwordSchema,
+    passwordConfirmation: passwordSchema,
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.passwordConfirmation) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'passwords do not match',
+      });
+    }
   });
 
 export class CreateLocalUserDto extends createZodDto(createLocalUserSchema) {}

@@ -27,11 +27,11 @@ export function HandleErrors() {
         return await original.apply(this, args);
       } catch (err: unknown) {
         if (err instanceof DrizzleQueryError) {
-          throw new BadRequestException(err.message);
+          throw new BadRequestException(err);
         }
 
         if (err instanceof DrizzleError) {
-          throw new InternalServerErrorException(err.message, _propertyKey);
+          throw new InternalServerErrorException(err, _propertyKey);
         }
 
         if (err instanceof TransactionRollbackError) {

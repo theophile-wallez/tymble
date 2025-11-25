@@ -1,4 +1,9 @@
 import type { Table } from 'drizzle-orm';
+import type {
+  BuildRefine,
+  CreateInsertSchema,
+  NoUnknownKeys,
+} from 'drizzle-zod';
 import {
   createInsertSchema,
   createSelectSchema,
@@ -6,11 +11,23 @@ import {
 } from 'drizzle-zod';
 export const zodSelectGenerator = createSelectSchema;
 export const zodUpdateGenerator = createUpdateSchema;
-export const zodInsertGenerator = <TTable extends Table>(value: TTable) => {
-  const schema = createInsertSchema(value);
+
+export const zodInsertGenerator = (<
+  TTable extends Table,
+  TRefine extends BuildRefine<
+    Pick<TTable['_']['columns'], keyof TTable['$inferInsert']>,
+    undefined
+  >,
+>(
+  table: TTable,
+  refine?: TRefine extends undefined
+    ? undefined
+    : NoUnknownKeys<TRefine, TTable['$inferInsert']>
+) => {
+  const schema = createInsertSchema(table, refine).strict();
   return schema.omit({
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
   });
-};
+}) satisfies CreateInsertSchema<undefined>;

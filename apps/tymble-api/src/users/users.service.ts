@@ -20,7 +20,7 @@ export class UsersService {
   async createLocalUser(dto: CreateLocalUserDto) {
     this.logger.log(`Creating user with email: ${dto.email}`);
     const userId = await this.db.transaction(async (tx) => {
-      const { password, ...userDto } = dto;
+      const { password, passwordConfirmation: _, ...userDto } = dto;
 
       const [user] = await tx
         .insert(schema.usersTable)
