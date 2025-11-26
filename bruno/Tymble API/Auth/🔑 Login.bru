@@ -1,0 +1,18 @@
+meta {
+  name: 🔑 Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "theophile3@test.com",
+    "password": "MySecurePass1$"
+  }
+}
