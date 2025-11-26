@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserSelect } from '@repo/db';
 import { compare } from 'bcrypt';
 import { UsersService } from '../users/users.service';
+import { AuthJwtPayload } from './types/jwtPayload';
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
@@ -37,8 +38,9 @@ export class AuthService {
   }
 
   login(user: UserSelect) {
-    const payload = { email: user.email, sub: user.id };
+    const payload: AuthJwtPayload = { sub: user.id };
     return {
+      id: user.id,
       access_token: this.jwtService.sign(payload),
     };
   }

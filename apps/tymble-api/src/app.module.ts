@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AssetModule } from './asset/asset.module';
 import { AuthModule } from './auth/auth.module';
-import authConfig from './auth/auth.config';
 import { DrizzleModule } from './drizzle/drizzle.module';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { PortfolioModule } from './portfolio/portfolio.module';
@@ -17,7 +15,6 @@ import { UsersModule } from './users/users.module';
   imports: [
     DrizzleModule,
     StocksModule,
-    ConfigModule.forRoot({ isGlobal: true, load: [authConfig] }),
     UsersModule,
     TransactionModule,
     PortfolioModule,
