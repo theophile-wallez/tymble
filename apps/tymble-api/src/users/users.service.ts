@@ -1,4 +1,10 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import * as schema from '@repo/db';
 import * as bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
@@ -19,30 +25,39 @@ export class UsersService {
   @HandleErrors()
   async createLocalUser(dto: CreateLocalUserDto) {
     this.logger.log(`Creating user with email: ${dto.email}`);
-    const userId = await this.db.transaction(async (tx) => {
-      const { password, passwordConfirmation: _, ...userDto } = dto;
+    try {
+      const userId = await this.db.transaction(async (tx) => {
+        const { password, passwordConfirmation: _, ...userDto } = dto;
 
-      const [user] = await tx
-        .insert(schema.usersTable)
-        .values(userDto)
-        .returning({
-          id: schema.usersTable.id,
-          email: schema.usersTable.email,
+        const [user] = await tx
+          .insert(schema.usersTable)
+          .values(userDto)
+          .returning({
+            id: schema.usersTable.id,
+            email: schema.usersTable.email,
+          });
+
+        const passwordHash = await bcrypt.hash(password, 10);
+        await tx.insert(schema.authsTable).values({
+          userId: user.id,
+          provider: 'local',
+          providerAccountId: user.email,
+          passwordHash,
         });
 
-      const passwordHash = await bcrypt.hash(password, 10);
-      await tx.insert(schema.authsTable).values({
-        userId: user.id,
-        provider: 'local',
-        providerAccountId: user.email,
-        passwordHash,
+        return user.id;
       });
 
-      return user.id;
-    });
-
-    this.logger.log(`Created user with ID: ${userId}`);
-    return userId;
+      this.logger.log(`Created user with ID: ${userId}`);
+      return userId;
+    } catch (error) {
+      const message = error instanceof Error ? error.cause : 'Unknown error';
+      this.logger.error(
+        `Failed to create user with email: ${dto.email}`,
+        message
+      );
+      throw new HttpException('Failed to create user', 500);
+    }
   }
 
   findAll() {
