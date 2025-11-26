@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
 import { AssetModule } from './asset/asset.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     DrizzleModule,
@@ -20,6 +21,7 @@ import { AssetModule } from './asset/asset.module';
     TransactionModule,
     PortfolioModule,
     AssetModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
