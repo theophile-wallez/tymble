@@ -61,6 +61,17 @@ export class UsersService {
     return user;
   }
 
+  async findOneByEmail(email: string) {
+    const user = await this.db.query.usersTable.findFirst({
+      where: eq(schema.usersTable.email, email),
+      with: { auths: true },
+    });
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+    return user;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const [user] = await this.db
       .update(schema.usersTable)

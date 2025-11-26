@@ -7,5 +7,6 @@ import { UsersService } from './users.service';
   imports: [DrizzleModule],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}
