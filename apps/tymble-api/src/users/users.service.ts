@@ -69,6 +69,17 @@ export class UsersService {
   async findOne(id: number) {
     const user = await this.db.query.usersTable.findFirst({
       where: eq(schema.usersTable.id, id),
+      with: {
+        portfolios: {
+          with: {
+            assets: {
+              with: {
+                instrument: true,
+              },
+            },
+          },
+        },
+      },
     });
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);

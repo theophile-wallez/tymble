@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/guards/jwt.guard';
 import { Public } from '@/decorators/public.decorator';
+import type { GuardedRequest } from '@/types/guardedRequest.type';
 import { CreateLocalUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -27,10 +28,8 @@ export class UsersController {
   }
 
   @Get('profile')
-  findOne(@Req() req) {
-    return {
-      message: req.user,
-    };
+  findOne(@Req() req: GuardedRequest) {
+    return this.usersService.findOne(req.user.id);
   }
 
   @Patch(':id')
