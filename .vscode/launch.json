@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "tymble-api: start (watch + inspect)",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["-w", "dev:api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9229"
+      },
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "restart": true,
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "tymble-api: attach to running process",
+      "port": 9229,
+      "processId": "${command:PickProcess}",
+      "restart": false,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}
