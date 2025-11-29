@@ -1,4 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import * as schema from '@repo/db';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -13,16 +18,19 @@ export class PortfolioService {
     @Inject(DrizzleAsyncProvider)
     private readonly db: NodePgDatabase<typeof schema>
   ) {}
-  create(createPortfolioDto: CreatePortfolioDto) {
+  create(userId: string, createPortfolioDto: CreatePortfolioDto) {
     this.logger.log(
       `Creating a new portfolio with name: "${createPortfolioDto.name}" for userId: "${createPortfolioDto.userId}"`
     );
-    this.db
+
+    if (userId !== createPortfolioDto.userId) {
+      throw new BadRequestException('User ID mismatch');
+    }
+
+    return this.db
       .insert(schema.portfoliosTable)
       .values(createPortfolioDto)
-      .returning({
-        id: schema.portfoliosTable.id,
-      });
+      .returning();
   }
 
   findAllByUserId(userId: string) {

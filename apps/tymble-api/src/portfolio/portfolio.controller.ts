@@ -6,9 +6,11 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/guards/jwt.guard';
+import type { GuardedRequest } from '@/types/guardedRequest.type';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import { PortfolioService } from './portfolio.service';
@@ -19,13 +21,16 @@ export class PortfolioController {
   constructor(private readonly portfolioService: PortfolioService) {}
 
   @Post()
-  create(@Body() createPortfolioDto: CreatePortfolioDto) {
-    return this.portfolioService.create(createPortfolioDto);
+  create(
+    @Req() req: GuardedRequest,
+    @Body() createPortfolioDto: CreatePortfolioDto
+  ) {
+    return this.portfolioService.create(req.user.id, createPortfolioDto);
   }
 
-  @Get('user/:userId')
-  findAllByUserId(@Param('userId') userId: string) {
-    return this.portfolioService.findAllByUserId(userId);
+  @Get()
+  findAll(@Req() req: GuardedRequest) {
+    return this.portfolioService.findAllByUserId(req.user.id);
   }
 
   @Get(':id')
