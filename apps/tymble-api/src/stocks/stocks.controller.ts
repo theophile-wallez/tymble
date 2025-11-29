@@ -1,8 +1,11 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ZodResponse } from 'nestjs-zod';
+import { JwtAuthGuard } from '@/auth/guards/jwt.guard';
 import { GetScreenerQueryDto, GetScreenerResDto } from './dto/get.screener.dto';
 import { GetChartQueryDto, GetChartResDto } from './dto/get-chart.dto';
 import { StocksService } from './stocks.service';
+
+@UseGuards(JwtAuthGuard)
 @Controller('stocks')
 export class StocksController {
   constructor(private readonly stockService: StocksService) {}
