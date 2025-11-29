@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserSelect } from '@repo/db';
 import { compare } from 'bcrypt';
 import { UsersService } from '../users/users.service';
-import { AuthJwtPayload } from './types/jwtPayload';
+import { AuthJwtPayload } from './types/jwtPayload.type';
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);

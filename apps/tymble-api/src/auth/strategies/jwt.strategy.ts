@@ -9,7 +9,7 @@ import {
   type StrategyOptionsWithoutRequest,
 } from 'passport-jwt';
 import jwtConfig from '../config/jwt.config';
-import { AuthJwtPayload } from '../types/jwtPayload';
+import { AuthJwtPayload } from '../types/jwtPayload.type';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -25,6 +25,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: AuthJwtPayload) {
-    return { userId: payload.sub };
+    return { id: payload.sub };
   }
 }

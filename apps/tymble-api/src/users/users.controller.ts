@@ -10,29 +10,26 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/guards/jwt.guard';
+import { Public } from '@/decorators/public.decorator';
 import { CreateLocalUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Public()
   @Post()
   create(@Body() dto: CreateLocalUserDto) {
     return this.usersService.createLocalUser(dto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.usersService.findAll();
-  // }
-
-  @UseGuards(JwtAuthGuard)
   @Get('profile')
   findOne(@Req() req) {
     return {
-      message: 'User profile fetched successfully',
+      message: req.user,
     };
   }
 
