@@ -7,11 +7,15 @@ meta {
 get {
   url: {{base_url}}/stocks/quote-summary?ticker={{ticker}}
   body: none
-  auth: none
+  auth: bearer
 }
 
 query {
   ticker: {{ticker}}
+}
+
+auth:bearer {
+  token: {{token}}
 }
 
 vars:pre-request {

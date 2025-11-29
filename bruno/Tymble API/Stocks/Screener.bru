@@ -7,11 +7,15 @@ meta {
 get {
   url: {{base_url}}/stocks/screener?scrIds={{scrIds}}
   body: none
-  auth: none
+  auth: bearer
 }
 
 query {
   scrIds: {{scrIds}}
+}
+
+auth:bearer {
+  token: {{token}}
 }
 
 vars:pre-request {

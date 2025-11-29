@@ -7,11 +7,15 @@ meta {
 get {
   url: {{base_url}}/stocks/search?name={{name}}
   body: none
-  auth: none
+  auth: bearer
 }
 
 query {
   name: {{name}}
+}
+
+auth:bearer {
+  token: {{token}}
 }
 
 vars:pre-request {
