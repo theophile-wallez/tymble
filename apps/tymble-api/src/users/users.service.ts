@@ -66,7 +66,7 @@ export class UsersService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const user = await this.db.query.usersTable.findFirst({
       where: eq(schema.usersTable.id, id),
       with: {
@@ -98,7 +98,7 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     const [user] = await this.db
       .update(schema.usersTable)
       .set({ ...updateUserDto, updatedAt: new Date().toISOString() })
@@ -110,7 +110,7 @@ export class UsersService {
     return user;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const [user] = await this.db
       .delete(schema.usersTable)
       .where(eq(schema.usersTable.id, id))

@@ -24,7 +24,7 @@ import { usersTable } from './users/users.schema';
 export const portfoliosTable = d.pgTable(
   'portfolios',
   {
-    id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
+    id: d.uuid().primaryKey().defaultRandom(),
     userId: drizzleRef(usersTable.id, 'cascade'),
     type: d.varchar({ length: 255 }).notNull(),
     provider: d.varchar({ length: 255 }).notNull(),

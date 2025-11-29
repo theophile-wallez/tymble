@@ -22,7 +22,7 @@ import { instrumentTable } from './instruments.schema';
 export const transactionsTable = d.pgTable(
   'transactions',
   {
-    id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
+    id: d.uuid().primaryKey().defaultRandom(),
     assetId: drizzleRef(instrumentTable.id),
 
     side: transactionSideEnum('side').notNull(),

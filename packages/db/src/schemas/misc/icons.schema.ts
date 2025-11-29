@@ -15,7 +15,7 @@ import {
  * This table stores the assets of the users. An asset is a financial instrument held in a portfolio.
  */
 export const iconsTable = d.pgTable('icons', {
-  id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
+  id: d.uuid().primaryKey().defaultRandom(),
   type: iconTypeEnum('type').notNull(),
   value: d.varchar({ length: 50 }).notNull(),
   color: d.varchar({

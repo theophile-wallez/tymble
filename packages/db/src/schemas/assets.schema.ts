@@ -17,7 +17,7 @@ import { portfoliosTable } from './portfolios.schema';
  * This table stores the assets of the users. An asset is a financial instrument held in a portfolio.
  */
 export const assetsTable = d.pgTable('assets', {
-  id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
+  id: d.uuid().primaryKey().defaultRandom(),
   instrumentId: drizzleRef(instrumentTable.id, 'no action'),
   portfolioId: drizzleRef(portfoliosTable.id, 'cascade'),
   quantity: d.numeric({ precision: 28, scale: 18 }).notNull(),

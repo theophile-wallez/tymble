@@ -3,7 +3,6 @@ import * as d from 'drizzle-orm/pg-core';
 import type z from 'zod';
 import { authProviderEnum } from '../../enums/authProvider.enum';
 import {
-  drizzleRef,
   withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
@@ -22,7 +21,12 @@ export const authsTable = d.pgTable(
   'auths',
   {
     id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
-    userId: drizzleRef(usersTable.id, 'cascade'),
+    userId: d
+      .uuid()
+      .notNull()
+      .references(() => usersTable.id, {
+        onDelete: 'cascade',
+      }),
     provider: authProviderEnum('provider').notNull(),
     providerAccountId: d.varchar({ length: 255 }).notNull(),
     passwordHash: d.text(),

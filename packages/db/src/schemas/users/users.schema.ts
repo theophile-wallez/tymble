@@ -10,7 +10,7 @@ import {
 export const usersTable = d.pgTable(
   'users',
   {
-    id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
+    id: d.uuid().primaryKey().defaultRandom(),
     email: d.varchar({ length: 255 }).notNull().unique(),
     firstName: d.varchar({ length: 255 }).notNull(),
     lastName: d.varchar().notNull(),

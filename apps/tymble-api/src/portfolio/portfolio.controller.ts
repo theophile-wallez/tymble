@@ -22,13 +22,12 @@ export class PortfolioController {
 
   @Get('user/:userId')
   findAllByUserId(@Param('userId') userId: string) {
-    return this.portfolioService.findAllByUserId(+userId);
+    return this.portfolioService.findAllByUserId(userId);
   }
-
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.portfolioService.findOne(+id);
+    return this.portfolioService.findOne(id);
   }
 
   @Patch(':id')
@@ -36,11 +35,11 @@ export class PortfolioController {
     @Param('id') id: string,
     @Body() updatePortfolioDto: UpdatePortfolioDto
   ) {
-    return this.portfolioService.update(+id, updatePortfolioDto);
+    return this.portfolioService.update(id, updatePortfolioDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.portfolioService.remove(+id);
+    return this.portfolioService.remove(id);
   }
 }

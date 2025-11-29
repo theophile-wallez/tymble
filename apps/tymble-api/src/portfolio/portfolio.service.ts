@@ -25,7 +25,7 @@ export class PortfolioService {
       });
   }
 
-  findAllByUserId(userId: number) {
+  findAllByUserId(userId: string) {
     this.logger.log(`Finding all portfolios for user with id ${userId}`);
     return this.db
       .select()
@@ -33,7 +33,7 @@ export class PortfolioService {
       .where(eq(schema.portfoliosTable.userId, userId));
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     this.logger.log(`Finding portfolio with id ${id}`);
     return this.db.query.portfoliosTable.findFirst({
       where: eq(schema.portfoliosTable.id, id),
@@ -44,7 +44,7 @@ export class PortfolioService {
     });
   }
 
-  update(id: number, updatePortfolioDto: UpdatePortfolioDto) {
+  update(id: string, updatePortfolioDto: UpdatePortfolioDto) {
     this.logger.log(`Updating portfolio with id ${id}`);
     return this.db
       .update(schema.portfoliosTable)
@@ -55,7 +55,7 @@ export class PortfolioService {
       });
   }
 
-  remove(id: number) {
+  remove(id: string) {
     this.logger.log(`Removing portfolio with id ${id}`);
     return this.db
       .delete(schema.portfoliosTable)

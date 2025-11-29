@@ -17,7 +17,7 @@ import {
  */
 
 export const instrumentTable = d.pgTable('instruments', {
-  id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
+  id: d.uuid().primaryKey().defaultRandom(),
   symbol: d.varchar({ length: 64 }).notNull().unique(),
   name: d.varchar({ length: 255 }).notNull(),
   type: instrumentTypeEnum('type').notNull(),

@@ -11,9 +11,9 @@ import { iconsTable } from '../misc/icons.schema';
 import { usersTable } from '../users/users.schema';
 
 export const dashboardsTable = d.pgTable('dashboards', {
-  id: d.integer().primaryKey().generatedAlwaysAsIdentity(),
+  id: d.uuid().primaryKey().defaultRandom(),
   iconId: drizzleRef(iconsTable.id),
-  userId: drizzleRef(usersTable.id),
+  userId: drizzleRef(usersTable.id, 'cascade'),
   title: d.varchar({ length: 255 }).notNull(),
   description: d.varchar(),
 

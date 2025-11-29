@@ -1,7 +1,7 @@
 import {
-  integer,
   type PgColumn,
   type UpdateDeleteAction,
+  uuid,
 } from 'drizzle-orm/pg-core';
 
 export const drizzleRef = (
@@ -9,7 +9,7 @@ export const drizzleRef = (
   /** Action to perform on delete. @default 'cascade' */
   onDelete: UpdateDeleteAction = 'cascade'
 ) =>
-  integer()
+  uuid()
     .notNull()
     .references(() => col, {
       onDelete,
