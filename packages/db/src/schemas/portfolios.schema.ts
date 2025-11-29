@@ -30,7 +30,9 @@ export const portfoliosTable = d.pgTable(
     provider: d.varchar({ length: 255 }).notNull(),
     description: d.varchar({ length: 255 }),
     name: d.varchar({ length: 50 }).notNull(),
-    iconId: drizzleRef(iconsTable.id),
+    iconId: d.uuid().references(() => iconsTable.id, {
+      onDelete: 'cascade',
+    }),
 
     ...withTimestamps,
   },

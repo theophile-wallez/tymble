@@ -1,13 +1,9 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import * as schema from '@repo/db';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DrizzleAsyncProvider } from '@/drizzle/drizzle.provider';
+import { TymbleException } from '@/errors/tymble.exception';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 
@@ -18,19 +14,32 @@ export class PortfolioService {
     @Inject(DrizzleAsyncProvider)
     private readonly db: NodePgDatabase<typeof schema>
   ) {}
-  create(userId: string, createPortfolioDto: CreatePortfolioDto) {
-    this.logger.log(
-      `Creating a new portfolio with name: "${createPortfolioDto.name}" for userId: "${createPortfolioDto.userId}"`
-    );
 
-    if (userId !== createPortfolioDto.userId) {
-      throw new BadRequestException('User ID mismatch');
+  async create(userId: string, createPortfolioDto: CreatePortfolioDto) {
+    try {
+      this.logger.log(
+        `Creating a new portfolio with name: "${createPortfolioDto.name}" for userId: "${userId}"`
+      );
+
+      const portfolioData = {
+        ...createPortfolioDto,
+        userId,
+      };
+
+      const result = await this.db
+        .insert(schema.portfoliosTable)
+        .values(portfolioData)
+        .returning();
+
+      return result[0];
+    } catch (error: unknown) {
+      throw new TymbleException(
+        this.logger,
+        `Failed to create portfolio for userId: "${userId}"`,
+        HttpStatus.BAD_REQUEST,
+        error
+      );
     }
-
-    return this.db
-      .insert(schema.portfoliosTable)
-      .values(createPortfolioDto)
-      .returning();
   }
 
   findAllByUserId(userId: string) {

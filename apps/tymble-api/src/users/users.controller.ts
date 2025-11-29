@@ -14,7 +14,6 @@ import type { GuardedRequest } from '@/types/guardedRequest.type';
 import { CreateLocalUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
-
 @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UsersController {

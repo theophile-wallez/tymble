@@ -1,17 +1,31 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, Logger } from '@nestjs/common';
 
 export class TymbleException extends HttpException {
   constructor(
-    code: string,
+    logger: Logger,
     message: string | string[],
     status: HttpStatus,
-    context?: Record<string, unknown>
+    errOrContext?: unknown
   ) {
+    logger.error(
+      message,
+      errOrContext instanceof Error ? errOrContext.stack : undefined
+    );
+
+    let context: Record<string, unknown> | undefined;
+
+    if (errOrContext instanceof Error) {
+      context = {
+        cause: errOrContext.cause,
+      };
+    } else if (typeof errOrContext === 'object' && errOrContext !== null) {
+      context = errOrContext as Record<string, unknown>;
+    }
+
     const response = {
-      code,
       message,
       timestamp: new Date().toISOString(),
-      context,
+      context: context || undefined,
     };
 
     super(response, status);
