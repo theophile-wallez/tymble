@@ -6,12 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '@/auth/guards/jwt.guard';
 import { CreateLocalUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -20,14 +23,17 @@ export class UsersController {
     return this.usersService.createLocalUser(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.usersService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  findOne(@Req() req) {
+    return {
+      message: 'User profile fetched successfully',
+    };
   }
 
   @Patch(':id')
