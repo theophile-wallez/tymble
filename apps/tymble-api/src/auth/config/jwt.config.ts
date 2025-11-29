@@ -2,7 +2,14 @@ import { registerAs } from '@nestjs/config';
 import { JwtModuleOptions } from '@nestjs/jwt';
 import z from 'zod';
 
-export default registerAs('jwt', (): JwtModuleOptions => {
+type RemoveUndefinedProps<T> = {
+  [K in keyof T]-?: Exclude<T[K], undefined>;
+};
+type JwtConfig = RemoveUndefinedProps<
+  Pick<JwtModuleOptions, 'secret' | 'signOptions'>
+>;
+
+export default registerAs('jwt', (): JwtConfig => {
   const schema = z.object({
     JWT_SECRET: z
       .string()
@@ -15,5 +22,5 @@ export default registerAs('jwt', (): JwtModuleOptions => {
     secret: parsedEnv.JWT_SECRET,
     // @ts-expect-error Nest expects a `${number}${string}` but zod only ensures it's a string
     signOptions: { expiresIn: parsedEnv.JWT_EXPIRES_IN },
-  };
+  } satisfies JwtConfig;
 });
