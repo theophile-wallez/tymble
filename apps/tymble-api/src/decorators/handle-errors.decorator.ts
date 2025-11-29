@@ -27,7 +27,13 @@ export function HandleErrors() {
         return await original.apply(this, args);
       } catch (err: unknown) {
         if (err instanceof DrizzleQueryError) {
-          throw new BadRequestException(err);
+          throw new BadRequestException(
+            {
+              message: 'Database query error',
+              cause: err.cause,
+            },
+            err
+          );
         }
 
         if (err instanceof DrizzleError) {
