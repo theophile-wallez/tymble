@@ -6,7 +6,7 @@
     "rules": {
       "correctness": {
         "useExhaustiveDependencies": "info",
-        "useImageSize": "info"
+        "useImageSize": "off"
       },
       "suspicious": {
         "noDocumentCookie": "warn"
