@@ -1,3 +1,4 @@
+import placeholderImage from '@/assets/placeholder.svg';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
 import {
@@ -92,9 +93,10 @@ export function LoginForm({
           </form>
           <div className="relative hidden bg-muted md:block">
             <img
-              alt="Image"
+              alt="Login illustration"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-              src="/placeholder.svg"
+              draggable={false}
+              src={placeholderImage}
             />
           </div>
         </CardContent>
