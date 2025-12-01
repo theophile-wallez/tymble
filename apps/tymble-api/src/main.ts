@@ -13,10 +13,7 @@ async function bootstrap() {
   app.enableShutdownHooks();
   app.enableCors({
     origin: [
-      'http://local.tymble.com',
-      'https://local.tymble.com',
-      'http://localhost:3000',
-      'http://127.0.0.1:3000',
+      'http://app.local.tymble.xyz:3001',
     ],
     credentials: true,
   });

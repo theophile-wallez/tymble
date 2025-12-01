@@ -1,5 +1,8 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { z } from 'zod';
+import { loginUser } from '@/api/auth';
 import placeholderImage from '@/assets/placeholder.svg';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
@@ -13,7 +16,6 @@ import {
 } from '@/ui/field';
 import { Input } from '@/ui/input';
 import { cn } from '@/ui/utils';
-
 const { fieldContext, formContext } = createFormHookContexts();
 
 // Allow us to bind components to the form to keep type safety but reduce production boilerplate
@@ -33,6 +35,16 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
+  const loginMutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      toast.success('Login successful!');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Login failed. Please try again.');
+    },
+  });
+
   const form = useAppForm({
     defaultValues: {
       email: '',
@@ -45,8 +57,11 @@ export function LoginForm({
         password: z.string(),
       }),
     },
-    onSubmit: ({ value, formApi }) => {
-      formApi.reset();
+    onSubmit: ({ value }) => {
+      loginMutation.mutate({
+        email: value.email,
+        password: value.password,
+      });
     },
   });
   return (
@@ -77,12 +92,12 @@ export function LoginForm({
                         <field.Input
                           autoComplete="email"
                           id="email"
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           placeholder="m@example.com"
                           required
                           type="email"
                           value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
                         />
                         <FieldError errors={field.state.meta.errors} />
                       </Field>
@@ -104,11 +119,11 @@ export function LoginForm({
                         <field.Input
                           autoComplete="current-password"
                           id="password"
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           required
                           type="password"
                           value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
                         />
                         <FieldError errors={field.state.meta.errors} />
                       </Field>
@@ -117,7 +132,12 @@ export function LoginForm({
                   />
                   <form.AppForm>
                     <Field>
-                      <form.Button type="submit">Login</form.Button>
+                      <form.Button
+                        disabled={loginMutation.isPending}
+                        type="submit"
+                      >
+                        {loginMutation.isPending ? 'Logging in...' : 'Login'}
+                      </form.Button>
                     </Field>
                   </form.AppForm>
                   <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
