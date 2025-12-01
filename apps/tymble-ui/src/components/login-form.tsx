@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/ui/card';
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
@@ -44,11 +45,7 @@ export function LoginForm({
         password: z.string(),
       }),
     },
-    onSubmitInvalid(props) {
-      console.log('onSubmitInvalid', props);
-    },
     onSubmit: ({ value, formApi }) => {
-      console.log('onSubmit value: ', value);
       formApi.reset();
     },
   });
@@ -62,7 +59,6 @@ export function LoginForm({
                 className="p-6 md:p-8"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  console.log('handle submit');
                   form.handleSubmit();
                 }}
               >
@@ -88,6 +84,7 @@ export function LoginForm({
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
                         />
+                        <FieldError errors={field.state.meta.errors} />
                       </Field>
                     )}
                     name="email"
@@ -113,6 +110,7 @@ export function LoginForm({
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
                         />
+                        <FieldError errors={field.state.meta.errors} />
                       </Field>
                     )}
                     name="password"
