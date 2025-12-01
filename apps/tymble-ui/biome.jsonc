@@ -24,5 +24,20 @@
         }
       }
     }
-  }
+  },
+  // override for shadcn/ui components
+  "overrides": [
+    {
+      "includes": ["src/ui/**"],
+      "formatter": {
+        "enabled": false
+      },
+      "linter": {
+        "enabled": false
+      },
+      "assist": {
+        "enabled": false
+      }
+    }
+  ]
 }
