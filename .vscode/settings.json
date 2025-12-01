@@ -16,6 +16,10 @@
     "**/routeTree.gen.ts": true
   },
   "search.exclude": {
-    "**/routeTree.gen.ts": true
+    "**/routeTree.gen.ts": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.turbo": true,
+    "**/.tanstack": true
   }
 }
