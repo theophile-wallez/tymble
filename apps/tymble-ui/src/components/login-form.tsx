@@ -1,3 +1,5 @@
+import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
+import { z } from 'zod';
 import placeholderImage from '@/assets/placeholder.svg';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
@@ -11,17 +13,56 @@ import {
 import { Input } from '@/ui/input';
 import { cn } from '@/ui/utils';
 
+const { fieldContext, formContext } = createFormHookContexts();
+
+// Allow us to bind components to the form to keep type safety but reduce production boilerplate
+// Define this once to have a generator of consistent form instances throughout your app
+const { useAppForm } = createFormHook({
+  fieldComponents: {
+    Input,
+  },
+  formComponents: {
+    Button,
+  },
+  fieldContext,
+  formContext,
+});
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
+  const form = useAppForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    validators: {
+      // Pass a schema or function to validate
+      onChange: z.object({
+        email: z.email(),
+        password: z.string(),
+      }),
+    },
+    onSubmit: ({ value, formApi }) => {
+      console.log('value: ', value);
+      formApi.reset();
+    },
+  });
   return (
     <section className="flex size-full items-center justify-center">
       <section className="w-full max-w-sm md:max-w-4xl">
         <div className={cn('flex w-full flex-col gap-6', className)} {...props}>
           <Card className="overflow-hidden p-0">
             <CardContent className="grid p-0 md:grid-cols-2">
-              <form className="p-6 md:p-8">
+              <form
+                className="p-6 md:p-8"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  console.log('form submit');
+                  form.handleSubmit();
+                }}
+              >
                 <FieldGroup>
                   <div className="flex flex-col items-center gap-2 text-center">
                     <h1 className="font-bold text-2xl">Welcome back</h1>
@@ -29,30 +70,49 @@ export function LoginForm({
                       Login to your Tymble account
                     </p>
                   </div>
-                  <Field>
-                    <FieldLabel htmlFor="email">Email</FieldLabel>
-                    <Input
-                      id="email"
-                      placeholder="m@example.com"
-                      required
-                      type="email"
-                    />
-                  </Field>
-                  <Field>
-                    <div className="flex items-center">
-                      <FieldLabel htmlFor="password">Password</FieldLabel>
-                      <a
-                        className="ml-auto text-sm underline-offset-2 hover:underline"
-                        href="#"
-                      >
-                        Forgot your password?
-                      </a>
-                    </div>
-                    <Input id="password" required type="password" />
-                  </Field>
-                  <Field>
-                    <Button type="submit">Login</Button>
-                  </Field>
+                  <h1>Personal Information</h1>
+                  <form.AppField
+                    children={(field) => (
+                      <Field>
+                        <FieldLabel htmlFor="email">Email</FieldLabel>
+                        <field.Input
+                          autoComplete="email"
+                          id="email"
+                          placeholder="m@example.com"
+                          required
+                          type="email"
+                        />
+                      </Field>
+                    )}
+                    name="email"
+                  />
+                  <form.AppField
+                    children={(field) => (
+                      <Field>
+                        <div className="flex items-center">
+                          <FieldLabel htmlFor="password">Password</FieldLabel>
+                          <a
+                            className="ml-auto text-sm underline-offset-2 hover:underline"
+                            href="#"
+                          >
+                            Forgot your password?
+                          </a>
+                        </div>
+                        <field.Input
+                          autoComplete="current-password"
+                          id="password"
+                          required
+                          type="password"
+                        />
+                      </Field>
+                    )}
+                    name="password"
+                  />
+                  <form.AppForm>
+                    <Field>
+                      <form.Button type="submit">Login</form.Button>
+                    </Field>
+                  </form.AppForm>
                   <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                     Or continue with
                   </FieldSeparator>
