@@ -40,12 +40,15 @@ export function LoginForm({
     validators: {
       // Pass a schema or function to validate
       onChange: z.object({
-        email: z.email(),
+        email: z.string().email(),
         password: z.string(),
       }),
     },
+    onSubmitInvalid(props) {
+      console.log('onSubmitInvalid', props);
+    },
     onSubmit: ({ value, formApi }) => {
-      console.log('value: ', value);
+      console.log('onSubmit value: ', value);
       formApi.reset();
     },
   });
@@ -59,7 +62,7 @@ export function LoginForm({
                 className="p-6 md:p-8"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  console.log('form submit');
+                  console.log('handle submit');
                   form.handleSubmit();
                 }}
               >
@@ -81,6 +84,9 @@ export function LoginForm({
                           placeholder="m@example.com"
                           required
                           type="email"
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
                         />
                       </Field>
                     )}
@@ -103,6 +109,9 @@ export function LoginForm({
                           id="password"
                           required
                           type="password"
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
                         />
                       </Field>
                     )}
