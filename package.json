@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "app": "turbo run dev --filter=tymble-*",
+    "app": "turbo run dev --filter=tymble-* --ui=tui",
     "dev:api": "turbo run dev --filter=tymble-api",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
