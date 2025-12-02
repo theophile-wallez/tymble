@@ -57,7 +57,7 @@ export function LoginForm({
       password: '',
     },
     validators: {
-      onChange: loginSchema,
+      onSubmit: loginSchema,
     },
     onSubmit: ({ value }) => {
       loginMutation.mutate({
