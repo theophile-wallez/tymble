@@ -4,15 +4,16 @@ import {
   Injectable,
   Logger,
   NotFoundException,
-} from '@nestjs/common';
-import * as schema from '@repo/db';
-import * as bcrypt from 'bcrypt';
-import { eq } from 'drizzle-orm';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { HandleErrors } from '@/decorators/handle-errors.decorator';
-import { DrizzleAsyncProvider } from '../drizzle/drizzle.provider';
-import { CreateLocalUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+} from "@nestjs/common";
+import * as schema from "@repo/db";
+import * as bcrypt from "bcrypt";
+import { eq } from "drizzle-orm";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { HandleErrors } from "@/decorators/handle-errors.decorator";
+import { DrizzleAsyncProvider } from "../drizzle/drizzle.provider";
+import { CreateLocalUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
@@ -40,7 +41,7 @@ export class UsersService {
         const passwordHash = await bcrypt.hash(password, 10);
         await tx.insert(schema.authsTable).values({
           userId: user.id,
-          provider: 'local',
+          provider: "local",
           providerAccountId: user.email,
           passwordHash,
         });
@@ -51,35 +52,18 @@ export class UsersService {
       this.logger.log(`Created user with ID: ${userId}`);
       return userId;
     } catch (error) {
-      const message = error instanceof Error ? error.cause : 'Unknown error';
+      const message = error instanceof Error ? error.cause : "Unknown error";
       this.logger.error(
         `Failed to create user with email: ${dto.email}`,
         message
       );
-      throw new HttpException('Failed to create user', 500);
+      throw new HttpException("Failed to create user", 500);
     }
-  }
-
-  findAll() {
-    return this.db.query.usersTable.findMany({
-      orderBy: (users, { desc }) => desc(users.createdAt),
-    });
   }
 
   async findOne(id: string) {
     const user = await this.db.query.usersTable.findFirst({
       where: eq(schema.usersTable.id, id),
-      with: {
-        portfolios: {
-          with: {
-            assets: {
-              with: {
-                instrument: true,
-              },
-            },
-          },
-        },
-      },
     });
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);
