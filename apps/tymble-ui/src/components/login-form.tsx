@@ -98,6 +98,7 @@ export function LoginForm({
                           onChange={(e) => field.handleChange(e.target.value)}
                           placeholder="m@example.com"
                           required
+                          tabIndex={1}
                           type="email"
                           value={field.state.value}
                         />
@@ -114,6 +115,7 @@ export function LoginForm({
                           <a
                             className="ml-auto text-sm underline-offset-2 hover:underline"
                             href="#"
+                            tabIndex={4}
                           >
                             Forgot your password?
                           </a>
@@ -124,6 +126,7 @@ export function LoginForm({
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
                           required
+                          tabIndex={2}
                           type="password"
                           value={field.state.value}
                         />
@@ -136,6 +139,7 @@ export function LoginForm({
                     <Field>
                       <form.Button
                         disabled={loginMutation.isPending}
+                        tabIndex={3}
                         type="submit"
                       >
                         {loginMutation.isPending ? 'Logging in...' : 'Login'}
