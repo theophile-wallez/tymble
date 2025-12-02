@@ -1,9 +1,11 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import { z } from 'zod';
 import { loginUser } from '@/api/auth';
 import placeholderImage from '@/assets/placeholder.svg';
+import { authStore } from '@/lib/auth';
+import { loginSchema } from '@/schemas/login';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
 import {
@@ -16,6 +18,7 @@ import {
 } from '@/ui/field';
 import { Input } from '@/ui/input';
 import { cn } from '@/ui/utils';
+
 const { fieldContext, formContext } = createFormHookContexts();
 
 // Allow us to bind components to the form to keep type safety but reduce production boilerplate
@@ -35,10 +38,13 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
+  const navigate = useNavigate();
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
+      authStore.setUser(data.user);
       toast.success('Login successful!');
+      navigate({ to: '/' });
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Login failed. Please try again.');
@@ -51,11 +57,7 @@ export function LoginForm({
       password: '',
     },
     validators: {
-      // Pass a schema or function to validate
-      onChange: z.object({
-        email: z.string().email(),
-        password: z.string(),
-      }),
+      onChange: loginSchema,
     },
     onSubmit: ({ value }) => {
       loginMutation.mutate({
