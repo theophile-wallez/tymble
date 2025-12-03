@@ -166,7 +166,7 @@ export const AppSidebar = ({
       <NavProjects projects={data.projects} />
     </SidebarContent>
     <SidebarFooter>
-      <NavUser user={data.user} />
+      <NavUser />
     </SidebarFooter>
     <SidebarRail />
   </Sidebar>
