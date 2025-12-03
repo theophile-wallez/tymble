@@ -4,7 +4,6 @@ import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { loginUser } from '@/api/auth';
 import placeholderImage from '@/assets/placeholder.svg';
-import { authQueryOptions } from '@/hooks/use-auth';
 import { loginSchema } from '@/schemas/login';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
@@ -45,7 +44,7 @@ export function LoginForm({
     mutationKey: ['login'],
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: authQueryOptions.queryKey,
+        queryKey: ['user'],
       });
       navigate({ to: '/' });
     },
