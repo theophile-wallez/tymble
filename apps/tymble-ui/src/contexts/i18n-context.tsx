@@ -8,6 +8,7 @@ import {
 } from 'react';
 import enTranslations from '@/locales/en.json';
 import frTranslations from '@/locales/fr.json';
+import type { TranslationKey } from '@/locales/translation-keys';
 
 export type Language = 'en' | 'fr';
 
@@ -21,7 +22,7 @@ const translations: Record<Language, Translations> = {
 type I18nContextType = {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: TranslationKey) => string;
 };
 
 export const I18nContext = createContext<I18nContextType | undefined>(
@@ -31,7 +32,7 @@ export const I18nContext = createContext<I18nContextType | undefined>(
 const LANGUAGE_STORAGE_KEY = 'tymble-language';
 
 // Helper function to get nested value from object using dot notation
-function getNestedValue(obj: unknown, path: string): string {
+function getNestedValue(obj: unknown, path: TranslationKey): string {
   const keys = path.split('.');
   let current: unknown = obj;
 
@@ -39,11 +40,11 @@ function getNestedValue(obj: unknown, path: string): string {
     if (current && typeof current === 'object' && key in current) {
       current = (current as Record<string, unknown>)[key];
     } else {
-      return path; // Return the key itself if not found
+      return path as string; // Return the key itself if not found
     }
   }
 
-  return typeof current === 'string' ? current : path;
+  return typeof current === 'string' ? current : (path as string);
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -64,7 +65,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   // Translation function with nested key support
   const t = useCallback(
-    (key: string): string => getNestedValue(translations[language], key),
+    (key: TranslationKey): string =>
+      getNestedValue(translations[language], key),
     [language]
   );
 
