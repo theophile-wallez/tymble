@@ -1,7 +1,7 @@
 import {
   AudioWaveform,
   BookOpen,
-  Bot,
+  ChartArea,
   ChartNoAxesCombined,
   Command,
   Frame,
@@ -91,9 +91,9 @@ export const AppSidebar = ({
         ],
       },
       {
-        title: t('navigation.models.title'),
+        title: t('navigation.dashboards.title'),
         url: '#',
-        icon: Bot,
+        icon: ChartArea,
       },
       {
         title: t('navigation.documentation.title'),

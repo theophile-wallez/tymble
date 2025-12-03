@@ -62,8 +62,8 @@
       "euroFunds": "Fonds euros",
       "loans": "Prêts"
     },
-    "models": {
-      "title": "Modèles"
+    "dashboards": {
+      "title": "Dashboards"
     },
     "documentation": {
       "title": "Documentation",
