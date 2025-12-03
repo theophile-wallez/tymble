@@ -1,0 +1,116 @@
+{
+  "common": {
+    "language": "Langue",
+    "english": "Anglais",
+    "french": "Français",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "actions": "Actions"
+  },
+  "auth": {
+    "login": {
+      "title": "Bon retour",
+      "subtitle": "Connectez-vous à votre compte Tymble",
+      "email": "Email",
+      "emailPlaceholder": "m@exemple.com",
+      "password": "Mot de passe",
+      "forgotPassword": "Mot de passe oublié ?",
+      "loginButton": "Se connecter",
+      "loggingIn": "Connexion en cours...",
+      "orContinueWith": "Ou continuer avec",
+      "loginWithApple": "Se connecter avec Apple",
+      "loginWithGoogle": "Se connecter avec Google",
+      "loginWithMeta": "Se connecter avec Meta",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "signUp": "S'inscrire",
+      "termsPrefix": "En continuant, vous acceptez nos",
+      "termsOfService": "Conditions d'utilisation",
+      "and": "et",
+      "privacyPolicy": "Politique de confidentialité",
+      "personalInformation": "Informations personnelles"
+    },
+    "errors": {
+      "loginFailed": "Échec de la connexion. Veuillez réessayer.",
+      "invalidCredentials": "Email ou mot de passe invalide",
+      "networkError": "Erreur réseau. Veuillez vérifier votre connexion."
+    }
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "projects": "Projets",
+    "tasks": "Tâches",
+    "calendar": "Calendrier",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "logout": "Déconnexion",
+    "portfolio": {
+      "title": "Portefeuille",
+      "stocksAndFunds": "Actions et fonds",
+      "savingsAccounts": "Comptes d'épargne",
+      "otherAssets": "Autres actifs",
+      "checkingAccounts": "Comptes courants",
+      "crypto": "Crypto",
+      "euroFunds": "Fonds euros",
+      "loans": "Prêts"
+    },
+    "models": {
+      "title": "Modèles"
+    },
+    "documentation": {
+      "title": "Documentation",
+      "introduction": "Introduction",
+      "getStarted": "Commencer",
+      "tutorials": "Tutoriels",
+      "changelog": "Journal des modifications"
+    },
+    "settingsMenu": {
+      "title": "Paramètres",
+      "general": "Général",
+      "team": "Équipe",
+      "billing": "Facturation",
+      "limits": "Limites"
+    }
+  },
+  "sidebar": {
+    "platform": "Plateforme",
+    "projects": "Projets",
+    "searchProjects": "Rechercher des projets...",
+    "moreProjects": "Plus de projets",
+    "addProject": "Ajouter un projet",
+    "team": "Équipe",
+    "enterprise": "Entreprise",
+    "startup": "Startup",
+    "free": "Gratuit",
+    "teams": "Équipes",
+    "addTeam": "Ajouter une équipe",
+    "viewProject": "Voir le projet",
+    "shareProject": "Partager le projet",
+    "deleteProject": "Supprimer le projet",
+    "more": "Plus"
+  },
+  "user": {
+    "upgradeToPro": "Passer à Pro",
+    "account": "Compte",
+    "billing": "Facturation",
+    "notifications": "Notifications",
+    "logOut": "Se déconnecter"
+  },
+  "projects": {
+    "title": "Projets",
+    "newProject": "Nouveau projet",
+    "noProjects": "Aucun projet trouvé",
+    "createFirst": "Créez votre premier projet pour commencer",
+    "designEngineering": "Ingénierie de conception",
+    "salesAndMarketing": "Ventes et marketing",
+    "travel": "Voyage"
+  }
+}

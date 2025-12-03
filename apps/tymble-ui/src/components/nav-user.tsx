@@ -1,3 +1,4 @@
+import { IconLanguage } from '@tabler/icons-react';
 import {
   BadgeCheck,
   Bell,
@@ -6,7 +7,9 @@ import {
   LogOut,
   Sparkles,
 } from 'lucide-react';
+import type { Language } from '@/contexts/i18n-context';
 import { useAuth } from '@/hooks/use-auth';
+import { useTranslation } from '@/hooks/use-translation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/ui/avatar';
 import {
   DropdownMenu,
@@ -27,6 +30,12 @@ import {
 export function NavUser() {
   const { data: user } = useAuth();
   const { isMobile } = useSidebar();
+  const { language, setLanguage, t } = useTranslation();
+
+  const languages: { code: Language; label: string }[] = [
+    { code: 'en', label: t('common.english') },
+    { code: 'fr', label: t('common.french') },
+  ];
 
   return (
     <SidebarMenu>
@@ -78,28 +87,44 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
-                Upgrade to Pro
+                {t('user.upgradeToPro')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
+                {t('user.account')}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
-                Billing
+                {t('user.billing')}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
-                Notifications
+                {t('user.notifications')}
               </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="text-muted-foreground text-xs">
+                {t('common.language')}
+              </DropdownMenuLabel>
+              {languages.map((lang) => (
+                <DropdownMenuItem
+                  className={language === lang.code ? 'bg-accent' : ''}
+                  key={lang.code}
+                  onClick={() => setLanguage(lang.code)}
+                >
+                  <IconLanguage className="size-4" />
+                  {lang.label}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut />
-              Log out
+              {t('user.logOut')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

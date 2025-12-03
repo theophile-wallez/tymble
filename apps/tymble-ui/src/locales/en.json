@@ -1,0 +1,116 @@
+{
+  "common": {
+    "language": "Language",
+    "english": "English",
+    "french": "French",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "actions": "Actions"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Login to your Tymble account",
+      "email": "Email",
+      "emailPlaceholder": "m@example.com",
+      "password": "Password",
+      "forgotPassword": "Forgot your password?",
+      "loginButton": "Login",
+      "loggingIn": "Logging in...",
+      "orContinueWith": "Or continue with",
+      "loginWithApple": "Login with Apple",
+      "loginWithGoogle": "Login with Google",
+      "loginWithMeta": "Login with Meta",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "termsPrefix": "By clicking continue, you agree to our",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy",
+      "personalInformation": "Personal Information"
+    },
+    "errors": {
+      "loginFailed": "Login failed. Please try again.",
+      "invalidCredentials": "Invalid email or password",
+      "networkError": "Network error. Please check your connection."
+    }
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "tasks": "Tasks",
+    "calendar": "Calendar",
+    "settings": "Settings",
+    "help": "Help",
+    "logout": "Logout",
+    "portfolio": {
+      "title": "Portfolio",
+      "stocksAndFunds": "Stocks & Funds",
+      "savingsAccounts": "Savings accounts",
+      "otherAssets": "Other assets",
+      "checkingAccounts": "Checking accounts",
+      "crypto": "Crypto",
+      "euroFunds": "Euro funds",
+      "loans": "Loans"
+    },
+    "models": {
+      "title": "Models"
+    },
+    "documentation": {
+      "title": "Documentation",
+      "introduction": "Introduction",
+      "getStarted": "Get Started",
+      "tutorials": "Tutorials",
+      "changelog": "Changelog"
+    },
+    "settingsMenu": {
+      "title": "Settings",
+      "general": "General",
+      "team": "Team",
+      "billing": "Billing",
+      "limits": "Limits"
+    }
+  },
+  "sidebar": {
+    "platform": "Platform",
+    "projects": "Projects",
+    "searchProjects": "Search projects...",
+    "moreProjects": "More projects",
+    "addProject": "Add Project",
+    "team": "Team",
+    "enterprise": "Enterprise",
+    "startup": "Startup",
+    "free": "Free",
+    "teams": "Teams",
+    "addTeam": "Add team",
+    "viewProject": "View Project",
+    "shareProject": "Share Project",
+    "deleteProject": "Delete Project",
+    "more": "More"
+  },
+  "user": {
+    "upgradeToPro": "Upgrade to Pro",
+    "account": "Account",
+    "billing": "Billing",
+    "notifications": "Notifications",
+    "logOut": "Log out"
+  },
+  "projects": {
+    "title": "Projects",
+    "newProject": "New Project",
+    "noProjects": "No projects found",
+    "createFirst": "Create your first project to get started",
+    "designEngineering": "Design Engineering",
+    "salesAndMarketing": "Sales & Marketing",
+    "travel": "Travel"
+  }
+}

@@ -4,6 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { loginUser } from '@/api/auth';
 import placeholderImage from '@/assets/placeholder.svg';
+import { useTranslation } from '@/hooks/use-translation';
 import { loginSchema } from '@/schemas/login';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
@@ -39,6 +40,8 @@ export function LoginForm({
 }: React.ComponentProps<'div'>) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
   const loginMutation = useMutation({
     mutationFn: loginUser,
     mutationKey: ['login'],
@@ -49,7 +52,7 @@ export function LoginForm({
       navigate({ to: '/' });
     },
     onError: (error) => {
-      toast.error(error.message || 'Login failed. Please try again.');
+      toast.error(error.message || t('auth.errors.loginFailed'));
     },
   });
 
@@ -83,22 +86,26 @@ export function LoginForm({
               >
                 <FieldGroup>
                   <div className="flex flex-col items-center gap-2 text-center">
-                    <h1 className="font-bold text-2xl">Welcome back</h1>
+                    <h1 className="font-bold text-2xl">
+                      {t('auth.login.title')}
+                    </h1>
                     <p className="text-balance text-muted-foreground">
-                      Login to your Tymble account
+                      {t('auth.login.subtitle')}
                     </p>
                   </div>
-                  <h1>Personal Information</h1>
+                  <h1>{t('auth.login.personalInformation')}</h1>
                   <form.AppField
                     children={(field) => (
                       <Field>
-                        <FieldLabel htmlFor="email">Email</FieldLabel>
+                        <FieldLabel htmlFor="email">
+                          {t('auth.login.email')}
+                        </FieldLabel>
                         <field.Input
                           autoComplete="email"
                           id="email"
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder="m@example.com"
+                          placeholder={t('auth.login.emailPlaceholder')}
                           required
                           tabIndex={1}
                           type="email"
@@ -113,13 +120,15 @@ export function LoginForm({
                     children={(field) => (
                       <Field>
                         <div className="flex items-center">
-                          <FieldLabel htmlFor="password">Password</FieldLabel>
+                          <FieldLabel htmlFor="password">
+                            {t('auth.login.password')}
+                          </FieldLabel>
                           <a
                             className="ml-auto text-sm underline-offset-2 hover:underline"
                             href="#"
                             tabIndex={4}
                           >
-                            Forgot your password?
+                            {t('auth.login.forgotPassword')}
                           </a>
                         </div>
                         <field.Input
@@ -144,12 +153,14 @@ export function LoginForm({
                         tabIndex={3}
                         type="submit"
                       >
-                        {loginMutation.isPending ? 'Logging in...' : 'Login'}
+                        {loginMutation.isPending
+                          ? t('auth.login.loggingIn')
+                          : t('auth.login.loginButton')}
                       </form.Button>
                     </Field>
                   </form.AppForm>
                   <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                    Or continue with
+                    {t('auth.login.orContinueWith')}
                   </FieldSeparator>
                   <Field className="grid grid-cols-3 gap-4">
                     <Button type="button" variant="outline">
@@ -163,7 +174,9 @@ export function LoginForm({
                           fill="currentColor"
                         />
                       </svg>
-                      <span className="sr-only">Login with Apple</span>
+                      <span className="sr-only">
+                        {t('auth.login.loginWithApple')}
+                      </span>
                     </Button>
                     <Button type="button" variant="outline">
                       <svg
@@ -176,7 +189,9 @@ export function LoginForm({
                           fill="currentColor"
                         />
                       </svg>
-                      <span className="sr-only">Login with Google</span>
+                      <span className="sr-only">
+                        {t('auth.login.loginWithGoogle')}
+                      </span>
                     </Button>
                     <Button type="button" variant="outline">
                       <svg
@@ -189,11 +204,14 @@ export function LoginForm({
                           fill="currentColor"
                         />
                       </svg>
-                      <span className="sr-only">Login with Meta</span>
+                      <span className="sr-only">
+                        {t('auth.login.loginWithMeta')}
+                      </span>
                     </Button>
                   </Field>
                   <FieldDescription className="text-center">
-                    Don&apos;t have an account? <a href="#">Sign up</a>
+                    {t('auth.login.noAccount')}{' '}
+                    <a href="#">{t('auth.login.signUp')}</a>
                   </FieldDescription>
                 </FieldGroup>
               </form>
@@ -208,8 +226,10 @@ export function LoginForm({
             </CardContent>
           </Card>
           <FieldDescription className="px-6 text-center">
-            By clicking continue, you agree to our{' '}
-            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            {t('auth.login.termsPrefix')}{' '}
+            <a href="#">{t('auth.login.termsOfService')}</a>{' '}
+            {t('auth.login.and')}{' '}
+            <a href="#">{t('auth.login.privacyPolicy')}</a>.
           </FieldDescription>
         </div>
       </section>

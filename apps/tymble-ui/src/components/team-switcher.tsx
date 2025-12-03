@@ -2,6 +2,7 @@
 
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import * as React from 'react';
+import { useTranslation } from '@/hooks/use-translation';
 
 import {
   DropdownMenu,
@@ -29,6 +30,7 @@ export function TeamSwitcher({
   }[];
 }) {
   const { isMobile } = useSidebar();
+  const { t } = useTranslation();
   const [activeTeam, setActiveTeam] = React.useState(teams[0]);
 
   if (!activeTeam) {
@@ -61,7 +63,7 @@ export function TeamSwitcher({
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Teams
+              {t('sidebar.teams')}
             </DropdownMenuLabel>
             {teams.map((team, index) => (
               <DropdownMenuItem
@@ -81,7 +83,9 @@ export function TeamSwitcher({
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">Add team</div>
+              <div className="font-medium text-muted-foreground">
+                {t('sidebar.addTeam')}
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
