@@ -6,6 +6,7 @@ import {
   Command,
   Frame,
   GalleryVerticalEnd,
+  type LucideIcon,
   MapIcon,
   PieChart,
   Settings2,
@@ -23,6 +24,13 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/ui/sidebar';
+
+export type NavItem = {
+  title: string;
+  url: string;
+  icon?: LucideIcon;
+  items?: NavItem[];
+};
 
 export const AppSidebar = ({
   ...props
