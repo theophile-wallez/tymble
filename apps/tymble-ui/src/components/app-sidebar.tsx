@@ -33,17 +33,17 @@ const data = {
   },
   teams: [
     {
-      name: 'Acme Inc',
+      name: 'Tymble',
       logo: GalleryVerticalEnd,
       plan: 'Enterprise',
     },
     {
-      name: 'Acme Corp.',
+      name: 'Tymble',
       logo: AudioWaveform,
       plan: 'Startup',
     },
     {
-      name: 'Evil Corp.',
+      name: 'Tymble',
       logo: Command,
       plan: 'Free',
     },
