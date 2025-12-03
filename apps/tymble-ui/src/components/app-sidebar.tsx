@@ -2,13 +2,13 @@ import {
   AudioWaveform,
   BookOpen,
   Bot,
+  ChartNoAxesCombined,
   Command,
   Frame,
   GalleryVerticalEnd,
   MapIcon,
   PieChart,
   Settings2,
-  SquareTerminal,
 } from 'lucide-react';
 import type * as React from 'react';
 
@@ -50,21 +50,37 @@ const data = {
   ],
   navMain: [
     {
-      title: 'Playground',
+      title: 'Portfolio',
       url: '#',
-      icon: SquareTerminal,
+      icon: ChartNoAxesCombined,
       isActive: true,
       items: [
         {
-          title: 'History',
+          title: 'Stocks & Founds',
           url: '#',
         },
         {
-          title: 'Starred',
+          title: 'Savings accounts',
           url: '#',
         },
         {
-          title: 'Settings',
+          title: 'Other assets',
+          url: '#',
+        },
+        {
+          title: 'Checking accounts',
+          url: '#',
+        },
+        {
+          title: 'Crypto',
+          url: '#',
+        },
+        {
+          title: 'Euro funds',
+          url: '#',
+        },
+        {
+          title: 'Loans',
           url: '#',
         },
       ],
@@ -73,20 +89,20 @@ const data = {
       title: 'Models',
       url: '#',
       icon: Bot,
-      items: [
-        {
-          title: 'Genesis',
-          url: '#',
-        },
-        {
-          title: 'Explorer',
-          url: '#',
-        },
-        {
-          title: 'Quantum',
-          url: '#',
-        },
-      ],
+      // items: [
+      //   {
+      //     title: 'Genesis',
+      //     url: '#',
+      //   },
+      //   {
+      //     title: 'Explorer',
+      //     url: '#',
+      //   },
+      //   {
+      //     title: 'Quantum',
+      //     url: '#',
+      //   },
+      // ],
     },
     {
       title: 'Documentation',
@@ -161,7 +177,7 @@ export const AppSidebar = ({
     <SidebarHeader>
       <TeamSwitcher teams={data.teams} />
     </SidebarHeader>
-    <SidebarContent>
+    <SidebarContent className="scrollbar-thin">
       <NavMain items={data.navMain} />
       <NavProjects projects={data.projects} />
     </SidebarContent>
