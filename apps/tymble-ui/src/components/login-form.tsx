@@ -1,10 +1,9 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { loginUser } from '@/api/auth';
 import placeholderImage from '@/assets/placeholder.svg';
-import { authStore } from '@/lib/auth';
 import { loginSchema } from '@/schemas/login';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
@@ -39,10 +38,11 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<'div'>) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const loginMutation = useMutation({
     mutationFn: loginUser,
-    onSuccess: (data) => {
-      authStore.setUser(data.user);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['auth'] });
       toast.success('Login successful!');
       navigate({ to: '/' });
     },

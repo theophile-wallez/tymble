@@ -4,7 +4,7 @@ import {
   Outlet,
   redirect,
 } from '@tanstack/react-router';
-import { authStore } from '@/lib/auth';
+import { authQueryOptions } from '@/hooks/use-auth';
 
 const AppLayout = () => (
   <>
@@ -25,8 +25,10 @@ const AppLayout = () => (
 );
 
 export const Route = createFileRoute('/_app')({
-  beforeLoad: () => {
-    if (!authStore.isAuthenticated()) {
+  beforeLoad: async ({ context }) => {
+    try {
+      await context.queryClient.ensureQueryData(authQueryOptions);
+    } catch {
       throw redirect({ to: '/login' });
     }
   },

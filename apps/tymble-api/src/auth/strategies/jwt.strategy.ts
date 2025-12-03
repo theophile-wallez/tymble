@@ -1,15 +1,15 @@
 /** biome-ignore-all lint/correctness/noUnusedPrivateClassMembers: The `config` member is used by Passport internally */
 
-import { Inject, Injectable } from '@nestjs/common';
-import type { ConfigType } from '@nestjs/config';
-import { PassportStrategy } from '@nestjs/passport';
+import { Inject, Injectable } from "@nestjs/common";
+import type { ConfigType } from "@nestjs/config";
+import { PassportStrategy } from "@nestjs/passport";
 import {
   ExtractJwt,
   Strategy,
   type StrategyOptionsWithoutRequest,
-} from 'passport-jwt';
-import jwtConfig from '../config/jwt.config';
-import { AuthJwtPayload } from '../types/jwtPayload.type';
+} from "passport-jwt";
+import jwtConfig from "../config/jwt.config";
+import { AuthJwtPayload } from "../types/jwtPayload.type";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -18,7 +18,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly config: ConfigType<typeof jwtConfig>
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request) => request?.cookies?.auth_token,
+      ]),
       secretOrKey: config.secret as string,
       ignoreExpiration: false,
     } satisfies StrategyOptionsWithoutRequest);

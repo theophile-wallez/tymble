@@ -1,22 +1,26 @@
 import { apiRequest } from '@/lib/api';
 
-export interface LoginRequest {
+export type LoginRequest = {
   email: string;
   password: string;
-}
+};
 
-export interface LoginResponse {
+export type LoginResponse = {
   user: {
     id: string;
     email: string;
-    name?: string;
   };
-}
+};
 
-export async function loginUser(credentials: LoginRequest): Promise<LoginResponse> {
+export function loginUser(credentials: LoginRequest): Promise<LoginResponse> {
   return apiRequest<LoginResponse>('/auth/login', {
     method: 'POST',
     body: JSON.stringify(credentials),
     credentials: 'include', // Important: send cookies with the request
   });
+}
+
+export async function fetchUser(): Promise<LoginResponse['user']> {
+  const response = await apiRequest<LoginResponse['user']>('/user/profile');
+  return response;
 }
