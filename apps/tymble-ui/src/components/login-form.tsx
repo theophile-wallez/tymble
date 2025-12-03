@@ -4,6 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { loginUser } from '@/api/auth';
 import placeholderImage from '@/assets/placeholder.svg';
+import { authQueryOptions } from '@/hooks/use-auth';
 import { loginSchema } from '@/schemas/login';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
@@ -41,12 +42,14 @@ export function LoginForm({
   const queryClient = useQueryClient();
   const loginMutation = useMutation({
     mutationFn: loginUser,
+    mutationKey: ['login'],
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['auth'] });
-      toast.success('Login successful!');
+      await queryClient.invalidateQueries({
+        queryKey: authQueryOptions.queryKey,
+      });
       navigate({ to: '/' });
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       toast.error(error.message || 'Login failed. Please try again.');
     },
   });

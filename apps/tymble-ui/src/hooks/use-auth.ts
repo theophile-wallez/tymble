@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchUser } from '@/api/auth';
 
 export const authQueryOptions = {
-  queryKey: ['auth'],
+  queryKey: ['user'],
   queryFn: fetchUser,
   retry: false,
 };
