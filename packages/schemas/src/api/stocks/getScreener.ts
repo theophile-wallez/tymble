@@ -1,7 +1,6 @@
-import type { DTOStructure } from 'types/dto.structure';
-import type { InferDto } from 'types/inferDto';
 import type * as screener from 'yahoo-finance2/modules/screener';
 import { z } from 'zod';
+import type { DTOStructure, InferDto } from '@/types';
 
 const screenerModules = [
   'aggressive_small_caps',
@@ -21,7 +20,7 @@ const screenerModules = [
   'undervalued_large_caps',
 ] as const satisfies screener.PredefinedScreenerModules[];
 
-export const GetScreenerQuerySchema = {
+export const GetScreenerSchema = {
   dto: z
     .object({
       scrIds: z
@@ -35,6 +34,6 @@ export const GetScreenerQuerySchema = {
       title: z.string().describe('Display name of the screener'),
     })
     .strict(),
-} satisfies DTOStructure;
+} as const satisfies DTOStructure;
 
-export type GetScreenerQuery = InferDto<typeof GetScreenerQuerySchema>;
+export type GetScreener = InferDto<typeof GetScreenerSchema>;

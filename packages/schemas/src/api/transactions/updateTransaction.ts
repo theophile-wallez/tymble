@@ -1,6 +1,5 @@
-import type { DTOStructure } from 'types/dto.structure';
-import type { InferDto } from 'types/inferDto';
 import z from 'zod';
+import type { DTOStructure, InferDto } from '@/types';
 import { createTransactionSchema } from './createTransaction';
 
 export const updateTransactionSchema = {

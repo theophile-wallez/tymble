@@ -33,6 +33,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.1",
     "@tymble/db": "workspace:*",
+    "@tymble/schemas": "workspace:*",
     "@supabase/supabase-js": "^2.80.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",

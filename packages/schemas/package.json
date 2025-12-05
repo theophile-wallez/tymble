@@ -4,16 +4,6 @@
   "private": true,
   "main": "dist/index.js",
   "types": "src/index.ts",
-  "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./dist/index.js"
-    },
-    "./*": {
-      "types": "./src/*.ts",
-      "default": "./dist/*.js"
-    }
-  },
   "scripts": {
     "lint": "biome check .",
     "lint:fix": "npx ultracite fix",
