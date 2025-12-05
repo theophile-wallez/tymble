@@ -1,6 +1,6 @@
+import type { DTOStructure, InferDto } from '@schemas/types';
 import { transactionInsertSchema } from '@tymble/db';
 import z from 'zod';
-import type { DTOStructure, InferDto } from '@/types';
 
 export const createTransactionSchema = {
   dto: transactionInsertSchema,

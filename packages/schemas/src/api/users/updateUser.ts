@@ -1,6 +1,6 @@
+import type { DTOStructure, InferDto } from '@schemas/types';
 import { userUpdateSchema } from '@tymble/db';
 import z from 'zod';
-import type { DTOStructure, InferDto } from '@/types';
 
 export const updateUserSchema = {
   dto: userUpdateSchema

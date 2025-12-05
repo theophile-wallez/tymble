@@ -1,6 +1,6 @@
+import type { DTOStructure, InferDto } from '@schemas/types';
 import type { ChartOptions } from 'yahoo-finance2/modules/chart';
 import { z } from 'zod';
-import type { DTOStructure, InferDto } from '@/types';
 
 const intervals = [
   '1m',

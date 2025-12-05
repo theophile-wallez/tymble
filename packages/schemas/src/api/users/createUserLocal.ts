@@ -1,6 +1,6 @@
+import type { DTOStructure, InferDto } from '@schemas/types';
 import { userInsertSchema } from '@tymble/db';
 import z from 'zod';
-import type { DTOStructure, InferDto } from '@/types';
 import { passwordSchema } from '../../misc';
 
 export const createLocalUserSchema = {
