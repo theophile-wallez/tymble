@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "path": "../apps/tymble-ui"
+    },
+    {
+      "path": "../apps/tymble-api"
+    },
+    {
+      "path": "../.vscode"
+    }
+  ],
+  "settings": {
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    "emmet.showExpandedAbbreviation": "never"
+  }
+}

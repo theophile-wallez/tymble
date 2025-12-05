@@ -1,4 +1,4 @@
-import { userUpdateSchema } from '@repo/db';
+import { userUpdateSchema } from '@tymble/db';
 import { createZodDto } from 'nestjs-zod';
 
 const updateUserSchema = userUpdateSchema

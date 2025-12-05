@@ -1,4 +1,4 @@
-import { userInsertSchema } from '@repo/db';
+import { userInsertSchema } from '@tymble/db';
 import { createZodDto } from 'nestjs-zod';
 import z from 'zod';
 

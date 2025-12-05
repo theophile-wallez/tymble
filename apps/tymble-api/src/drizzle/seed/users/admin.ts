@@ -1,4 +1,4 @@
-import { usersTable } from '@repo/db/index';
+import { usersTable } from '@tymble/db';
 import { type SeedDatabase } from '../utils/getSeedDatabase.utils';
 
 export const seedAdminUser = async (db: SeedDatabase) => {

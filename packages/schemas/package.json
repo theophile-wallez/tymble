@@ -1,5 +1,5 @@
 {
-  "name": "@tymble/db",
+  "name": "@tymble/schemas",
   "version": "0.0.0",
   "private": true,
   "main": "dist/index.js",
@@ -22,12 +22,11 @@
     "watch": "tsc -p tsconfig.json --watch"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.7",
-    "drizzle-zod": "^0.8.3",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@tymble/db": "workspace:*",
     "@types/node": "^22.15.3",
     "typescript": "5.9.2"
   }

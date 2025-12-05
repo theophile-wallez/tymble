@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserSelect } from '@repo/db';
+import { UserSelect } from '@tymble/db';
 import { compare } from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { AuthJwtPayload } from './types/jwtPayload.type';

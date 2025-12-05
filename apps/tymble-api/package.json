@@ -32,7 +32,7 @@
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.1",
-    "@repo/db": "workspace:*",
+    "@tymble/db": "workspace:*",
     "@supabase/supabase-js": "^2.80.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",

@@ -1,4 +1,4 @@
-import { userInsertSchema, usersTable } from '@repo/db/index';
+import { userInsertSchema, usersTable } from '@tymble/db';
 import { z } from 'zod';
 import { SeedDatabase } from '../utils/getSeedDatabase.utils';
 

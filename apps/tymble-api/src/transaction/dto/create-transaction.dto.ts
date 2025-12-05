@@ -1,4 +1,4 @@
-import { transactionInsertSchema } from '@repo/db';
+import { transactionInsertSchema } from '@tymble/db';
 import { createZodDto } from 'nestjs-zod';
 
 export const createTransactionSchema = transactionInsertSchema;

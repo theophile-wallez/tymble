@@ -19,7 +19,7 @@
     },
     "dev": {
       "cache": false,
-      "dependsOn": ["@repo/db#build"],
+      "dependsOn": ["@tymble/db#build", "@tymble/schemas#build"],
       "persistent": true
     }
   }

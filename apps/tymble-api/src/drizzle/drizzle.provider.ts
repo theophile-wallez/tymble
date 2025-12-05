@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import * as schema from '@repo/db';
+import * as schema from '@tymble/db';
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 

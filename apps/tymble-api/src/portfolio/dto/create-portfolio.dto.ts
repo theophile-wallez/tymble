@@ -1,4 +1,4 @@
-import { portfolioInsertSchema } from '@repo/db';
+import { portfolioInsertSchema } from '@tymble/db';
 import { createZodDto } from 'nestjs-zod';
 
 const createPortfolioDtoSchema = portfolioInsertSchema.omit({
