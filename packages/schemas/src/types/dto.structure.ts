@@ -1,11 +1,10 @@
-// t is a zod schema representing the DTO structure
-// r is a zod schema representing the response structure
+/** biome-ignore-all lint/suspicious/noExplicitAny: simple extends */
 
 import type z from 'zod';
 
 export type DTOStructure<
-  T extends z.ZodType = z.ZodType,
-  R extends z.ZodType = z.ZodType,
+  T extends z.ZodType<any> = z.ZodType<unknown>,
+  R extends z.ZodType<any> = z.ZodType<unknown>,
 > = {
   dto: T;
   res: R;
