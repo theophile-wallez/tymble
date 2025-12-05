@@ -1,8 +1,6 @@
-import { transactionInsertSchema } from '@tymble/db';
+import { createTransactionSchema } from '@tymble/schemas';
 import { createZodDto } from 'nestjs-zod';
 
-export const createTransactionSchema = transactionInsertSchema;
-
 export class CreateTransactionDto extends createZodDto(
-  createTransactionSchema
+  createTransactionSchema.dto
 ) {}

@@ -1,11 +1,4 @@
-import { userUpdateSchema } from '@tymble/db';
+import { updateUserSchema } from '@tymble/schemas';
 import { createZodDto } from 'nestjs-zod';
 
-const updateUserSchema = userUpdateSchema
-  .omit({
-    emailVerifiedAt: true,
-    isSuperuser: true,
-  })
-  .partial();
-
-export class UpdateUserDto extends createZodDto(updateUserSchema) {}
+export class UpdateUserDto extends createZodDto(updateUserSchema.dto) {}

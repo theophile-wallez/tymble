@@ -20,7 +20,7 @@ const screenerModules = [
   'undervalued_large_caps',
 ] as const satisfies screener.PredefinedScreenerModules[];
 
-export const GetScreenerSchema = {
+export const getScreenerSchema = {
   dto: z
     .object({
       scrIds: z
@@ -36,4 +36,4 @@ export const GetScreenerSchema = {
     .strict(),
 } as const satisfies DTOStructure;
 
-export type GetScreener = InferDto<typeof GetScreenerSchema>;
+export type GetScreener = InferDto<typeof getScreenerSchema>;
