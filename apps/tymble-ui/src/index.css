@@ -7,6 +7,7 @@ html,
 #root {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -18,6 +19,7 @@ html,
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-main-background: var(--main-background);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -41,7 +43,7 @@ html,
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
+  --color-sidebar: var(--main-background);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
@@ -55,7 +57,8 @@ html,
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --main-background: oklch(97.315% 0.00011 271.152);
+  --background: oklch(99.107% 0.00011 271.152);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -89,7 +92,8 @@ html,
 }
 
 .dark {
-  --background: oklch(0.14 0.04 259.21);
+  --main-background: oklch(13.979% 0.00002 271.152);
+  --background: oklch(17.348% 0.00206 286.048);
   --foreground: oklch(0.98 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
