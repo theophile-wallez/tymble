@@ -38,88 +38,88 @@ export const AppSidebar = ({
     navMain: [
       {
         title: t('navigation.portfolio.title'),
-        url: '#',
+        url: '/portfolio',
         icon: ChartNoAxesCombined,
         isActive: true,
         items: [
           {
             title: t('navigation.portfolio.stocksAndFunds'),
-            url: '#',
+            url: '/portfolio/stocks-and-funds',
           },
           {
             title: t('navigation.portfolio.savingsAccounts'),
-            url: '#',
+            url: '/portfolio/savings-accounts',
           },
           {
             title: t('navigation.portfolio.otherAssets'),
-            url: '#',
+            url: '/portfolio/other-assets',
           },
           {
             title: t('navigation.portfolio.checkingAccounts'),
-            url: '#',
+            url: '/portfolio/checking-accounts',
           },
           {
             title: t('navigation.portfolio.crypto'),
-            url: '#',
+            url: '/portfolio/crypto',
           },
           {
             title: t('navigation.portfolio.euroFunds'),
-            url: '#',
+            url: '/portfolio/euro-funds',
           },
           {
             title: t('navigation.portfolio.loans'),
-            url: '#',
+            url: '/portfolio/loans',
           },
         ],
       },
       {
         title: t('navigation.dashboards.title'),
-        url: '#',
+        url: '/dashboards',
         icon: ChartArea,
       },
       {
         title: t('navigation.documentation.title'),
-        url: '#',
+        url: '/manage',
         icon: BookOpen,
         items: [
           {
             title: t('navigation.documentation.introduction'),
-            url: '#',
+            url: '/documentation/introduction',
           },
           {
             title: t('navigation.documentation.getStarted'),
-            url: '#',
+            url: '/documentation/get-started',
           },
           {
             title: t('navigation.documentation.tutorials'),
-            url: '#',
+            url: '/documentation/tutorials',
           },
           {
             title: t('navigation.documentation.changelog'),
-            url: '#',
+            url: '/documentation/changelog',
           },
         ],
       },
       {
         title: t('navigation.settingsMenu.title'),
-        url: '#',
+        url: '/settings',
         icon: Settings2,
         items: [
           {
             title: t('navigation.settingsMenu.general'),
-            url: '#',
+            url: '/settings/general',
           },
           {
             title: t('navigation.settingsMenu.team'),
-            url: '#',
+            url: '/settings/team',
           },
           {
             title: t('navigation.settingsMenu.billing'),
-            url: '#',
+            url: '/settings/billing',
           },
           {
             title: t('navigation.settingsMenu.limits'),
-            url: '#',
+            url: '/settings/limits',
           },
         ],
       },
