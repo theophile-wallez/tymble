@@ -1,4 +1,5 @@
 import { IconLanguage } from '@tabler/icons-react';
+import { Link } from '@tanstack/react-router';
 import {
   BadgeCheck,
   Bell,
@@ -92,9 +93,11 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                {t('user.account')}
+              <DropdownMenuItem asChild>
+                <Link to="/profile">
+                  <BadgeCheck />
+                  {t('user.account')}
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />

@@ -1,9 +1,158 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
+import { format } from 'date-fns';
+import { Mail, MapPin, User as UserIcon } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
+import { Avatar, AvatarFallback, AvatarImage } from '@/ui/avatar';
+import { Badge } from '@/ui/badge';
+import { Button } from '@/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/ui/card';
+import { Label } from '@/ui/label';
+import { Separator } from '@/ui/separator';
 
 export const Route = createFileRoute('/_app/profile')({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return <div>Hello "/_app/profile"!</div>
+  const { data: user } = useAuth();
+  // const { t } = useTranslation();
+
+  if (!user) {
+    return null;
+  }
+
+  return (
+    <div className="container mx-auto max-w-4xl space-y-8 p-8">
+      <div className="flex flex-col gap-8 md:flex-row md:items-start">
+        {/* Profile Header Card */}
+        <Card className="flex-1">
+          <CardHeader className="flex flex-row items-center gap-6 pb-2">
+            <Avatar className="h-24 w-24">
+              <AvatarImage alt={user.firstName} src={user.avatarUrl ?? ''} />
+              <AvatarFallback className="text-2xl">
+                {user.firstName[0]}
+                {user.lastName[0]}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-2xl">
+                    {user.firstName} {user.lastName}
+                  </CardTitle>
+                  <CardDescription className="mt-1 flex items-center gap-2 text-base">
+                    <Mail className="h-4 w-4" />
+                    {user.email}
+                    {user.emailVerifiedAt && (
+                      <Badge className="text-xs" variant="secondary">
+                        Verified
+                      </Badge>
+                    )}
+                  </CardDescription>
+                </div>
+                <Button disabled variant="outline">
+                  Edit Profile
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="mt-6 space-y-6">
+            {user.bio && (
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">About</Label>
+                <p className="text-sm leading-relaxed">{user.bio}</p>
+              </div>
+            )}
+
+            <div className="grid gap-6 sm:grid-cols-2">
+              {user.countryCode && (
+                <div className="flex items-center gap-2 text-sm">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">Country:</span>
+                  <span className="font-medium">{user.countryCode}</span>
+                </div>
+              )}
+              {user.birthdate && (
+                <div className="flex items-center gap-2 text-sm">
+                  <UserIcon className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">Born:</span>
+                  <span className="font-medium">
+                    {format(new Date(user.birthdate), 'PP')}
+                  </span>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Account Details */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Account Settings</CardTitle>
+            <CardDescription>
+              Your personal preferences and account status
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex justify-between py-2">
+              <span className="text-muted-foreground text-sm">Language</span>
+              <span className="font-medium text-sm uppercase">
+                {user.language}
+              </span>
+            </div>
+            <Separator />
+            <div className="flex justify-between py-2">
+              <span className="text-muted-foreground text-sm">Theme</span>
+              <span className="font-medium text-sm capitalize">
+                {user.theme}
+              </span>
+            </div>
+            <Separator />
+            <div className="flex justify-between py-2">
+              <span className="text-muted-foreground text-sm">
+                Account Type
+              </span>
+              <Badge variant={user.isSuperuser ? 'default' : 'secondary'}>
+                {user.isSuperuser ? 'Admin' : 'Standard'}
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* System Info */}
+        <Card>
+          <CardHeader>
+            <CardTitle>System Information</CardTitle>
+            <CardDescription>
+              Account creation and update timestamps
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-1">
+              <Label className="text-muted-foreground text-xs">Joined</Label>
+              <p className="font-medium text-sm">
+                {format(new Date(user.createdAt), 'PPP p')}
+              </p>
+            </div>
+            <div className="space-y-1">
+              <Label className="text-muted-foreground text-xs">
+                Last Updated
+              </Label>
+              <p className="font-medium text-sm">
+                {format(new Date(user.updatedAt), 'PPP p')}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
 }
