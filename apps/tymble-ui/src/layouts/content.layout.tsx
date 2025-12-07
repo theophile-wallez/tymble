@@ -28,6 +28,17 @@ export const ContentHeader = ({ className, cy, ...props }: Props) => (
   />
 );
 
+export const ContentSubHeader = ({ className, cy, ...props }: Props) => (
+  <header
+    {...props}
+    className={cn(
+      'justify-left flex h-12 w-full shrink-0 items-center border-border border-b bg-background px-6',
+      className
+    )}
+    data-cy={`content-sub-header-${cy}`}
+  />
+);
+
 export const ContentTitle = ({ className, cy, ...props }: Props) => (
   <h1
     {...props}
