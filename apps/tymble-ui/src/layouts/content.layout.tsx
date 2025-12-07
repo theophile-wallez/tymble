@@ -8,7 +8,11 @@ type Props = React.HTMLAttributes<HTMLDivElement> & {
 export const ContentLayout = ({ className, cy, ...props }: Props) => (
   <section
     {...props}
-    className={cn('relative flex size-full flex-col', className)}
+    className={cn(
+      'relative flex size-full flex-col overflow-hidden',
+      className
+    )}
+    data-content-layout
     data-cy={`content-layout-${cy}`}
     id={cy}
   />
@@ -18,9 +22,10 @@ export const ContentHeader = ({ className, cy, ...props }: Props) => (
   <header
     {...props}
     className={cn(
-      'flex h-12 w-full items-center justify-between border-border border-b bg-accent px-6',
+      'absolute top-0 left-0 flex h-content-header w-full items-center justify-between border-border border-b bg-background/80 px-6 backdrop-blur-md',
       className
     )}
+    data-content-header
     data-cy={`content-header-${cy}`}
   />
 );
@@ -30,5 +35,17 @@ export const ContentTitle = ({ className, cy, ...props }: Props) => (
     {...props}
     className={cn('font-normal text-base', className)}
     data-cy={`content-title-${cy}`}
+  />
+);
+
+export const ContentBody = ({ className, cy, ...props }: Props) => (
+  <div
+    {...props}
+    className={cn(
+      'overflow-auto p-6 [[data-content-header]~&]:pt-content-header',
+      className
+    )}
+    data-content-body
+    data-cy={`content-body-${cy}`}
   />
 );

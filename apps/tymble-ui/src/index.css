@@ -53,6 +53,7 @@ html,
   --color-sidebar-ring: var(--sidebar-ring);
 
   --spacing-content-padding: calc(var(--spacing) * 2);
+  --spacing-content-header: 3rem;
 }
 
 :root {
