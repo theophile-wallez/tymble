@@ -145,13 +145,13 @@ export const AppSidebar = ({
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="flex h-header-height flex-row items-center gap-4 border-border border-b p-4">
+      <SidebarHeader className="flex h-header-height flex-row items-center gap-4 p-4">
         <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
           <GalleryVerticalEnd className="size-4" />
         </div>
-        <div className="grid flex-1 text-left text-sm leading-tight">
+        <div className="grid flex-1 text-left text-normal leading-tight">
           <span className="truncate font-medium">Tymble</span>
-          <span className="truncate text-xs">Portfolio</span>
+          {/* <span className="truncate text-xs">Portfolio</span> */}
         </div>
       </SidebarHeader>
       <SidebarContent className="scrollbar-thin">
