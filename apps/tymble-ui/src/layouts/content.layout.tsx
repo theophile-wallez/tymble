@@ -42,7 +42,7 @@ export const ContentSubHeader = ({ className, cy, ...props }: Props) => (
 export const ContentTitle = ({ className, cy, ...props }: Props) => (
   <h1
     {...props}
-    className={cn('font-normal text-base', className)}
+    className={cn('flex items-center gap-2 font-normal text-base', className)}
     data-cy={`content-title-${cy}`}
   />
 );

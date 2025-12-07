@@ -6,119 +6,23 @@ import {
   ContentSubHeader,
   ContentTitle,
 } from '@/layouts/content.layout';
+import { Badge } from '@/ui/badge';
+import { Dashboard } from './dashboard/dashboard';
 
 export const Dashboards = () => {
   const { t } = useTranslation();
   return (
     <ContentLayout cy="dashboards">
       <ContentHeader cy="dashboards">
-        <ContentTitle cy="dashboards">Dashboards</ContentTitle>
+        <ContentTitle cy="dashboards">
+          Dashboards <Badge variant="secondary">4</Badge>
+        </ContentTitle>
       </ContentHeader>
       <ContentSubHeader cy="dashboards">
         <ContentTitle cy="dashboards">Dashboards</ContentTitle>
       </ContentSubHeader>
       <ContentBody>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem
-          ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem
-          ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem
-          ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem
-          ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem
-          ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem
-          ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem
-          ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem
-          ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem
-          ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quod. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-        </p>
+        <Dashboard />
       </ContentBody>
     </ContentLayout>
   );
