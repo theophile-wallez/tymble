@@ -1,3 +1,4 @@
+import type { UpdateUser } from '@tymble/schemas';
 import { apiRequest } from '@/lib/api';
 
 export type LoginRequest = {
@@ -39,3 +40,9 @@ export const loginUser = (credentials: LoginRequest) => {
 };
 
 export const fetchUser = () => apiRequest<User>('/user/profile');
+
+export const updateUser = (data: UpdateUser['dto']) =>
+  apiRequest<User>('/user/profile', {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });

@@ -4,6 +4,16 @@
   "private": true,
   "main": "dist/index.js",
   "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./src/*.ts",
+      "default": "./dist/*.js"
+    }
+  },
   "scripts": {
     "lint": "biome check .",
     "lint:fix": "npx ultracite fix",
@@ -12,11 +22,11 @@
     "watch": "tsc -p tsconfig.json --watch"
   },
   "dependencies": {
+    "@tymble/db": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@tymble/db": "workspace:*",
     "@types/node": "^22.15.3",
     "typescript": "5.9.2",
     "yahoo-finance2": "^3.10.1"

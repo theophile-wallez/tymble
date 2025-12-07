@@ -7,6 +7,7 @@ export const updateUserSchema = {
     .omit({
       emailVerifiedAt: true,
       isSuperuser: true,
+      id: true,
     })
     .partial(),
   res: z.object({}).strict(),

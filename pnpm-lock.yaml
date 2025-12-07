@@ -356,6 +356,9 @@ importers:
 
   packages/schemas:
     dependencies:
+      '@tymble/db':
+        specifier: workspace:*
+        version: link:../db
       zod:
         specifier: 'catalog:'
         version: 4.1.12
@@ -363,9 +366,6 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
-      '@tymble/db':
-        specifier: workspace:*
-        version: link:../db
       '@types/node':
         specifier: ^22.15.3
         version: 22.15.3

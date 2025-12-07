@@ -19,6 +19,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ['@tymble/schemas'],
+  },
   server: {
     port: 3001,
     host: 'app.local.tymble.xyz',
