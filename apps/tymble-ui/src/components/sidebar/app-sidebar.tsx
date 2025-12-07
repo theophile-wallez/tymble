@@ -1,9 +1,7 @@
 import {
-  AudioWaveform,
   BookOpen,
   ChartArea,
   ChartNoAxesCombined,
-  Command,
   Frame,
   GalleryVerticalEnd,
   type LucideIcon,
@@ -15,7 +13,6 @@ import type * as React from 'react';
 import { NavMain } from '@/components/sidebar/nav-main';
 import { NavProjects } from '@/components/sidebar/nav-projects';
 import { NavUser } from '@/components/sidebar/nav-user';
-import { TeamSwitcher } from '@/components/team-switcher';
 import { useTranslation } from '@/hooks/use-translation';
 import {
   Sidebar,
@@ -38,23 +35,6 @@ export const AppSidebar = ({
 
   // Data structure using translations
   const data = {
-    teams: [
-      {
-        name: 'Tymble',
-        logo: GalleryVerticalEnd,
-        plan: t('sidebar.enterprise'),
-      },
-      {
-        name: 'Tymble',
-        logo: AudioWaveform,
-        plan: t('sidebar.startup'),
-      },
-      {
-        name: 'Tymble',
-        logo: Command,
-        plan: t('sidebar.free'),
-      },
-    ],
     navMain: [
       {
         title: t('navigation.portfolio.title'),
@@ -165,8 +145,14 @@ export const AppSidebar = ({
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="h-header-height border-border border-b">
-        <TeamSwitcher teams={data.teams} />
+      <SidebarHeader className="flex h-header-height flex-row items-center gap-4 border-border border-b p-4">
+        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+          <GalleryVerticalEnd className="size-4" />
+        </div>
+        <div className="grid flex-1 text-left text-sm leading-tight">
+          <span className="truncate font-medium">Tymble</span>
+          <span className="truncate text-xs">Portfolio</span>
+        </div>
       </SidebarHeader>
       <SidebarContent className="scrollbar-thin">
         <NavMain items={data.navMain} />

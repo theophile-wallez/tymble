@@ -50,7 +50,7 @@ html,
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --spacing-header-height: 4rem;
+  --spacing-header-height: 3.5rem;
 }
 
 :root {
