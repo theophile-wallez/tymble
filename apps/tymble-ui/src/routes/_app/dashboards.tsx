@@ -1,9 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { Dashboards } from '@/components/dashboards/dashboards';
 
 export const Route = createFileRoute('/_app/dashboards')({
-  component: RouteComponent,
+  component: () => <Dashboards />,
 });
-
-function RouteComponent() {
-  return <div className="p-content-padding">dashboards</div>;
-}
