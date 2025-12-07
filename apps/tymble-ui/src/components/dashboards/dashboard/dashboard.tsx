@@ -89,7 +89,8 @@ export const Dashboard = () => {
       <GridLayout
         className="layout"
         cols={12}
-        draggableHandle=".drag-handle"
+        isDraggable
+        isResizable
         layout={layout}
         onLayoutChange={setLayout}
         rowHeight={30}
