@@ -11,6 +11,6 @@ export const updateUserSchema = {
     })
     .partial(),
   res: z.object({}).strict(),
-} satisfies DTOStructure;
+} as const satisfies DTOStructure;
 
 export type UpdateUser = InferDto<typeof updateUserSchema>;

@@ -27,9 +27,6 @@ export const Route = createFileRoute('/_app/profile')({
   component: RouteComponent,
 });
 
-// Inline schema for profile update form
-const profileFormSchema = updateUserSchema.dto;
-
 const { fieldContext, formContext } = createFormHookContexts();
 
 const { useAppForm } = createFormHook({
@@ -68,7 +65,7 @@ function RouteComponent() {
       bio: user?.bio ?? '',
     },
     validators: {
-      onSubmit: profileFormSchema,
+      onSubmit: updateUserSchema.dto,
     },
     onSubmit: ({ value }) => {
       updateMutation.mutate({
@@ -88,7 +85,7 @@ function RouteComponent() {
       <div className="flex flex-col gap-8 md:flex-row md:items-start">
         {/* Profile Header Card */}
         <Card className="flex-1">
-          <CardHeader className="flex flex-row items-center gap-6 pb-2">
+          <CardHeader className="flex flex-row items-start gap-6 pb-4">
             <Avatar className="h-24 w-24">
               <AvatarImage alt={user.firstName} src={user.avatarUrl ?? ''} />
               <AvatarFallback className="text-2xl">
@@ -97,117 +94,127 @@ function RouteComponent() {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 space-y-1">
-              <div className="flex items-center justify-between">
+              <div className="flex items-start justify-between">
                 <div>
+                  <CardTitle className="text-2xl">
+                    {user.firstName} {user.lastName}
+                  </CardTitle>
+                  <CardDescription className="mt-1 flex items-center gap-2 text-base">
+                    <Mail className="h-4 w-4" />
+                    {user.email}
+                    {user.emailVerifiedAt && (
+                      <Badge className="text-xs" variant="secondary">
+                        Verified
+                      </Badge>
+                    )}
+                  </CardDescription>
+                </div>
+                <Button
+                  onClick={() => setIsEditing(!isEditing)}
+                  variant={isEditing ? 'secondary' : 'outline'}
+                >
                   {isEditing ? (
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        form.handleSubmit();
-                      }}
-                    >
-                      <FieldGroup className="gap-4">
-                        <div className="grid gap-4 sm:grid-cols-2">
-                          <form.AppField
-                            children={(field) => (
-                              <Field>
-                                <FieldLabel>First Name</FieldLabel>
-                                <field.Input
-                                  onBlur={field.handleBlur}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>
-                                  ) => field.handleChange(e.target.value)}
-                                  value={field.state.value}
-                                />
-                                <FieldError errors={field.state.meta.errors} />
-                              </Field>
-                            )}
-                            name="firstName"
-                          />
-                          <form.AppField
-                            children={(field) => (
-                              <Field>
-                                <FieldLabel>Last Name</FieldLabel>
-                                <field.Input
-                                  onBlur={field.handleBlur}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>
-                                  ) => field.handleChange(e.target.value)}
-                                  value={field.state.value}
-                                />
-                                <FieldError errors={field.state.meta.errors} />
-                              </Field>
-                            )}
-                            name="lastName"
-                          />
-                        </div>
-                        <form.AppField
-                          children={(field) => (
-                            <Field>
-                              <FieldLabel>Bio</FieldLabel>
-                              <field.Input
-                                onBlur={field.handleBlur}
-                                onChange={(
-                                  e: React.ChangeEvent<HTMLInputElement>
-                                ) => field.handleChange(e.target.value)}
-                                value={field.state.value}
-                              />
-                              <FieldError errors={field.state.meta.errors} />
-                            </Field>
-                          )}
-                          name="bio"
-                        />
-                        <Field className="flex-row gap-2">
-                          <form.AppForm>
-                            <form.Button
-                              disabled={updateMutation.isPending}
-                              type="submit"
-                            >
-                              {updateMutation.isPending
-                                ? 'Saving...'
-                                : 'Save Changes'}
-                            </form.Button>
-                          </form.AppForm>
-                          <Button
-                            onClick={() => {
-                              setIsEditing(false);
-                              form.reset();
-                            }}
-                            type="button"
-                            variant="outline"
-                          >
-                            <X className="mr-1 h-4 w-4" />
-                            Cancel
-                          </Button>
-                        </Field>
-                      </FieldGroup>
-                    </form>
+                    <>
+                      <X className="mr-1 h-4 w-4" />
+                      Cancel
+                    </>
                   ) : (
                     <>
-                      <CardTitle className="text-2xl">
-                        {user.firstName} {user.lastName}
-                      </CardTitle>
-                      <CardDescription className="mt-1 flex items-center gap-2 text-base">
-                        <Mail className="h-4 w-4" />
-                        {user.email}
-                        {user.emailVerifiedAt && (
-                          <Badge className="text-xs" variant="secondary">
-                            Verified
-                          </Badge>
-                        )}
-                      </CardDescription>
+                      <Pencil className="mr-1 h-4 w-4" />
+                      Edit Profile
                     </>
                   )}
-                </div>
-                {!isEditing && (
-                  <Button onClick={() => setIsEditing(true)} variant="outline">
-                    <Pencil className="mr-1 h-4 w-4" />
-                    Edit Profile
-                  </Button>
-                )}
+                </Button>
               </div>
             </div>
           </CardHeader>
+
+          {isEditing && (
+            <CardContent className="overflow-hidden border-t pt-6">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  form.handleSubmit();
+                }}
+              >
+                <FieldGroup className="gap-6">
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <form.AppField
+                      children={(field) => (
+                        <Field>
+                          <FieldLabel>First Name</FieldLabel>
+                          <field.Input
+                            onBlur={field.handleBlur}
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => field.handleChange(e.target.value)}
+                            value={field.state.value}
+                          />
+                          <FieldError errors={field.state.meta.errors} />
+                        </Field>
+                      )}
+                      name="firstName"
+                    />
+                    <form.AppField
+                      children={(field) => (
+                        <Field>
+                          <FieldLabel>Last Name</FieldLabel>
+                          <field.Input
+                            onBlur={field.handleBlur}
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => field.handleChange(e.target.value)}
+                            value={field.state.value}
+                          />
+                          <FieldError errors={field.state.meta.errors} />
+                        </Field>
+                      )}
+                      name="lastName"
+                    />
+                  </div>
+                  <form.AppField
+                    children={(field) => (
+                      <Field>
+                        <FieldLabel>Bio</FieldLabel>
+                        <field.Input
+                          onBlur={field.handleBlur}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            field.handleChange(e.target.value)
+                          }
+                          placeholder="Tell us about yourself..."
+                          value={field.state.value}
+                        />
+                        <FieldError errors={field.state.meta.errors} />
+                      </Field>
+                    )}
+                    name="bio"
+                  />
+                  <div className="flex justify-end gap-3 pt-2">
+                    <Button
+                      onClick={() => {
+                        setIsEditing(false);
+                        form.reset();
+                      }}
+                      type="button"
+                      variant="outline"
+                    >
+                      Cancel
+                    </Button>
+                    <form.AppForm>
+                      <form.Button
+                        disabled={updateMutation.isPending}
+                        type="submit"
+                      >
+                        {updateMutation.isPending
+                          ? 'Saving...'
+                          : 'Save Changes'}
+                      </form.Button>
+                    </form.AppForm>
+                  </div>
+                </FieldGroup>
+              </form>
+            </CardContent>
+          )}
           <CardContent className="mt-6 space-y-6">
             {!isEditing && user.bio && (
               <div className="space-y-2">
