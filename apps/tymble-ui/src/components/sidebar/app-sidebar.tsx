@@ -165,7 +165,7 @@ export const AppSidebar = ({
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="h-header-height border-border border-b">
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent className="scrollbar-thin">
