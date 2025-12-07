@@ -63,7 +63,11 @@ const initialLayout: Layout[] = [
   { i: 'tasks', x: 0, y: 9, w: 12, h: 5 },
 ];
 
-export const Dashboard = () => {
+type DashboardProps = {
+  isEditing?: boolean;
+};
+
+export const Dashboard = ({ isEditing = false }: DashboardProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(1200);
   const [layout, setLayout] = useState(initialLayout);
@@ -89,8 +93,8 @@ export const Dashboard = () => {
       <GridLayout
         className="layout"
         cols={12}
-        isDraggable
-        isResizable
+        isDraggable={isEditing}
+        isResizable={isEditing}
         layout={layout}
         onLayoutChange={setLayout}
         rowHeight={30}
