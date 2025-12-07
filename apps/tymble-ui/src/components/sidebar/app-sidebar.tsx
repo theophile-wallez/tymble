@@ -22,7 +22,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
 } from '@/ui/sidebar';
 
 export type NavItem = {
@@ -39,11 +38,6 @@ export const AppSidebar = ({
 
   // Data structure using translations
   const data = {
-    user: {
-      name: 'shadcn',
-      email: 'm@example.com',
-      avatar: '/avatars/shadcn.jpg',
-    },
     teams: [
       {
         name: 'Tymble',
@@ -181,7 +175,7 @@ export const AppSidebar = ({
       <SidebarFooter>
         <NavUser />
       </SidebarFooter>
-      <SidebarRail />
+      {/* <SidebarRail /> */}
     </Sidebar>
   );
 };
