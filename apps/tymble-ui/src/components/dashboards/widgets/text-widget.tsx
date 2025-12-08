@@ -19,7 +19,7 @@ export const TextWidget = ({
     editorProps: {
       attributes: {
         class:
-          'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[100px]',
+          'prose dark:prose-invert prose-h1:text-3xl max-w-none focus:outline-none min-h-[100px]',
       },
     },
   });
@@ -31,7 +31,7 @@ export const TextWidget = ({
   }, [editor, isEditing]);
 
   return (
-    <WidgetLayout isEditing={isEditing} title="Notes" transparent={transparent}>
+    <WidgetLayout isEditing={isEditing} transparent={transparent}>
       <EditorContent editor={editor} />
     </WidgetLayout>
   );
