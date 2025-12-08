@@ -107,4 +107,15 @@ export type WidgetContent = z.infer<typeof WidgetContentSchema>;
 export type DashboardItem = z.infer<typeof DashboardItemSchema>;
 export type Dashboard = z.infer<typeof DashboardSchema>;
 
+export const WIDGET_MIN_SIZES: Record<
+  WidgetType,
+  { minW: number; minH: number }
+> = {
+  stats: { minW: 2, minH: 2 },
+  revenue: { minW: 4, minH: 6 },
+  activity: { minW: 3, minH: 6 },
+  tasks: { minW: 4, minH: 6 },
+  traffic: { minW: 3, minH: 6 },
+};
+
 // --- Mock Data ---

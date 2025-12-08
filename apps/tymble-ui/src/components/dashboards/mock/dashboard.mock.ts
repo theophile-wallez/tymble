@@ -1,4 +1,7 @@
-import type { Dashboard } from '../dashboard/dashboard-schema';
+import {
+  type Dashboard,
+  WIDGET_MIN_SIZES,
+} from '../dashboard/dashboard-schema';
 
 export const mockDashboardData: Dashboard = {
   id: 'dashboard-001',
@@ -7,7 +10,14 @@ export const mockDashboardData: Dashboard = {
     // Stats Widgets
     {
       id: 'stats-1',
-      layout: { i: 'stats-1', x: 0, y: 0, w: 3, h: 4 },
+      layout: {
+        i: 'stats-1',
+        x: 0,
+        y: 0,
+        w: 3,
+        h: 4,
+        ...WIDGET_MIN_SIZES.stats,
+      },
       content: {
         type: 'stats',
         data: { label: 'Total Revenue', value: '$45,231.89', change: '+20.1%' },
@@ -15,7 +25,14 @@ export const mockDashboardData: Dashboard = {
     },
     {
       id: 'stats-2',
-      layout: { i: 'stats-2', x: 3, y: 0, w: 3, h: 4 },
+      layout: {
+        i: 'stats-2',
+        x: 3,
+        y: 0,
+        w: 3,
+        h: 4,
+        ...WIDGET_MIN_SIZES.stats,
+      },
       content: {
         type: 'stats',
         data: { label: 'Subscriptions', value: '+2350', change: '+180.1%' },
@@ -23,7 +40,14 @@ export const mockDashboardData: Dashboard = {
     },
     {
       id: 'stats-3',
-      layout: { i: 'stats-3', x: 6, y: 0, w: 3, h: 4 },
+      layout: {
+        i: 'stats-3',
+        x: 6,
+        y: 0,
+        w: 3,
+        h: 4,
+        ...WIDGET_MIN_SIZES.stats,
+      },
       content: {
         type: 'stats',
         data: { label: 'Sales', value: '+12,234', change: '+19%' },
@@ -31,7 +55,14 @@ export const mockDashboardData: Dashboard = {
     },
     {
       id: 'stats-4',
-      layout: { i: 'stats-4', x: 9, y: 0, w: 3, h: 4 },
+      layout: {
+        i: 'stats-4',
+        x: 9,
+        y: 0,
+        w: 3,
+        h: 4,
+        ...WIDGET_MIN_SIZES.stats,
+      },
       content: {
         type: 'stats',
         data: { label: 'Active Now', value: '+573', change: '+201' },
@@ -40,7 +71,14 @@ export const mockDashboardData: Dashboard = {
     // Revenue Widget
     {
       id: 'revenue',
-      layout: { i: 'revenue', x: 0, y: 4, w: 8, h: 9 },
+      layout: {
+        i: 'revenue',
+        x: 0,
+        y: 4,
+        w: 8,
+        h: 9,
+        ...WIDGET_MIN_SIZES.revenue,
+      },
       content: {
         type: 'revenue',
         config: { viewMode: 'monthly' },
@@ -49,7 +87,14 @@ export const mockDashboardData: Dashboard = {
     // Activity Widget
     {
       id: 'activity',
-      layout: { i: 'activity', x: 8, y: 4, w: 4, h: 9 },
+      layout: {
+        i: 'activity',
+        x: 8,
+        y: 4,
+        w: 4,
+        h: 9,
+        ...WIDGET_MIN_SIZES.activity,
+      },
       content: {
         type: 'activity',
       },
@@ -57,7 +102,14 @@ export const mockDashboardData: Dashboard = {
     // Tasks Widget
     {
       id: 'tasks',
-      layout: { i: 'tasks', x: 0, y: 13, w: 8, h: 8 },
+      layout: {
+        i: 'tasks',
+        x: 0,
+        y: 13,
+        w: 8,
+        h: 8,
+        ...WIDGET_MIN_SIZES.tasks,
+      },
       content: {
         type: 'tasks',
         data: {
@@ -105,7 +157,14 @@ export const mockDashboardData: Dashboard = {
     // Traffic Widget
     {
       id: 'traffic',
-      layout: { i: 'traffic', x: 8, y: 13, w: 4, h: 8 },
+      layout: {
+        i: 'traffic',
+        x: 8,
+        y: 13,
+        w: 4,
+        h: 8,
+        ...WIDGET_MIN_SIZES.traffic,
+      },
       content: {
         type: 'traffic',
       },

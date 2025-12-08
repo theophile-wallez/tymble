@@ -13,10 +13,23 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
     mockDashboardData.items.map((item) => item.layout)
   );
 
+  // Merge current layout state with constraints from mock data
+  // This ensures minW/minH are respected even if state is stale or RGL drops them
+  const constrainedLayout = layout.map((l) => {
+    const mockItem = mockDashboardData.items.find((item) => item.id === l.i);
+    return {
+      ...l,
+      minW: mockItem?.layout.minW,
+      minH: mockItem?.layout.minH,
+      maxW: mockItem?.layout.maxW,
+      maxH: mockItem?.layout.maxH,
+    };
+  });
+
   return (
     <DashboardGrid
       isEditing={isEditing}
-      layout={layout}
+      layout={constrainedLayout}
       onLayoutChange={setLayout}
     >
       {mockDashboardData.items.map((item) => (
