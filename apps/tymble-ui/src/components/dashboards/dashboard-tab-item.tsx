@@ -50,7 +50,7 @@ export const SortableDashboardTabItem = ({
       className={cn(
         'group relative flex shrink-0 cursor-pointer items-center gap-1 rounded-md border py-1.5 pr-8 pl-3 text-sm transition-colors',
         isActive
-          ? 'border-primary bg-primary/10 text-primary'
+          ? 'border-border bg-primary/10 text-primary'
           : 'border-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
       )}
       onClick={onClick}
