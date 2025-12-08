@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { forwardRef, type ReactNode } from 'react';
 import {
   Card,
   CardContent,
@@ -6,13 +6,25 @@ import {
   CardHeader,
   CardTitle,
 } from '@/ui/card';
-
 import { cn } from '@/ui/utils';
 
 // Custom resize handle component
-const ResizeHandle = () => (
-  <div className="react-resizable-handle absolute right-1 bottom-1 z-20 size-3 cursor-se-resize rounded-br-full border-muted-foreground border-r-2 border-b-2 transition-colors hover:border-foreground" />
-);
+export const ResizeHandle = forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    className={cn(
+      'react-resizable-handle group/handle absolute right-0 bottom-0 z-20 size-6 cursor-se-resize',
+      className
+    )}
+    ref={ref}
+    {...props}
+  >
+    <div className="absolute right-1 bottom-1 size-3 rounded-br-full border-muted-foreground border-r-2 border-b-2 transition-colors group-hover/handle:border-foreground" />
+  </div>
+));
+ResizeHandle.displayName = 'ResizeHandle';
 
 // Widget wrapper component for consistent styling
 export const Widget = ({
@@ -39,11 +51,6 @@ export const Widget = ({
       )}
     </CardHeader>
     <CardContent className="flex-1">{children}</CardContent>
-    {isEditing && (
-      <>
-        <div className="absolute inset-0 z-10 bg-transparent" />
-        <ResizeHandle />
-      </>
-    )}
+    {isEditing && <div className="absolute inset-0 z-10 bg-transparent" />}
   </Card>
 );

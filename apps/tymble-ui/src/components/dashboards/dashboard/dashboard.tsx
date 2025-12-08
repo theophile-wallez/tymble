@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import GridLayout, { type Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
-import { Widget } from '../widgets/widget';
+import { ResizeHandle, Widget } from '../widgets/widget';
 
 // Mock data for widgets
 const statsData = [
@@ -70,6 +70,7 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
         isResizable={isEditing}
         layout={layout}
         onLayoutChange={setLayout}
+        resizeHandle={<ResizeHandle />}
         rowHeight={30}
         width={width}
       >

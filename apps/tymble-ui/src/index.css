@@ -177,14 +177,16 @@ html,
   }
 }
 
-/* Hide default react-grid-layout resize handle to avoid duplicates */
-.react-grid-layout .react-resizable-handle-se {
-  display: none !important;
+/* Reset react-grid-layout default resize handle styles */
+.react-grid-layout .react-resizable-handle {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
 }
 
-/* Ensure no background on handles */
-.react-grid-layout .react-resizable-handle {
-  background-image: none !important;
+.react-grid-layout .react-resizable-handle::after {
+  display: none !important;
 }
 
 /* Change Autocomplete styles in Chrome*/
