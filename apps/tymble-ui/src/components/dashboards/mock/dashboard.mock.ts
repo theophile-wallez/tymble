@@ -23,7 +23,7 @@ export const mockDashboardData: Dashboard = {
         type: 'text',
         data: {
           content:
-            '<h1>Hello Théophile 👋</h1><p></p><p>Welcome to your dashboard. Here is an overview of your key metrics:</p><ul><li><strong>Revenue</strong> is trending up</li><li><strong>Activity</strong> is high this week</li><li>You have <strong>3 high priority tasks</strong></li></ul><p>Feel free to customize this text!</p>',
+            '<h1>Hello Théophile 👋</h1><p>Welcome to your dashboard. 🚀 <p/><p/> Here is an overview of your key metrics:</p>Revenue is trending up 📈Activity is high this week 🔥You have 3 high priority tasks 🚨</p>',
         },
       },
     },
