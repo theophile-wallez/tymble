@@ -3,6 +3,7 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';
+import { cn } from '@/ui/utils';
 import { TextWidgetToolbar } from './text-widget-toolbar';
 import { WidgetLayout } from './widget-layout';
 
@@ -15,13 +16,17 @@ export const TextWidget = ({
   isEditing?: boolean;
   transparent?: boolean;
 }) => {
+  const classNames = cn(
+    'prose prose-neutral dark:prose-invert max-w-none prose-h1:text-3xl prose-h2:text-2xl prose-h1:leading-[1em] focus:outline-none',
+    isEditing ? 'tiptap-readonly' : 'min-h-[100px]'
+  );
   const editor = useEditor({
     extensions: [StarterKit, BubbleMenuExtension],
     content,
     editable: isEditing,
     editorProps: {
       attributes: {
-        class: `prose dark:prose-invert prose-h1:text-3xl prose-h2:text-2xl max-w-none focus:outline-none ${isEditing ? 'min-h-[100px]' : 'tiptap-readonly'}`,
+        class: classNames,
       },
     },
   });
