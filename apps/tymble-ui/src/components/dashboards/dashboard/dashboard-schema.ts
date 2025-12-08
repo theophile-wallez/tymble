@@ -84,6 +84,27 @@ const TextWidgetConfigSchema = z.object({
   }),
 });
 
+// 7. Table Widget
+const TableColumnSchema = z.object({
+  id: z.string(),
+  header: z.string(),
+  accessorKey: z.string(),
+});
+
+const TableWidgetConfigSchema = z.object({
+  type: z.literal('table'),
+  data: z.object({
+    columns: z.array(TableColumnSchema),
+    rows: z.array(z.record(z.string(), z.unknown())),
+  }),
+  config: z
+    .object({
+      title: z.string().optional(),
+      description: z.string().optional(),
+    })
+    .optional(),
+});
+
 // --- Discriminated Union ---
 
 export const WidgetContentSchema = z.discriminatedUnion('type', [
@@ -93,6 +114,7 @@ export const WidgetContentSchema = z.discriminatedUnion('type', [
   TasksWidgetConfigSchema,
   TrafficWidgetConfigSchema,
   TextWidgetConfigSchema,
+  TableWidgetConfigSchema,
 ]);
 
 // --- Dashboard Item Schema ---
@@ -127,6 +149,7 @@ export const WIDGET_MIN_SIZES: Record<
   tasks: { minW: 4, minH: 6 },
   traffic: { minW: 3, minH: 6 },
   text: { minW: 3, minH: 2 },
+  table: { minW: 4, minH: 4 },
 };
 
 // --- Mock Data ---

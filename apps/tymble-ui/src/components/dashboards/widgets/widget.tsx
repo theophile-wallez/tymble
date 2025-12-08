@@ -2,6 +2,7 @@ import type { DashboardItem } from '../dashboard/dashboard-schema';
 import { ActivityWidget } from './charts/activity-widget';
 import { RevenueWidget } from './charts/revenue-widget';
 import { TrafficWidget } from './charts/traffic-widget';
+import { TableWidget } from './table-widget';
 import { TextWidget } from './text-widget';
 import { WidgetLayout } from './widget-layout';
 
@@ -66,6 +67,17 @@ export const Widget = ({
         <TextWidget
           content={item.content.data.content}
           isEditing={isEditing}
+          transparent={item.transparent}
+        />
+      );
+    case 'table':
+      return (
+        <TableWidget
+          columns={item.content.data.columns}
+          description={item.content.config?.description}
+          isEditing={isEditing}
+          rows={item.content.data.rows}
+          title={item.content.config?.title}
           transparent={item.transparent}
         />
       );
