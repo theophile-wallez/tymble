@@ -19,7 +19,7 @@ export const DashboardGrid = ({
   children,
 }: DashboardGridProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(1200);
+  const [width, setWidth] = useState<number>();
 
   useEffect(() => {
     const updateWidth = () => {
