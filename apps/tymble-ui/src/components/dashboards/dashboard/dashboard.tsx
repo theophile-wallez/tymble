@@ -28,13 +28,13 @@ const tasksData = [
 
 // Initial layout configuration
 const initialLayout: Layout[] = [
-  { i: 'stats-1', x: 0, y: 0, w: 3, h: 3 },
-  { i: 'stats-2', x: 3, y: 0, w: 3, h: 3 },
-  { i: 'stats-3', x: 6, y: 0, w: 3, h: 3 },
-  { i: 'stats-4', x: 9, y: 0, w: 3, h: 3 },
-  { i: 'chart', x: 0, y: 3, w: 8, h: 6 },
-  { i: 'activity', x: 8, y: 3, w: 4, h: 6 },
-  { i: 'tasks', x: 0, y: 9, w: 12, h: 5 },
+  { i: 'stats-1', x: 0, y: 0, w: 3, h: 4 },
+  { i: 'stats-2', x: 3, y: 0, w: 3, h: 4 },
+  { i: 'stats-3', x: 6, y: 0, w: 3, h: 4 },
+  { i: 'stats-4', x: 9, y: 0, w: 3, h: 4 },
+  { i: 'chart', x: 0, y: 4, w: 8, h: 6 },
+  { i: 'activity', x: 8, y: 4, w: 4, h: 6 },
+  { i: 'tasks', x: 0, y: 10, w: 12, h: 5 },
 ];
 
 type DashboardProps = {
