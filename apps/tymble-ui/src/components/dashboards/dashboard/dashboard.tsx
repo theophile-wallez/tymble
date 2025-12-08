@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import GridLayout, { type Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
+import { ActivityWidget } from '../widgets/charts/activity-widget';
+import { RevenueWidget } from '../widgets/charts/revenue-widget';
+import { TrafficWidget } from '../widgets/charts/traffic-widget';
 import { ResizeHandle } from '../widgets/resize-handle';
 import { Widget } from '../widgets/widget';
 
@@ -12,18 +15,17 @@ const statsData = [
   { label: 'Active Now', value: '+573', change: '+201' },
 ];
 
-const activityData = [
-  { user: 'John Doe', action: 'Created new project', time: '2 min ago' },
-  { user: 'Jane Smith', action: 'Updated dashboard', time: '5 min ago' },
-  { user: 'Bob Johnson', action: 'Deployed changes', time: '10 min ago' },
-  { user: 'Alice Brown', action: 'Added new widget', time: '15 min ago' },
-];
-
 const tasksData = [
   { title: 'Review pull requests', status: 'In Progress', priority: 'High' },
   { title: 'Update documentation', status: 'Pending', priority: 'Medium' },
   { title: 'Fix authentication bug', status: 'Done', priority: 'High' },
   { title: 'Design new landing page', status: 'In Progress', priority: 'Low' },
+  {
+    title: 'Optimize database queries',
+    status: 'In Progress',
+    priority: 'High',
+  },
+  { title: 'Create marketing assets', status: 'Pending', priority: 'Low' },
 ];
 
 // Initial layout configuration
@@ -32,9 +34,10 @@ const initialLayout: Layout[] = [
   { i: 'stats-2', x: 3, y: 0, w: 3, h: 4 },
   { i: 'stats-3', x: 6, y: 0, w: 3, h: 4 },
   { i: 'stats-4', x: 9, y: 0, w: 3, h: 4 },
-  { i: 'chart', x: 0, y: 4, w: 8, h: 6 },
-  { i: 'activity', x: 8, y: 4, w: 4, h: 6 },
-  { i: 'tasks', x: 0, y: 10, w: 12, h: 5 },
+  { i: 'revenue', x: 0, y: 4, w: 8, h: 9 },
+  { i: 'activity', x: 8, y: 4, w: 4, h: 9 },
+  { i: 'tasks', x: 0, y: 13, w: 8, h: 8 },
+  { i: 'traffic', x: 8, y: 13, w: 4, h: 8 },
 ];
 
 type DashboardProps = {
@@ -88,54 +91,14 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
           </div>
         ))}
 
-        {/* Chart Widget */}
-        <div key="chart">
-          <Widget
-            description="Monthly revenue overview"
-            isEditing={isEditing}
-            title="Overview"
-          >
-            <div className="flex h-full items-end gap-2 pb-4">
-              {[40, 65, 45, 80, 55, 70, 85, 60, 75, 90, 50, 95].map(
-                (height, i) => (
-                  <div
-                    className="flex-1 rounded-t bg-primary/80 transition-all hover:bg-primary"
-                    key={i}
-                    style={{ height: `${height}%` }}
-                  />
-                )
-              )}
-            </div>
-          </Widget>
+        {/* Revenue Widget */}
+        <div key="revenue">
+          <RevenueWidget isEditing={isEditing} />
         </div>
 
         {/* Activity Widget */}
         <div key="activity">
-          <Widget
-            description="Latest user actions"
-            isEditing={isEditing}
-            title="Recent Activity"
-          >
-            <div className="space-y-3">
-              {activityData.map((item, i) => (
-                <div
-                  className="flex items-center gap-3 border-border border-b pb-2 last:border-0"
-                  key={i}
-                >
-                  <div className="size-8 shrink-0 rounded-full bg-primary/10" />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-sm">{item.user}</p>
-                    <p className="truncate text-muted-foreground text-xs">
-                      {item.action}
-                    </p>
-                  </div>
-                  <span className="shrink-0 text-muted-foreground text-xs">
-                    {item.time}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </Widget>
+          <ActivityWidget isEditing={isEditing} />
         </div>
 
         {/* Tasks Widget */}
@@ -192,6 +155,11 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
               </div>
             </div>
           </Widget>
+        </div>
+
+        {/* Traffic Widget */}
+        <div key="traffic">
+          <TrafficWidget isEditing={isEditing} />
         </div>
       </GridLayout>
     </div>
