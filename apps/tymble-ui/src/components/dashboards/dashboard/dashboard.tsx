@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import GridLayout, { type Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
-import { ResizeHandle, Widget } from '../widgets/widget';
+import { ResizeHandle } from '../widgets/resize-handle';
+import { Widget } from '../widgets/widget';
 
 // Mock data for widgets
 const statsData = [
