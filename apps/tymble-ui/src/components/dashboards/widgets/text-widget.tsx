@@ -34,7 +34,7 @@ export const TextWidget = ({
   }, [editor, isEditing]);
 
   return (
-    <WidgetLayout isEditing={isEditing} title="Notes" transparent={transparent}>
+    <WidgetLayout isEditing={isEditing} transparent={transparent}>
       {isEditing && editor && (
         <BubbleMenu editor={editor}>
           <TextWidgetToolbar editor={editor} />
