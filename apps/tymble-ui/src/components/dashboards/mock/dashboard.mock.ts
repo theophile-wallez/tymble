@@ -139,7 +139,7 @@ export const mockDashboardData: Dashboard = {
         type: 'activity',
       },
     },
-    // Tasks Widget
+    // Tasks Table Widget
     {
       id: 'tasks',
       layout: {
@@ -149,12 +149,40 @@ export const mockDashboardData: Dashboard = {
         w: 12,
         h: 8,
         minW: 4,
-        minH: 6,
+        minH: 4,
       },
       content: {
-        type: 'tasks',
+        type: 'table',
         data: {
-          tasks: [
+          columns: [
+            { id: 'title', header: 'Task', accessorKey: 'title' },
+            {
+              id: 'status',
+              header: 'Status',
+              accessorKey: 'status',
+              variant: 'badge',
+              badgeColors: {
+                Done: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+                'In Progress':
+                  'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
+                Pending:
+                  'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+              },
+            },
+            {
+              id: 'priority',
+              header: 'Priority',
+              accessorKey: 'priority',
+              variant: 'badge',
+              badgeColors: {
+                High: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
+                Medium:
+                  'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+                Low: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+              },
+            },
+          ],
+          rows: [
             {
               id: 't1',
               title: 'Review pull requests',
@@ -192,6 +220,10 @@ export const mockDashboardData: Dashboard = {
               priority: 'Low',
             },
           ],
+        },
+        config: {
+          title: 'Tasks',
+          description: 'Your current tasks',
         },
       },
     },

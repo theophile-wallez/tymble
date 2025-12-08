@@ -89,6 +89,8 @@ const TableColumnSchema = z.object({
   id: z.string(),
   header: z.string(),
   accessorKey: z.string(),
+  variant: z.enum(['text', 'badge']).optional(),
+  badgeColors: z.record(z.string(), z.string()).optional(),
 });
 
 const TableWidgetConfigSchema = z.object({
