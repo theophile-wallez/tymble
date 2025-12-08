@@ -12,7 +12,6 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
   const [layout, setLayout] = useState(
     mockDashboardData.items.map((item) => item.layout)
   );
-  console.log(layout);
   // Merge current layout state with constraints from mock data
   // This ensures minW/minH are respected even if state is stale or RGL drops them
   const constrainedLayout = layout.map((l) => {
