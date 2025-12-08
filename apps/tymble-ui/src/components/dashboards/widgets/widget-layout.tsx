@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 import {
   Card,
   CardContent,
@@ -8,6 +8,13 @@ import {
 } from '@/ui/card';
 import { cn } from '@/ui/utils';
 
+type Props = PropsWithChildren<{
+  title: string;
+  description?: string;
+  isEditing?: boolean;
+  transparent?: boolean;
+}>;
+
 // Widget wrapper component for consistent styling
 export const WidgetLayout = ({
   title,
@@ -15,13 +22,7 @@ export const WidgetLayout = ({
   children,
   isEditing,
   transparent,
-}: {
-  title: string;
-  description?: string;
-  children: ReactNode;
-  isEditing?: boolean;
-  transparent?: boolean;
-}) => (
+}: Props) => (
   <Card
     className={cn(
       'relative size-full overflow-hidden',
