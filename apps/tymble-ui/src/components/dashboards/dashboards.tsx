@@ -93,46 +93,49 @@ export const Dashboards = () => {
           </DndContext>
         </div>
         <Button
-          className="shrink-0 overflow-hidden"
+          asChild
+          className="shrink-0 overflow-hidden transition-colors"
           onClick={() => setIsEditing(!isEditing)}
           size="sm"
           variant={isEditing ? 'default' : 'outline'}
         >
-          <AnimatePresence initial={false} mode="popLayout">
-            {isEditing ? (
-              <motion.div
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                className="flex items-center"
-                exit={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
-                initial={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
-                key="save"
-                transition={{
-                  bounce: 0,
-                  duration: 0.3,
-                  type: 'spring',
-                }}
-              >
-                <Check className="mr-2 size-4" />
-                Save dashboard
-              </motion.div>
-            ) : (
-              <motion.div
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                className="flex items-center"
-                exit={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
-                initial={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
-                key="edit"
-                transition={{
-                  bounce: 0,
-                  duration: 0.3,
-                  type: 'spring',
-                }}
-              >
-                <Pencil className="mr-2 size-4" />
-                Edit dashboard
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <motion.button layout>
+            <AnimatePresence initial={false} mode="popLayout">
+              {isEditing ? (
+                <motion.div
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  className="flex items-center"
+                  exit={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
+                  initial={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
+                  key="save"
+                  transition={{
+                    bounce: 0,
+                    duration: 0.2,
+                    type: 'spring',
+                  }}
+                >
+                  <Check className="mr-2 size-4" />
+                  Save dashboard
+                </motion.div>
+              ) : (
+                <motion.div
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  className="flex items-center"
+                  exit={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
+                  initial={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
+                  key="edit"
+                  transition={{
+                    bounce: 0,
+                    duration: 0.2,
+                    type: 'spring',
+                  }}
+                >
+                  <Pencil className="mr-2 size-4" />
+                  Edit dashboard
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </Button>
       </ContentSubHeader>
       <ContentBody>

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import 'react-grid-layout/css/styles.css';
+import { mockDashboardData } from '../mock/dashboard.mock';
 import { Widget } from '../widgets/widget';
 import { DashboardGrid } from './dashboard-grid';
-import { mockDashboardData } from './dashboard-schema';
 
 type DashboardProps = {
   isEditing?: boolean;
