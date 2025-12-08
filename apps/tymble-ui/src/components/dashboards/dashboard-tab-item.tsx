@@ -28,13 +28,6 @@ export const SortableDashboardTabItem = ({
     isDragging,
   } = useSortable({ id: dashboard.id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    zIndex: isDragging ? 1 : 0,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
   return (
     <div
       className={cn(
@@ -47,7 +40,13 @@ export const SortableDashboardTabItem = ({
       onClick={onClick}
       onKeyUp={onClick}
       ref={setNodeRef}
-      style={style}
+      style={{
+        transform: CSS.Translate.toString(transform),
+        transition,
+        zIndex: isDragging ? 1 : 0,
+        opacity: isDragging ? 1 : 1,
+        cursor: isDragging ? 'grabbing' : 'pointer',
+      }}
       {...attributes}
       {...listeners}
       role="tab"

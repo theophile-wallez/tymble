@@ -7,7 +7,10 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
+import {
+  restrictToHorizontalAxis,
+  restrictToParentElement,
+} from '@dnd-kit/modifiers';
 import {
   arrayMove,
   horizontalListSortingStrategy,
@@ -73,7 +76,7 @@ export const Dashboards = () => {
         <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
           <DndContext
             collisionDetection={closestCenter}
-            modifiers={[restrictToHorizontalAxis]}
+            modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
             onDragEnd={handleDragEnd}
             sensors={sensors}
           >
