@@ -206,3 +206,9 @@ select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px var(--input) inset;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+/* Hide trailing empty paragraphs in Tiptap readonly mode */
+.tiptap-readonly p:last-child:empty,
+.tiptap-readonly p:last-child:has(br:only-child) {
+  display: none;
+}

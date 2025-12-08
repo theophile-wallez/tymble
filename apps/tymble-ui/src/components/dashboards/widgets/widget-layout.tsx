@@ -15,6 +15,7 @@ type Props = PropsWithChildren<{
   description?: string;
   isEditing?: boolean;
   transparent?: boolean;
+  className?: string;
 }>;
 
 // Widget wrapper component for consistent styling
@@ -24,12 +25,14 @@ export const WidgetLayout = ({
   children,
   isEditing,
   transparent,
+  className,
 }: Props) => (
   <Card
     className={cn(
       'relative size-full overflow-hidden',
       transparent && 'border-transparent bg-background shadow-none',
-      transparent && isEditing && 'border border-border border-dashed'
+      transparent && isEditing && 'border border-border border-dashed',
+      className
     )}
   >
     {title && (
