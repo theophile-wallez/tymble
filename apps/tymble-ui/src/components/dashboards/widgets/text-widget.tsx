@@ -1,17 +1,16 @@
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';
+import { TextWidgetToolbar } from './text-widget-toolbar';
 import { WidgetLayout } from './widget-layout';
 
-export const TextWidget = ({
-  content,
-  isEditing,
-  transparent,
-}: {
+type Props = {
   content: string;
   isEditing?: boolean;
   transparent?: boolean;
-}) => {
+};
+
+export const TextWidget = ({ content, isEditing, transparent }: Props) => {
   const editor = useEditor({
     extensions: [StarterKit],
     content,
@@ -31,7 +30,8 @@ export const TextWidget = ({
   }, [editor, isEditing]);
 
   return (
-    <WidgetLayout isEditing={isEditing} transparent={transparent}>
+    <WidgetLayout isEditing={isEditing} title="Notes" transparent={transparent}>
+      {isEditing && <TextWidgetToolbar editor={editor} />}
       <EditorContent editor={editor} />
     </WidgetLayout>
   );
