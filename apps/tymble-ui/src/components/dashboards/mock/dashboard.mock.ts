@@ -7,13 +7,47 @@ export const mockDashboardData: Dashboard = {
   id: 'dashboard-001',
   name: 'Main Dashboard',
   items: [
+    // Text Widget
+    {
+      id: 'text-1',
+      layout: {
+        i: 'text-1',
+        x: 0,
+        y: 0,
+        w: 8,
+        h: 8,
+        ...WIDGET_MIN_SIZES.text,
+      },
+      content: {
+        type: 'text',
+        data: {
+          content:
+            '<h2>Hello Théophile 👋</h2><p>Welcome to your dashboard. Here is an overview of your key metrics:</p><ul><li><strong>Revenue</strong> is trending up</li><li><strong>Activity</strong> is high this week</li><li>You have <strong>3 high priority tasks</strong></li></ul><p>Feel free to customize this text!</p>',
+        },
+      },
+    },
+    // Traffic Widget
+    {
+      id: 'traffic',
+      layout: {
+        i: 'traffic',
+        x: 8,
+        y: 0,
+        w: 4,
+        h: 8,
+        ...WIDGET_MIN_SIZES.traffic,
+      },
+      content: {
+        type: 'traffic',
+      },
+    },
     // Stats Widgets
     {
       id: 'stats-1',
       layout: {
         i: 'stats-1',
         x: 0,
-        y: 0,
+        y: 6,
         w: 3,
         h: 4,
         ...WIDGET_MIN_SIZES.stats,
@@ -22,14 +56,13 @@ export const mockDashboardData: Dashboard = {
         type: 'stats',
         data: { label: 'Total Revenue', value: '$45,231.89', change: '+20.1%' },
       },
-      transparent: true,
     },
     {
       id: 'stats-2',
       layout: {
         i: 'stats-2',
         x: 3,
-        y: 0,
+        y: 6,
         w: 3,
         h: 4,
         ...WIDGET_MIN_SIZES.stats,
@@ -44,7 +77,7 @@ export const mockDashboardData: Dashboard = {
       layout: {
         i: 'stats-3',
         x: 6,
-        y: 0,
+        y: 6,
         w: 3,
         h: 4,
         ...WIDGET_MIN_SIZES.stats,
@@ -59,7 +92,7 @@ export const mockDashboardData: Dashboard = {
       layout: {
         i: 'stats-4',
         x: 9,
-        y: 0,
+        y: 6,
         w: 3,
         h: 4,
         ...WIDGET_MIN_SIZES.stats,
@@ -75,7 +108,7 @@ export const mockDashboardData: Dashboard = {
       layout: {
         i: 'revenue',
         x: 0,
-        y: 4,
+        y: 10,
         w: 8,
         h: 9,
         ...WIDGET_MIN_SIZES.revenue,
@@ -91,7 +124,7 @@ export const mockDashboardData: Dashboard = {
       layout: {
         i: 'activity',
         x: 8,
-        y: 4,
+        y: 10,
         w: 4,
         h: 9,
         ...WIDGET_MIN_SIZES.activity,
@@ -106,8 +139,8 @@ export const mockDashboardData: Dashboard = {
       layout: {
         i: 'tasks',
         x: 0,
-        y: 13,
-        w: 8,
+        y: 19,
+        w: 12,
         h: 8,
         ...WIDGET_MIN_SIZES.tasks,
       },
@@ -152,40 +185,6 @@ export const mockDashboardData: Dashboard = {
               priority: 'Low',
             },
           ],
-        },
-      },
-    },
-    // Traffic Widget
-    {
-      id: 'traffic',
-      layout: {
-        i: 'traffic',
-        x: 8,
-        y: 13,
-        w: 4,
-        h: 8,
-        ...WIDGET_MIN_SIZES.traffic,
-      },
-      content: {
-        type: 'traffic',
-      },
-    },
-    // Text Widget
-    {
-      id: 'text-1',
-      layout: {
-        i: 'text-1',
-        x: 0,
-        y: 21,
-        w: 12,
-        h: 6,
-        ...WIDGET_MIN_SIZES.text,
-      },
-      content: {
-        type: 'text',
-        data: {
-          content:
-            '<p>This is a <strong>text widget</strong>. You can edit this content when in edit mode.</p><ul><li>Item 1</li><li>Item 2</li></ul>',
         },
       },
     },
