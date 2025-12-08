@@ -8,11 +8,18 @@ const data = [
   { name: 'Referral', value: 200, color: 'var(--destructive)' },
 ];
 
-export const TrafficWidget = ({ isEditing }: { isEditing?: boolean }) => (
+export const TrafficWidget = ({
+  isEditing,
+  transparent,
+}: {
+  isEditing?: boolean;
+  transparent?: boolean;
+}) => (
   <WidgetLayout
     description="Traffic sources"
     isEditing={isEditing}
     title="Traffic Source"
+    transparent={transparent}
   >
     <div className="flex h-full min-h-[200px] w-full flex-col">
       <div className="min-h-0 flex-1">

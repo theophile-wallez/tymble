@@ -24,11 +24,18 @@ const data = [
   { name: 'Dec', value: 3890 },
 ];
 
-export const RevenueWidget = ({ isEditing }: { isEditing?: boolean }) => (
+export const RevenueWidget = ({
+  isEditing,
+  transparent,
+}: {
+  isEditing?: boolean;
+  transparent?: boolean;
+}) => (
   <WidgetLayout
     description="Monthly revenue overview"
     isEditing={isEditing}
     title="Revenue Overview"
+    transparent={transparent}
   >
     <div className="h-full min-h-[200px] w-full">
       <ResponsiveContainer height="100%" width="100%">

@@ -22,6 +22,7 @@ export const mockDashboardData: Dashboard = {
         type: 'stats',
         data: { label: 'Total Revenue', value: '$45,231.89', change: '+20.1%' },
       },
+      transparent: true,
     },
     {
       id: 'stats-2',

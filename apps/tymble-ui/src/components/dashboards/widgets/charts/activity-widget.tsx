@@ -11,11 +11,18 @@ const data = [
   { name: 'Sun', value: 40 },
 ];
 
-export const ActivityWidget = ({ isEditing }: { isEditing?: boolean }) => (
+export const ActivityWidget = ({
+  isEditing,
+  transparent,
+}: {
+  isEditing?: boolean;
+  transparent?: boolean;
+}) => (
   <WidgetLayout
     description="Daily user activity"
     isEditing={isEditing}
     title="Activity"
+    transparent={transparent}
   >
     <div className="h-full min-h-[200px] w-full">
       <ResponsiveContainer height="100%" width="100%">

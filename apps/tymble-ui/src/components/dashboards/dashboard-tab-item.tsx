@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/a11y/noNoninteractiveElementInteractions: <explanation> */
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { cn } from '@/ui/utils';
@@ -52,6 +50,8 @@ export const SortableDashboardTabItem = ({
       style={style}
       {...attributes}
       {...listeners}
+      role="tab"
+      tabIndex={isActive ? 0 : -1}
     >
       <span className="truncate">
         {dashboard.emoji && <span className="mr-2">{dashboard.emoji}</span>}

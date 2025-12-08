@@ -36,7 +36,11 @@ export const Widget = ({
   switch (item.content.type) {
     case 'stats':
       return (
-        <WidgetLayout isEditing={isEditing} title={item.content.data.label}>
+        <WidgetLayout
+          isEditing={isEditing}
+          title={item.content.data.label}
+          transparent={item.transparent}
+        >
           <p className="font-bold text-2xl">{item.content.data.value}</p>
           <p className="text-muted-foreground text-xs">
             <span className="text-green-500">{item.content.data.change}</span>{' '}
@@ -45,17 +49,24 @@ export const Widget = ({
         </WidgetLayout>
       );
     case 'revenue':
-      return <RevenueWidget isEditing={isEditing} />;
+      return (
+        <RevenueWidget isEditing={isEditing} transparent={item.transparent} />
+      );
     case 'activity':
-      return <ActivityWidget isEditing={isEditing} />;
+      return (
+        <ActivityWidget isEditing={isEditing} transparent={item.transparent} />
+      );
     case 'traffic':
-      return <TrafficWidget isEditing={isEditing} />;
+      return (
+        <TrafficWidget isEditing={isEditing} transparent={item.transparent} />
+      );
     case 'tasks':
       return (
         <WidgetLayout
           description="Your current tasks"
           isEditing={isEditing}
           title="Tasks"
+          transparent={item.transparent}
         >
           <div className="">
             <div className="grid grid-cols-4 gap-4 font-medium text-muted-foreground text-xs">

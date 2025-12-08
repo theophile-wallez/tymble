@@ -14,16 +14,20 @@ export const WidgetLayout = ({
   description,
   children,
   isEditing,
+  transparent,
 }: {
   title: string;
   description?: string;
   children: ReactNode;
   isEditing?: boolean;
+  transparent?: boolean;
 }) => (
   <Card
     className={cn(
       'relative size-full overflow-hidden',
-      isEditing && 'cursor-move'
+      isEditing && 'cursor-move',
+      transparent && 'border-transparent bg-background shadow-none',
+      transparent && isEditing && 'border border-border border-dashed'
     )}
   >
     <CardHeader className="pb-2">

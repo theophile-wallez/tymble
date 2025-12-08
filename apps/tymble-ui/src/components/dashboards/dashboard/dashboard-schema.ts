@@ -92,6 +92,7 @@ export const DashboardItemSchema = z.object({
   id: z.string(), // Unique identifier for the widget instance
   layout: LayoutSchema,
   content: WidgetContentSchema,
+  transparent: z.boolean().optional(),
 });
 
 export const DashboardSchema = z.object({
