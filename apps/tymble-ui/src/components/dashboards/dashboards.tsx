@@ -14,6 +14,7 @@ import {
   SortableContext,
 } from '@dnd-kit/sortable';
 import { Check, Pencil } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import {
   ContentBody,
@@ -92,22 +93,46 @@ export const Dashboards = () => {
           </DndContext>
         </div>
         <Button
-          className="shrink-0"
+          className="w-20 shrink-0 overflow-hidden"
           onClick={() => setIsEditing(!isEditing)}
           size="sm"
           variant={isEditing ? 'default' : 'outline'}
         >
-          {isEditing ? (
-            <>
-              <Check className="mr-1 size-4" />
-              Save
-            </>
-          ) : (
-            <>
-              <Pencil className="mr-1 size-4" />
-              Edit
-            </>
-          )}
+          <AnimatePresence initial={false} mode="popLayout">
+            {isEditing ? (
+              <motion.div
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                className="flex items-center"
+                exit={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+                initial={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+                key="save"
+                transition={{
+                  bounce: 0,
+                  duration: 0.3,
+                  type: 'spring',
+                }}
+              >
+                <Check className="mr-2 size-4" />
+                Save
+              </motion.div>
+            ) : (
+              <motion.div
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                className="flex items-center"
+                exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+                initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+                key="edit"
+                transition={{
+                  bounce: 0,
+                  duration: 0.3,
+                  type: 'spring',
+                }}
+              >
+                <Pencil className="mr-2 size-4" />
+                Edit
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Button>
       </ContentSubHeader>
       <ContentBody>
