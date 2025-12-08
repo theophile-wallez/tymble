@@ -17,8 +17,8 @@ export const TextWidget = ({
   transparent?: boolean;
 }) => {
   const classNames = cn(
-    'prose prose-neutral dark:prose-invert max-w-none prose-h1:text-3xl prose-h2:text-2xl prose-h1:leading-[1em] focus:outline-none',
-    isEditing ? 'tiptap-readonly' : 'min-h-[100px]'
+    'prose prose-neutral dark:prose-invert max-w-none prose-h1:text-3xl prose-h2:text-2xl prose-p:text-base prose-h1:leading-[1em] prose-p:leading-1 focus:outline-none',
+    isEditing ? 'min-h-[100px]' : 'tiptap-readonly'
   );
   const editor = useEditor({
     extensions: [StarterKit, BubbleMenuExtension],

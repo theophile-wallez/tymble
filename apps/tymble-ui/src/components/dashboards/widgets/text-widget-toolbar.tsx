@@ -33,7 +33,7 @@ export const TextWidgetToolbar = ({ editor }: Props) => {
   });
 
   return (
-    <div className="mb-2 flex flex-wrap gap-1 rounded-md border bg-muted/30 p-1 backdrop-blur-sm">
+    <div className="mb-2 flex flex-wrap gap-1 rounded-md border bg-muted/80 p-1 backdrop-blur-sm">
       <Toggle
         aria-label="Toggle bold"
         onPressedChange={() => editor.chain().focus().toggleBold().run()}

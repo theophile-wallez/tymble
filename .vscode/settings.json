@@ -21,5 +21,9 @@
     "**/dist": true,
     "**/.turbo": true,
     "**/.tanstack": true
-  }
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^'\"`,]*)(?:'|\"|`)"],
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ]
 }
