@@ -38,6 +38,6 @@ export const WidgetLayout = ({
       )}
     </CardHeader>
     <CardContent className="flex-1">{children}</CardContent>
-    {isEditing && <div className="absolute inset-0 z-10 bg-transparent" />}
+    {/* {isEditing && <div className="absolute inset-0 z-10 bg-transparent" />} */}
   </Card>
 );

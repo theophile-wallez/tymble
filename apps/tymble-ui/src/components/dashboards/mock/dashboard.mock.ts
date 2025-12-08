@@ -170,5 +170,24 @@ export const mockDashboardData: Dashboard = {
         type: 'traffic',
       },
     },
+    // Text Widget
+    {
+      id: 'text-1',
+      layout: {
+        i: 'text-1',
+        x: 0,
+        y: 21,
+        w: 12,
+        h: 6,
+        ...WIDGET_MIN_SIZES.text,
+      },
+      content: {
+        type: 'text',
+        data: {
+          content:
+            '<p>This is a <strong>text widget</strong>. You can edit this content when in edit mode.</p><ul><li>Item 1</li><li>Item 2</li></ul>',
+        },
+      },
+    },
   ],
 };

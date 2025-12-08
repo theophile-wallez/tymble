@@ -2,6 +2,7 @@ import type { DashboardItem } from '../dashboard/dashboard-schema';
 import { ActivityWidget } from './charts/activity-widget';
 import { RevenueWidget } from './charts/revenue-widget';
 import { TrafficWidget } from './charts/traffic-widget';
+import { TextWidget } from './text-widget';
 import { WidgetLayout } from './widget-layout';
 
 const getStatusColor = (status: string) => {
@@ -59,6 +60,14 @@ export const Widget = ({
     case 'traffic':
       return (
         <TrafficWidget isEditing={isEditing} transparent={item.transparent} />
+      );
+    case 'text':
+      return (
+        <TextWidget
+          content={item.content.data.content}
+          isEditing={isEditing}
+          transparent={item.transparent}
+        />
       );
     case 'tasks':
       return (

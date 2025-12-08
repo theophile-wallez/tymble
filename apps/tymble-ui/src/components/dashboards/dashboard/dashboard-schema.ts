@@ -76,6 +76,14 @@ const TrafficWidgetConfigSchema = z.object({
     .optional(),
 });
 
+// 6. Text Widget
+const TextWidgetConfigSchema = z.object({
+  type: z.literal('text'),
+  data: z.object({
+    content: z.string().default(''),
+  }),
+});
+
 // --- Discriminated Union ---
 
 export const WidgetContentSchema = z.discriminatedUnion('type', [
@@ -84,6 +92,7 @@ export const WidgetContentSchema = z.discriminatedUnion('type', [
   ActivityWidgetConfigSchema,
   TasksWidgetConfigSchema,
   TrafficWidgetConfigSchema,
+  TextWidgetConfigSchema,
 ]);
 
 // --- Dashboard Item Schema ---
@@ -117,6 +126,7 @@ export const WIDGET_MIN_SIZES: Record<
   activity: { minW: 3, minH: 6 },
   tasks: { minW: 4, minH: 6 },
   traffic: { minW: 3, minH: 6 },
+  text: { minW: 3, minH: 2 },
 };
 
 // --- Mock Data ---
