@@ -2,20 +2,12 @@
 /** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { MoreHorizontal, Settings, Trash2 } from 'lucide-react';
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/ui/dropdown-menu';
 import { cn } from '@/ui/utils';
 
 export type DashboardTab = {
   id: string;
   name: string;
+  emoji?: string;
 };
 
 type Props = {
@@ -48,11 +40,12 @@ export const SortableDashboardTabItem = ({
   return (
     <div
       className={cn(
-        'group relative flex shrink-0 cursor-pointer items-center gap-1 rounded-md border py-1.5 pr-8 pl-3 text-sm transition-colors',
+        'group relative flex shrink-0 cursor-pointer select-none items-center gap-1 rounded-sm px-3 py-1.5 text-sm backdrop-blur-md transition-colors',
         isActive
-          ? 'border-border bg-primary/10 text-primary'
+          ? 'border-border bg-accent text-primary'
           : 'border-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
       )}
+      data-cy={`dashboard-tab-item-${dashboard.id}`}
       onClick={onClick}
       onKeyUp={onClick}
       ref={setNodeRef}
@@ -60,8 +53,11 @@ export const SortableDashboardTabItem = ({
       {...attributes}
       {...listeners}
     >
-      <span className="truncate">{dashboard.name}</span>
-      <DropdownMenu>
+      <span className="truncate">
+        {dashboard.emoji && <span className="mr-2">{dashboard.emoji}</span>}
+        {dashboard.name}
+      </span>
+      {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
             className="-translate-y-1/2 absolute top-1/2 right-1 rounded p-0.5 opacity-0 transition-opacity hover:bg-muted group-hover:opacity-100"
@@ -89,7 +85,7 @@ export const SortableDashboardTabItem = ({
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
     </div>
   );
 };

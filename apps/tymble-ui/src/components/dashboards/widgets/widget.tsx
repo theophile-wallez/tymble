@@ -1,38 +1,103 @@
-import type { ReactNode } from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/ui/card';
-import { cn } from '@/ui/utils';
+import type { DashboardItem } from '../dashboard/dashboard-schema';
+import { ActivityWidget } from './charts/activity-widget';
+import { RevenueWidget } from './charts/revenue-widget';
+import { TrafficWidget } from './charts/traffic-widget';
+import { WidgetLayout } from './widget-layout';
 
-// Widget wrapper component for consistent styling
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case 'Done':
+      return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
+    case 'In Progress':
+      return 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300';
+    default:
+      return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+  }
+};
+
+const getPriorityColor = (priority: string) => {
+  switch (priority) {
+    case 'High':
+      return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+    case 'Medium':
+      return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
+    default:
+      return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
+  }
+};
+
 export const Widget = ({
-  title,
-  description,
-  children,
+  item,
   isEditing,
 }: {
-  title: string;
-  description?: string;
-  children: ReactNode;
-  isEditing?: boolean;
-}) => (
-  <Card
-    className={cn(
-      'relative size-full overflow-hidden',
-      isEditing && 'cursor-move'
-    )}
-  >
-    <CardHeader className="pb-2">
-      <CardTitle className="font-medium text-sm">{title}</CardTitle>
-      {description && (
-        <CardDescription className="text-xs">{description}</CardDescription>
-      )}
-    </CardHeader>
-    <CardContent className="flex-1">{children}</CardContent>
-    {isEditing && <div className="absolute inset-0 z-10 bg-transparent" />}
-  </Card>
-);
+  item: DashboardItem;
+  isEditing: boolean;
+}) => {
+  switch (item.content.type) {
+    case 'stats':
+      return (
+        <WidgetLayout isEditing={isEditing} title={item.content.data.label}>
+          <p className="font-bold text-2xl">{item.content.data.value}</p>
+          <p className="text-muted-foreground text-xs">
+            <span className="text-green-500">{item.content.data.change}</span>{' '}
+            from last month
+          </p>
+        </WidgetLayout>
+      );
+    case 'revenue':
+      return <RevenueWidget isEditing={isEditing} />;
+    case 'activity':
+      return <ActivityWidget isEditing={isEditing} />;
+    case 'traffic':
+      return <TrafficWidget isEditing={isEditing} />;
+    case 'tasks':
+      return (
+        <WidgetLayout
+          description="Your current tasks"
+          isEditing={isEditing}
+          title="Tasks"
+        >
+          <div className="">
+            <div className="grid grid-cols-4 gap-4 font-medium text-muted-foreground text-xs">
+              <span>Task</span>
+              <span>Status</span>
+              <span>Priority</span>
+              <span />
+            </div>
+            <div className="mt-2 space-y-2">
+              {item.content.data.tasks.map((task) => (
+                <div
+                  className="grid grid-cols-4 items-center gap-4 rounded-md bg-muted/50 p-2 text-sm"
+                  key={task.id}
+                >
+                  <span className="truncate font-medium">{task.title}</span>
+                  <span
+                    className={`inline-flex w-fit items-center rounded-full px-2 py-0.5 text-xs ${getStatusColor(
+                      task.status
+                    )}`}
+                  >
+                    {task.status}
+                  </span>
+                  <span
+                    className={`inline-flex w-fit items-center rounded-full px-2 py-0.5 text-xs ${getPriorityColor(
+                      task.priority
+                    )}`}
+                  >
+                    {task.priority}
+                  </span>
+                  <button
+                    className="text-muted-foreground text-xs hover:text-foreground"
+                    type="button"
+                  >
+                    View
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </WidgetLayout>
+      );
+    default:
+      return null;
+  }
+};

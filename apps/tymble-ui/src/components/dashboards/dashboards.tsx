@@ -32,10 +32,10 @@ import {
 
 // Mock dashboard data
 const initialDashboards: DashboardTab[] = [
-  { id: '1', name: 'Overview' },
-  { id: '2', name: 'Sales Analytics' },
-  { id: '3', name: 'Marketing' },
-  { id: '4', name: 'Operations' },
+  { id: '1', name: 'Overview', emoji: '📊' },
+  { id: '2', name: 'Sales Analytics', emoji: '💰' },
+  { id: '3', name: 'Marketing', emoji: '📣' },
+  { id: '4', name: 'Operations', emoji: '⚙️' },
 ];
 
 export const Dashboards = () => {

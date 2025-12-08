@@ -1,5 +1,5 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-import { Widget } from '../widget';
+import { WidgetLayout } from '../widget-layout';
 
 const data = [
   { name: 'Direct', value: 400, color: 'var(--primary)' },
@@ -9,7 +9,7 @@ const data = [
 ];
 
 export const TrafficWidget = ({ isEditing }: { isEditing?: boolean }) => (
-  <Widget
+  <WidgetLayout
     description="Traffic sources"
     isEditing={isEditing}
     title="Traffic Source"
@@ -27,8 +27,8 @@ export const TrafficWidget = ({ isEditing }: { isEditing?: boolean }) => (
               paddingAngle={5}
               stroke="none"
             >
-              {data.map((entry, index) => (
-                <Cell fill={entry.color} key={`cell-${index}`} />
+              {data.map((entry) => (
+                <Cell fill={entry.color} key={entry.name} />
               ))}
             </Pie>
             <Tooltip
@@ -67,5 +67,5 @@ export const TrafficWidget = ({ isEditing }: { isEditing?: boolean }) => (
         ))}
       </div>
     </div>
-  </Widget>
+  </WidgetLayout>
 );

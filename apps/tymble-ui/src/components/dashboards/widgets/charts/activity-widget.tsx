@@ -1,5 +1,5 @@
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
-import { Widget } from '../widget';
+import { WidgetLayout } from '../widget-layout';
 
 const data = [
   { name: 'Mon', value: 20 },
@@ -12,7 +12,7 @@ const data = [
 ];
 
 export const ActivityWidget = ({ isEditing }: { isEditing?: boolean }) => (
-  <Widget
+  <WidgetLayout
     description="Daily user activity"
     isEditing={isEditing}
     title="Activity"
@@ -53,5 +53,5 @@ export const ActivityWidget = ({ isEditing }: { isEditing?: boolean }) => (
         </BarChart>
       </ResponsiveContainer>
     </div>
-  </Widget>
+  </WidgetLayout>
 );

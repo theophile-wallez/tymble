@@ -7,7 +7,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { Widget } from '../widget';
+import { WidgetLayout } from '../widget-layout';
 
 const data = [
   { name: 'Jan', value: 4000 },
@@ -25,7 +25,7 @@ const data = [
 ];
 
 export const RevenueWidget = ({ isEditing }: { isEditing?: boolean }) => (
-  <Widget
+  <WidgetLayout
     description="Monthly revenue overview"
     isEditing={isEditing}
     title="Revenue Overview"
@@ -93,5 +93,5 @@ export const RevenueWidget = ({ isEditing }: { isEditing?: boolean }) => (
         </AreaChart>
       </ResponsiveContainer>
     </div>
-  </Widget>
+  </WidgetLayout>
 );
