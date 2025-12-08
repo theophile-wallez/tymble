@@ -21,7 +21,8 @@ export const TextWidget = ({
     editable: isEditing,
     editorProps: {
       attributes: {
-        class: 'tiptap focus:outline-none min-h-[100px]',
+        class:
+          'prose dark:prose-invert prose-h1:text-3xl prose-h2:text-2xl max-w-none focus:outline-none min-h-[100px]',
       },
     },
   });
