@@ -21,7 +21,7 @@ export const mockDashboardData: Dashboard = {
         type: 'text',
         data: {
           content:
-            '<h1>Hello Théophile 👋</h1><p/><p>Welcome to your dashboard! 🚀<p/>',
+            '<h1>Hello Théophile 👋</h1><p>Welcome to your dashboard! 🚀<p/>',
         },
       },
     },
