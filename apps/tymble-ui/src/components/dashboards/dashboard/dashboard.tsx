@@ -6,6 +6,7 @@ import { RevenueWidget } from '../widgets/charts/revenue-widget';
 import { TrafficWidget } from '../widgets/charts/traffic-widget';
 import { ResizeHandle } from '../widgets/resize-handle';
 import { Widget } from '../widgets/widget';
+import { GridBackground } from './grid-background';
 
 // Mock data for widgets
 const statsData = [
@@ -66,13 +67,23 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
   }, []);
 
   return (
-    <div className="w-full" ref={containerRef}>
+    <div className="relative w-full" ref={containerRef}>
+      {isEditing && (
+        <GridBackground
+          cols={12}
+          containerPadding={[0, 0]}
+          margin={[10, 10]}
+          rowHeight={30}
+        />
+      )}
       <GridLayout
         className="layout"
         cols={12}
+        containerPadding={[0, 0]}
         isDraggable={isEditing}
         isResizable={isEditing}
         layout={layout}
+        margin={[10, 10]}
         onLayoutChange={setLayout}
         resizeHandle={<ResizeHandle />}
         rowHeight={30}
