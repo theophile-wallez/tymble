@@ -1,3 +1,4 @@
+import { AnimatePresence } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import GridLayout, { type Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
@@ -38,14 +39,16 @@ export const DashboardGrid = ({
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      {isEditing && (
-        <GridBackground
-          cols={12}
-          containerPadding={[0, 0]}
-          margin={[10, 10]}
-          rowHeight={30}
-        />
-      )}
+      <AnimatePresence>
+        {isEditing && (
+          <GridBackground
+            cols={12}
+            containerPadding={[0, 0]}
+            margin={[10, 10]}
+            rowHeight={30}
+          />
+        )}
+      </AnimatePresence>
       <GridLayout
         className="layout"
         cols={12}

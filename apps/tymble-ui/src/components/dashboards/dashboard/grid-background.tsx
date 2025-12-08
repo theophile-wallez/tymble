@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { cn } from '@/ui/utils';
 
 type GridBackgroundProps = {
@@ -16,8 +17,11 @@ export const GridBackground = ({
   rows = 30, // Default number of rows to render
 }: GridBackgroundProps) => {
   return (
-    <div
+    <motion.div
+      animate={{ opacity: 1 }}
       className="pointer-events-none absolute inset-0 z-0"
+      exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
       style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${cols}, 1fr)`,
@@ -25,6 +29,7 @@ export const GridBackground = ({
         gap: `${margin[1]}px ${margin[0]}px`,
         padding: `${containerPadding[1]}px ${containerPadding[0]}px`,
       }}
+      transition={{ duration: 0.15, ease: 'easeOut' }}
     >
       {Array.from({ length: cols * rows }).map((_, i) => (
         <div
@@ -34,6 +39,6 @@ export const GridBackground = ({
           key={i}
         />
       ))}
-    </div>
+    </motion.div>
   );
 };
