@@ -48,7 +48,7 @@ export const SortableDashboardTabItem = ({
   return (
     <div
       className={cn(
-        'group flex shrink-0 cursor-pointer items-center gap-1 rounded-md border px-3 py-1.5 text-sm transition-colors',
+        'group relative flex shrink-0 cursor-pointer items-center gap-1 rounded-md border py-1.5 pr-8 pl-3 text-sm transition-colors',
         isActive
           ? 'border-primary bg-primary/10 text-primary'
           : 'border-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -64,7 +64,7 @@ export const SortableDashboardTabItem = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
-            className="ml-1 rounded p-0.5 opacity-0 transition-opacity hover:bg-muted group-hover:opacity-100"
+            className="-translate-y-1/2 absolute top-1/2 right-1 rounded p-0.5 opacity-0 transition-opacity hover:bg-muted group-hover:opacity-100"
             onClick={(e) => {
               e.stopPropagation();
               // Prevent drag when clicking the menu

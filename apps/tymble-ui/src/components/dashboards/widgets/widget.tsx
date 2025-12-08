@@ -9,7 +9,6 @@ import {
 import { cn } from '@/ui/utils';
 
 // Custom resize handle component
-// Custom resize handle component
 export const ResizeHandle = ({
   className,
   ref,
