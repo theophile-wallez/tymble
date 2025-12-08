@@ -1,34 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import GridLayout, { type Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/ui/card';
-
-// Widget wrapper component for consistent styling
-const Widget = ({
-  title,
-  description,
-  children,
-}: {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-}) => (
-  <Card className="size-full overflow-hidden">
-    <CardHeader className="pb-2">
-      <CardTitle className="font-medium text-sm">{title}</CardTitle>
-      {description && (
-        <CardDescription className="text-xs">{description}</CardDescription>
-      )}
-    </CardHeader>
-    <CardContent className="flex-1">{children}</CardContent>
-  </Card>
-);
+import { Widget } from '../widgets/widget';
 
 // Mock data for widgets
 const statsData = [
@@ -103,22 +76,24 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
         {/* Stats Widgets */}
         {statsData.map((stat, index) => (
           <div key={`stats-${index + 1}`}>
-            <Widget title={stat.label}>
-              <div className="drag-handle cursor-move">
-                <p className="font-bold text-2xl">{stat.value}</p>
-                <p className="text-muted-foreground text-xs">
-                  <span className="text-green-500">{stat.change}</span> from
-                  last month
-                </p>
-              </div>
+            <Widget isEditing={isEditing} title={stat.label}>
+              <p className="font-bold text-2xl">{stat.value}</p>
+              <p className="text-muted-foreground text-xs">
+                <span className="text-green-500">{stat.change}</span> from last
+                month
+              </p>
             </Widget>
           </div>
         ))}
 
         {/* Chart Widget */}
         <div key="chart">
-          <Widget description="Monthly revenue overview" title="Overview">
-            <div className="drag-handle flex h-full cursor-move items-end gap-2 pb-4">
+          <Widget
+            description="Monthly revenue overview"
+            isEditing={isEditing}
+            title="Overview"
+          >
+            <div className="flex h-full items-end gap-2 pb-4">
               {[40, 65, 45, 80, 55, 70, 85, 60, 75, 90, 50, 95].map(
                 (height, i) => (
                   <div
@@ -134,8 +109,12 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
 
         {/* Activity Widget */}
         <div key="activity">
-          <Widget description="Latest user actions" title="Recent Activity">
-            <div className="drag-handle cursor-move space-y-3">
+          <Widget
+            description="Latest user actions"
+            isEditing={isEditing}
+            title="Recent Activity"
+          >
+            <div className="space-y-3">
               {activityData.map((item, i) => (
                 <div
                   className="flex items-center gap-3 border-border border-b pb-2 last:border-0"
@@ -159,8 +138,12 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
 
         {/* Tasks Widget */}
         <div key="tasks">
-          <Widget description="Your current tasks" title="Tasks">
-            <div className="drag-handle cursor-move">
+          <Widget
+            description="Your current tasks"
+            isEditing={isEditing}
+            title="Tasks"
+          >
+            <div className="">
               <div className="grid grid-cols-4 gap-4 font-medium text-muted-foreground text-xs">
                 <span>Task</span>
                 <span>Status</span>
@@ -196,7 +179,10 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
                     >
                       {task.priority}
                     </span>
-                    <button className="text-muted-foreground text-xs hover:text-foreground">
+                    <button
+                      className="text-muted-foreground text-xs hover:text-foreground"
+                      type="button"
+                    >
                       View
                     </button>
                   </div>

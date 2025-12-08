@@ -177,6 +177,16 @@ html,
   }
 }
 
+/* Hide default react-grid-layout resize handle to avoid duplicates */
+.react-grid-layout .react-resizable-handle-se {
+  display: none !important;
+}
+
+/* Ensure no background on handles */
+.react-grid-layout .react-resizable-handle {
+  background-image: none !important;
+}
+
 /* Change Autocomplete styles in Chrome*/
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
