@@ -1,4 +1,5 @@
 import { GripVertical } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import type { PropsWithChildren } from 'react';
 import {
   Card,
@@ -45,11 +46,19 @@ export const WidgetLayout = ({
         </div>
       </CardHeader>
     )}
-    {isEditing && (
-      <div className="drag-handle absolute top-2 right-2 cursor-grab rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground active:cursor-grabbing">
-        <GripVertical className="size-4" />
-      </div>
-    )}
+    <AnimatePresence>
+      {isEditing && (
+        <motion.div
+          animate={{ opacity: 1, scale: 1 }}
+          className="drag-handle absolute top-2 right-2 cursor-grab rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground active:cursor-grabbing"
+          exit={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.15, ease: 'easeOut' }}
+        >
+          <GripVertical className="size-4" />
+        </motion.div>
+      )}
+    </AnimatePresence>
     <CardContent className="min-h-0 flex-1 overflow-auto">
       {children}
     </CardContent>

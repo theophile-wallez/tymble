@@ -1,7 +1,4 @@
-import {
-  type Dashboard,
-  WIDGET_MIN_SIZES,
-} from '../dashboard/dashboard-schema';
+import type { Dashboard } from '../dashboard/dashboard-schema';
 
 export const mockDashboardData: Dashboard = {
   id: 'dashboard-001',
@@ -15,15 +12,16 @@ export const mockDashboardData: Dashboard = {
         i: 'text-1',
         x: 0,
         y: 0,
-        w: 8,
-        h: 8,
-        ...WIDGET_MIN_SIZES.text,
+        w: 4,
+        h: 4,
+        minW: 3,
+        minH: 2,
       },
       content: {
         type: 'text',
         data: {
           content:
-            '<h1>Hello Théophile 👋</h1><p>Welcome to your dashboard. 🚀 <p/><p/> Here is an overview of your key metrics:</p>Revenue is trending up 📈Activity is high this week 🔥You have 3 high priority tasks 🚨</p>',
+            '<h1>Hello Théophile 👋</h1><p/><p>Welcome to your dashboard! 🚀<p/>',
         },
       },
     },
@@ -35,8 +33,9 @@ export const mockDashboardData: Dashboard = {
         x: 8,
         y: 0,
         w: 4,
-        h: 8,
-        ...WIDGET_MIN_SIZES.traffic,
+        h: 9,
+        minW: 3,
+        minH: 6,
       },
       content: {
         type: 'traffic',
@@ -48,10 +47,11 @@ export const mockDashboardData: Dashboard = {
       layout: {
         i: 'stats-1',
         x: 0,
-        y: 6,
-        w: 3,
-        h: 4,
-        ...WIDGET_MIN_SIZES.stats,
+        y: 4,
+        w: 4,
+        h: 5,
+        minW: 2,
+        minH: 2,
       },
       content: {
         type: 'stats',
@@ -62,11 +62,12 @@ export const mockDashboardData: Dashboard = {
       id: 'stats-2',
       layout: {
         i: 'stats-2',
-        x: 3,
-        y: 6,
-        w: 3,
+        x: 8,
+        y: 13,
+        w: 4,
         h: 4,
-        ...WIDGET_MIN_SIZES.stats,
+        minW: 2,
+        minH: 2,
       },
       content: {
         type: 'stats',
@@ -77,11 +78,12 @@ export const mockDashboardData: Dashboard = {
       id: 'stats-3',
       layout: {
         i: 'stats-3',
-        x: 6,
-        y: 6,
-        w: 3,
-        h: 4,
-        ...WIDGET_MIN_SIZES.stats,
+        x: 3,
+        y: 25,
+        w: 5,
+        h: 5,
+        minW: 2,
+        minH: 2,
       },
       content: {
         type: 'stats',
@@ -92,11 +94,12 @@ export const mockDashboardData: Dashboard = {
       id: 'stats-4',
       layout: {
         i: 'stats-4',
-        x: 9,
-        y: 6,
-        w: 3,
+        x: 8,
+        y: 9,
+        w: 4,
         h: 4,
-        ...WIDGET_MIN_SIZES.stats,
+        minW: 2,
+        minH: 2,
       },
       content: {
         type: 'stats',
@@ -109,10 +112,11 @@ export const mockDashboardData: Dashboard = {
       layout: {
         i: 'revenue',
         x: 0,
-        y: 10,
+        y: 9,
         w: 8,
-        h: 9,
-        ...WIDGET_MIN_SIZES.revenue,
+        h: 8,
+        minW: 4,
+        minH: 6,
       },
       content: {
         type: 'revenue',
@@ -124,11 +128,12 @@ export const mockDashboardData: Dashboard = {
       id: 'activity',
       layout: {
         i: 'activity',
-        x: 8,
-        y: 10,
+        x: 4,
+        y: 0,
         w: 4,
         h: 9,
-        ...WIDGET_MIN_SIZES.activity,
+        minW: 3,
+        minH: 6,
       },
       content: {
         type: 'activity',
@@ -140,10 +145,11 @@ export const mockDashboardData: Dashboard = {
       layout: {
         i: 'tasks',
         x: 0,
-        y: 19,
+        y: 17,
         w: 12,
         h: 8,
-        ...WIDGET_MIN_SIZES.tasks,
+        minW: 4,
+        minH: 6,
       },
       content: {
         type: 'tasks',
