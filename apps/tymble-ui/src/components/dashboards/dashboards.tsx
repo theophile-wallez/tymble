@@ -13,7 +13,7 @@ import {
   horizontalListSortingStrategy,
   SortableContext,
 } from '@dnd-kit/sortable';
-import { Pencil } from 'lucide-react';
+import { Check, Pencil } from 'lucide-react';
 import { useState } from 'react';
 import {
   ContentBody,
@@ -97,8 +97,17 @@ export const Dashboards = () => {
           size="sm"
           variant={isEditing ? 'default' : 'outline'}
         >
-          <Pencil className="mr-1 size-4" />
-          {isEditing ? 'Editing' : 'Edit'}
+          {isEditing ? (
+            <>
+              <Check className="mr-1 size-4" />
+              Save
+            </>
+          ) : (
+            <>
+              <Pencil className="mr-1 size-4" />
+              Edit
+            </>
+          )}
         </Button>
       </ContentSubHeader>
       <ContentBody>
