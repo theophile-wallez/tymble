@@ -93,7 +93,7 @@ export const Dashboards = () => {
           </DndContext>
         </div>
         <Button
-          className="w-20 shrink-0 overflow-hidden"
+          className="shrink-0 overflow-hidden"
           onClick={() => setIsEditing(!isEditing)}
           size="sm"
           variant={isEditing ? 'default' : 'outline'}
@@ -103,8 +103,8 @@ export const Dashboards = () => {
               <motion.div
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 className="flex items-center"
-                exit={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-                initial={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+                exit={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
+                initial={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
                 key="save"
                 transition={{
                   bounce: 0,
@@ -113,14 +113,14 @@ export const Dashboards = () => {
                 }}
               >
                 <Check className="mr-2 size-4" />
-                Save
+                Save dashboard
               </motion.div>
             ) : (
               <motion.div
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 className="flex items-center"
-                exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
-                initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+                exit={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
+                initial={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
                 key="edit"
                 transition={{
                   bounce: 0,
@@ -129,7 +129,7 @@ export const Dashboards = () => {
                 }}
               >
                 <Pencil className="mr-2 size-4" />
-                Edit
+                Edit dashboard
               </motion.div>
             )}
           </AnimatePresence>
