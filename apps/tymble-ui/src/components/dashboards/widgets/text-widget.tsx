@@ -1,18 +1,22 @@
+import { BubbleMenu as BubbleMenuExtension } from '@tiptap/extension-bubble-menu';
 import { EditorContent, useEditor } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';
 import { TextWidgetToolbar } from './text-widget-toolbar';
 import { WidgetLayout } from './widget-layout';
 
-type Props = {
+export const TextWidget = ({
+  content,
+  isEditing,
+  transparent,
+}: {
   content: string;
   isEditing?: boolean;
   transparent?: boolean;
-};
-
-export const TextWidget = ({ content, isEditing, transparent }: Props) => {
+}) => {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, BubbleMenuExtension],
     content,
     editable: isEditing,
     editorProps: {
@@ -31,7 +35,11 @@ export const TextWidget = ({ content, isEditing, transparent }: Props) => {
 
   return (
     <WidgetLayout isEditing={isEditing} title="Notes" transparent={transparent}>
-      {isEditing && <TextWidgetToolbar editor={editor} />}
+      {isEditing && editor && (
+        <BubbleMenu editor={editor}>
+          <TextWidgetToolbar editor={editor} />
+        </BubbleMenu>
+      )}
       <EditorContent editor={editor} />
     </WidgetLayout>
   );

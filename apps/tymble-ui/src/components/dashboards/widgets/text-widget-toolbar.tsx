@@ -10,7 +10,7 @@ import {
   Quote,
   Strikethrough,
 } from 'lucide-react';
-import { Toggle } from '@/ui/toggle';
+import { Toggle } from '../../../ui/toggle';
 
 type Props = {
   editor: Editor | null;
@@ -21,12 +21,14 @@ export const TextWidgetToolbar = ({ editor }: Props) => {
     return null;
   }
 
+  const isBold = editor.isActive('bold');
+  console.log({ isBold });
   return (
-    <div className="mb-2 flex flex-wrap gap-1 rounded-md border bg-muted/50 p-1">
+    <div className="mb-2 flex flex-wrap gap-1 rounded-md border bg-muted/30 p-1 backdrop-blur-sm">
       <Toggle
         aria-label="Toggle bold"
         onPressedChange={() => editor.chain().focus().toggleBold().run()}
-        pressed={editor.isActive('bold')}
+        pressed={isBold}
         size="sm"
       >
         <Bold className="size-4" />
