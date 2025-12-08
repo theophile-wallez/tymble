@@ -50,6 +50,7 @@ export const DashboardGrid = ({
         className="layout"
         cols={12}
         containerPadding={[0, 0]}
+        draggableHandle=".drag-handle"
         isDraggable={isEditing}
         isResizable={isEditing}
         layout={layout}
