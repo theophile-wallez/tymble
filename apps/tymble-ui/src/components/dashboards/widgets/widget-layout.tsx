@@ -16,6 +16,7 @@ type Props = PropsWithChildren<{
   isEditing?: boolean;
   transparent?: boolean;
   className?: string;
+  cardClassName?: string;
 }>;
 
 // Widget wrapper component for consistent styling
@@ -26,6 +27,7 @@ export const WidgetLayout = ({
   isEditing,
   transparent,
   className,
+  cardClassName,
 }: Props) => (
   <Card
     className={cn(
@@ -62,7 +64,9 @@ export const WidgetLayout = ({
         </motion.div>
       )}
     </AnimatePresence>
-    <CardContent className="min-h-0 flex-1 overflow-auto">
+    <CardContent
+      className={cn('mx-1 min-h-0 flex-1 overflow-auto px-5', cardClassName)}
+    >
       {children}
     </CardContent>
     {/* {isEditing && <div className="absolute inset-0 z-10 bg-transparent" />} */}

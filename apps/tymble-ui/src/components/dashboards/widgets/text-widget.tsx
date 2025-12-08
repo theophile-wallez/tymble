@@ -1,10 +1,5 @@
-import { BubbleMenu as BubbleMenuExtension } from '@tiptap/extension-bubble-menu';
-import { EditorContent, useEditor } from '@tiptap/react';
-import { BubbleMenu } from '@tiptap/react/menus';
-import StarterKit from '@tiptap/starter-kit';
-import { useEffect } from 'react';
+import { TiptapEditor } from '@/components/editor';
 import { cn } from '@/ui/utils';
-import { TextWidgetToolbar } from './text-widget-toolbar';
 import { WidgetLayout } from './widget-layout';
 
 export const TextWidget = ({
@@ -15,40 +10,13 @@ export const TextWidget = ({
   content: string;
   isEditing?: boolean;
   transparent?: boolean;
-}) => {
-  const classNames = cn(
-    'prose prose-neutral dark:prose-invert max-w-none prose-h1:text-3xl prose-h2:text-2xl prose-p:text-base prose-h1:leading-[1em] prose-p:leading-1 focus:outline-none',
-    isEditing ? 'min-h-[100px]' : 'tiptap-readonly'
-  );
-  const editor = useEditor({
-    extensions: [StarterKit, BubbleMenuExtension],
-    content,
-    editable: isEditing,
-    editorProps: {
-      attributes: {
-        class: classNames,
-      },
-    },
-  });
-
-  useEffect(() => {
-    if (editor) {
-      editor.setEditable(!!isEditing);
-    }
-  }, [editor, isEditing]);
-
-  return (
-    <WidgetLayout
-      className="pb-2"
-      isEditing={isEditing}
-      transparent={transparent}
-    >
-      {isEditing && editor && (
-        <BubbleMenu editor={editor}>
-          <TextWidgetToolbar editor={editor} />
-        </BubbleMenu>
-      )}
-      <EditorContent editor={editor} />
-    </WidgetLayout>
-  );
-};
+}) => (
+  <WidgetLayout
+    cardClassName={cn('overflow-hidden', isEditing && 'overflow-auto')}
+    className="pb-2"
+    isEditing={isEditing}
+    transparent={transparent}
+  >
+    <TiptapEditor content={content} editable={isEditing} />
+  </WidgetLayout>
+);

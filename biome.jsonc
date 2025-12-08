@@ -14,7 +14,8 @@
         "noParameterProperties": "off"
       },
       "performance": {
-        "noNamespaceImport": "off"
+        "noNamespaceImport": "off",
+        "noBarrelFile": "info"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "off"

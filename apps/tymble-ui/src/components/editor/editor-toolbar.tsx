@@ -10,13 +10,13 @@ import {
   Quote,
   Strikethrough,
 } from 'lucide-react';
-import { Toggle } from '../../../ui/toggle';
+import { Toggle } from '@/ui/toggle';
 
 type Props = {
   editor: Editor;
 };
 
-export const TextWidgetToolbar = ({ editor }: Props) => {
+export const EditorToolbar = ({ editor }: Props) => {
   const editorState = useEditorState({
     editor,
     selector: (ctx) => ({

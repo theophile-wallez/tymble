@@ -13,7 +13,7 @@ export const mockDashboardData: Dashboard = {
         x: 0,
         y: 0,
         w: 4,
-        h: 4,
+        h: 3,
         minW: 3,
         minH: 2,
       },
@@ -21,7 +21,7 @@ export const mockDashboardData: Dashboard = {
         type: 'text',
         data: {
           content:
-            '<h1>Hello Théophile 👋</h1><p>Welcome to your dashboard! 🚀<p/>',
+            '<h1>Hello Théophile 👋</h1><p>Welcome to your main dashboard<p/>',
         },
       },
     },
@@ -47,9 +47,9 @@ export const mockDashboardData: Dashboard = {
       layout: {
         i: 'stats-1',
         x: 0,
-        y: 4,
+        y: 3,
         w: 4,
-        h: 5,
+        h: 6,
         minW: 2,
         minH: 2,
       },
