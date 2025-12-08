@@ -28,10 +28,9 @@ export const GridBackground = ({
     >
       {Array.from({ length: cols * rows }).map((_, i) => (
         <div
-          // biome-ignore lint/suspicious/noArrayIndexKey: This is a static grid background
           className={cn(
             'rounded-md border border-border/50 border-dashed bg-muted/20 transition-opacity duration-300'
-          )}
+          )} // biome-ignore lint/suspicious/noArrayIndexKey: This is a static grid background
           key={i}
         />
       ))}

@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import GridLayout, { type Layout } from 'react-grid-layout';
+import { useState } from 'react';
+import type { Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import { ActivityWidget } from '../widgets/charts/activity-widget';
 import { RevenueWidget } from '../widgets/charts/revenue-widget';
 import { TrafficWidget } from '../widgets/charts/traffic-widget';
-import { ResizeHandle } from '../widgets/resize-handle';
 import { Widget } from '../widgets/widget';
-import { GridBackground } from './grid-background';
+import { DashboardGrid } from './dashboard-grid';
 
 // Mock data for widgets
 const statsData = [
@@ -45,134 +44,112 @@ type DashboardProps = {
   isEditing?: boolean;
 };
 
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case 'Done':
+      return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
+    case 'In Progress':
+      return 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300';
+    default:
+      return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+  }
+};
+
+const getPriorityColor = (priority: string) => {
+  switch (priority) {
+    case 'High':
+      return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+    case 'Medium':
+      return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
+    default:
+      return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
+  }
+};
+
 export const Dashboard = ({ isEditing = false }: DashboardProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(1200);
   const [layout, setLayout] = useState(initialLayout);
 
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setWidth(containerRef.current.offsetWidth);
-      }
-    };
-
-    updateWidth();
-    const resizeObserver = new ResizeObserver(updateWidth);
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-
-    return () => resizeObserver.disconnect();
-  }, []);
-
   return (
-    <div className="relative w-full" ref={containerRef}>
-      {isEditing && (
-        <GridBackground
-          cols={12}
-          containerPadding={[0, 0]}
-          margin={[10, 10]}
-          rowHeight={30}
-        />
-      )}
-      <GridLayout
-        className="layout"
-        cols={12}
-        containerPadding={[0, 0]}
-        isDraggable={isEditing}
-        isResizable={isEditing}
-        layout={layout}
-        margin={[10, 10]}
-        onLayoutChange={setLayout}
-        resizeHandle={<ResizeHandle />}
-        rowHeight={30}
-        width={width}
-      >
-        {/* Stats Widgets */}
-        {statsData.map((stat, index) => (
-          <div key={`stats-${index + 1}`}>
-            <Widget isEditing={isEditing} title={stat.label}>
-              <p className="font-bold text-2xl">{stat.value}</p>
-              <p className="text-muted-foreground text-xs">
-                <span className="text-green-500">{stat.change}</span> from last
-                month
-              </p>
-            </Widget>
-          </div>
-        ))}
-
-        {/* Revenue Widget */}
-        <div key="revenue">
-          <RevenueWidget isEditing={isEditing} />
-        </div>
-
-        {/* Activity Widget */}
-        <div key="activity">
-          <ActivityWidget isEditing={isEditing} />
-        </div>
-
-        {/* Tasks Widget */}
-        <div key="tasks">
-          <Widget
-            description="Your current tasks"
-            isEditing={isEditing}
-            title="Tasks"
-          >
-            <div className="">
-              <div className="grid grid-cols-4 gap-4 font-medium text-muted-foreground text-xs">
-                <span>Task</span>
-                <span>Status</span>
-                <span>Priority</span>
-                <span />
-              </div>
-              <div className="mt-2 space-y-2">
-                {tasksData.map((task, i) => (
-                  <div
-                    className="grid grid-cols-4 items-center gap-4 rounded-md bg-muted/50 p-2 text-sm"
-                    key={i}
-                  >
-                    <span className="truncate font-medium">{task.title}</span>
-                    <span
-                      className={`inline-flex w-fit items-center rounded-full px-2 py-0.5 text-xs ${
-                        task.status === 'Done'
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-                          : task.status === 'In Progress'
-                            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
-                            : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
-                      }`}
-                    >
-                      {task.status}
-                    </span>
-                    <span
-                      className={`inline-flex w-fit items-center rounded-full px-2 py-0.5 text-xs ${
-                        task.priority === 'High'
-                          ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
-                          : task.priority === 'Medium'
-                            ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
-                            : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-                      }`}
-                    >
-                      {task.priority}
-                    </span>
-                    <button
-                      className="text-muted-foreground text-xs hover:text-foreground"
-                      type="button"
-                    >
-                      View
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
+    <DashboardGrid
+      isEditing={isEditing}
+      layout={layout}
+      onLayoutChange={setLayout}
+    >
+      {/* Stats Widgets */}
+      {statsData.map((stat, index) => (
+        <div key={`stats-${index + 1}`}>
+          <Widget isEditing={isEditing} title={stat.label}>
+            <p className="font-bold text-2xl">{stat.value}</p>
+            <p className="text-muted-foreground text-xs">
+              <span className="text-green-500">{stat.change}</span> from last
+              month
+            </p>
           </Widget>
         </div>
+      ))}
 
-        {/* Traffic Widget */}
-        <div key="traffic">
-          <TrafficWidget isEditing={isEditing} />
-        </div>
-      </GridLayout>
-    </div>
+      {/* Revenue Widget */}
+      <div key="revenue">
+        <RevenueWidget isEditing={isEditing} />
+      </div>
+
+      {/* Activity Widget */}
+      <div key="activity">
+        <ActivityWidget isEditing={isEditing} />
+      </div>
+
+      {/* Tasks Widget */}
+      <div key="tasks">
+        <Widget
+          description="Your current tasks"
+          isEditing={isEditing}
+          title="Tasks"
+        >
+          <div className="">
+            <div className="grid grid-cols-4 gap-4 font-medium text-muted-foreground text-xs">
+              <span>Task</span>
+              <span>Status</span>
+              <span>Priority</span>
+              <span />
+            </div>
+            <div className="mt-2 space-y-2">
+              {tasksData.map((task) => (
+                <div
+                  className="grid grid-cols-4 items-center gap-4 rounded-md bg-muted/50 p-2 text-sm"
+                  key={task.title}
+                >
+                  <span className="truncate font-medium">{task.title}</span>
+                  <span
+                    className={`inline-flex w-fit items-center rounded-full px-2 py-0.5 text-xs ${getStatusColor(
+                      task.status
+                    )}`}
+                  >
+                    {task.status}
+                  </span>
+                  <span
+                    className={`inline-flex w-fit items-center rounded-full px-2 py-0.5 text-xs ${getPriorityColor(
+                      task.priority
+                    )}`}
+                  >
+                    {task.priority}
+                  </span>
+                  <button
+                    className="text-muted-foreground text-xs hover:text-foreground"
+                    type="button"
+                  >
+                    View
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Widget>
+      </div>
+
+      {/* Traffic Widget */}
+      <div key="traffic">
+        <TrafficWidget isEditing={isEditing} />
+      </div>
+    </DashboardGrid>
   );
 };
