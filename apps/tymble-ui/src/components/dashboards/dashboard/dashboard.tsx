@@ -1,44 +1,11 @@
 import { useState } from 'react';
-import type { Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import { ActivityWidget } from '../widgets/charts/activity-widget';
 import { RevenueWidget } from '../widgets/charts/revenue-widget';
 import { TrafficWidget } from '../widgets/charts/traffic-widget';
 import { Widget } from '../widgets/widget';
 import { DashboardGrid } from './dashboard-grid';
-
-// Mock data for widgets
-const statsData = [
-  { label: 'Total Revenue', value: '$45,231.89', change: '+20.1%' },
-  { label: 'Subscriptions', value: '+2350', change: '+180.1%' },
-  { label: 'Sales', value: '+12,234', change: '+19%' },
-  { label: 'Active Now', value: '+573', change: '+201' },
-];
-
-const tasksData = [
-  { title: 'Review pull requests', status: 'In Progress', priority: 'High' },
-  { title: 'Update documentation', status: 'Pending', priority: 'Medium' },
-  { title: 'Fix authentication bug', status: 'Done', priority: 'High' },
-  { title: 'Design new landing page', status: 'In Progress', priority: 'Low' },
-  {
-    title: 'Optimize database queries',
-    status: 'In Progress',
-    priority: 'High',
-  },
-  { title: 'Create marketing assets', status: 'Pending', priority: 'Low' },
-];
-
-// Initial layout configuration
-const initialLayout: Layout[] = [
-  { i: 'stats-1', x: 0, y: 0, w: 3, h: 4 },
-  { i: 'stats-2', x: 3, y: 0, w: 3, h: 4 },
-  { i: 'stats-3', x: 6, y: 0, w: 3, h: 4 },
-  { i: 'stats-4', x: 9, y: 0, w: 3, h: 4 },
-  { i: 'revenue', x: 0, y: 4, w: 8, h: 9 },
-  { i: 'activity', x: 8, y: 4, w: 4, h: 9 },
-  { i: 'tasks', x: 0, y: 13, w: 8, h: 8 },
-  { i: 'traffic', x: 8, y: 13, w: 4, h: 8 },
-];
+import { type DashboardItem, mockDashboardData } from './dashboard-schema';
 
 type DashboardProps = {
   isEditing?: boolean;
@@ -66,40 +33,26 @@ const getPriorityColor = (priority: string) => {
   }
 };
 
-export const Dashboard = ({ isEditing = false }: DashboardProps) => {
-  const [layout, setLayout] = useState(initialLayout);
-
-  return (
-    <DashboardGrid
-      isEditing={isEditing}
-      layout={layout}
-      onLayoutChange={setLayout}
-    >
-      {/* Stats Widgets */}
-      {statsData.map((stat, index) => (
-        <div key={`stats-${index + 1}`}>
-          <Widget isEditing={isEditing} title={stat.label}>
-            <p className="font-bold text-2xl">{stat.value}</p>
-            <p className="text-muted-foreground text-xs">
-              <span className="text-green-500">{stat.change}</span> from last
-              month
-            </p>
-          </Widget>
-        </div>
-      ))}
-
-      {/* Revenue Widget */}
-      <div key="revenue">
-        <RevenueWidget isEditing={isEditing} />
-      </div>
-
-      {/* Activity Widget */}
-      <div key="activity">
-        <ActivityWidget isEditing={isEditing} />
-      </div>
-
-      {/* Tasks Widget */}
-      <div key="tasks">
+const renderWidget = (item: DashboardItem, isEditing: boolean) => {
+  switch (item.content.type) {
+    case 'stats':
+      return (
+        <Widget isEditing={isEditing} title={item.content.data.label}>
+          <p className="font-bold text-2xl">{item.content.data.value}</p>
+          <p className="text-muted-foreground text-xs">
+            <span className="text-green-500">{item.content.data.change}</span>{' '}
+            from last month
+          </p>
+        </Widget>
+      );
+    case 'revenue':
+      return <RevenueWidget isEditing={isEditing} />;
+    case 'activity':
+      return <ActivityWidget isEditing={isEditing} />;
+    case 'traffic':
+      return <TrafficWidget isEditing={isEditing} />;
+    case 'tasks':
+      return (
         <Widget
           description="Your current tasks"
           isEditing={isEditing}
@@ -113,10 +66,10 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
               <span />
             </div>
             <div className="mt-2 space-y-2">
-              {tasksData.map((task) => (
+              {item.content.data.tasks.map((task) => (
                 <div
                   className="grid grid-cols-4 items-center gap-4 rounded-md bg-muted/50 p-2 text-sm"
-                  key={task.title}
+                  key={task.id}
                 >
                   <span className="truncate font-medium">{task.title}</span>
                   <span
@@ -144,12 +97,26 @@ export const Dashboard = ({ isEditing = false }: DashboardProps) => {
             </div>
           </div>
         </Widget>
-      </div>
+      );
+    default:
+      return null;
+  }
+};
 
-      {/* Traffic Widget */}
-      <div key="traffic">
-        <TrafficWidget isEditing={isEditing} />
-      </div>
+export const Dashboard = ({ isEditing = false }: DashboardProps) => {
+  const [layout, setLayout] = useState(
+    mockDashboardData.items.map((item) => item.layout)
+  );
+
+  return (
+    <DashboardGrid
+      isEditing={isEditing}
+      layout={layout}
+      onLayoutChange={setLayout}
+    >
+      {mockDashboardData.items.map((item) => (
+        <div key={item.id}>{renderWidget(item, isEditing)}</div>
+      ))}
     </DashboardGrid>
   );
 };
