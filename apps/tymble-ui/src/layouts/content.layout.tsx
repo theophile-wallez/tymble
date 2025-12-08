@@ -2,7 +2,7 @@ import type React from 'react';
 import { cn } from '@/ui/utils';
 
 type Props = React.HTMLAttributes<HTMLDivElement> & {
-  cy?: string;
+  cy: string;
 };
 
 export const ContentLayout = ({ className, cy, ...props }: Props) => (

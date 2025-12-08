@@ -138,7 +138,7 @@ export const Dashboards = () => {
           </motion.button>
         </Button>
       </ContentSubHeader>
-      <ContentBody>
+      <ContentBody cy="dashboard">
         <Dashboard isEditing={isEditing} />
       </ContentBody>
     </ContentLayout>
