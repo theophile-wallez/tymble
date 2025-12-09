@@ -8,6 +8,13 @@ import {
 } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import {
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/ui/table';
 import { cn } from '@/ui/utils';
 import { WidgetLayout } from './widget-layout';
 
@@ -99,16 +106,13 @@ export const TableWidget = ({
     >
       <div className="relative size-full overflow-auto">
         <table className="w-full caption-bottom text-sm">
-          <thead className="sticky top-0 z-10 bg-card [&_tr]:border-b">
+          <TableHeader className="sticky top-0 z-10 bg-card">
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr className="border-b transition-colors" key={headerGroup.id}>
+              <TableRow className="hover:bg-transparent" key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const isSorted = header.column.getIsSorted();
                   return (
-                    <th
-                      className="h-10 px-2 text-left align-middle font-medium text-muted-foreground"
-                      key={header.id}
-                    >
+                    <TableHead key={header.id}>
                       {header.isPlaceholder ? null : (
                         <button
                           className={cn(
@@ -131,37 +135,37 @@ export const TableWidget = ({
                           )}
                         </button>
                       )}
-                    </th>
+                    </TableHead>
                   );
                 })}
-              </tr>
+              </TableRow>
             ))}
-          </thead>
-          <tbody className="[&_tr:last-child]:border-0">
+          </TableHeader>
+          <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <tr
-                  className="border-b transition-colors hover:bg-muted/50"
-                  key={row.id}
-                >
+                <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
-                    <td className="p-2 align-middle" key={cell.id}>
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
-                    </td>
+                    </TableCell>
                   ))}
-                </tr>
+                </TableRow>
               ))
             ) : (
-              <tr className="border-b transition-colors hover:bg-muted/50">
-                <td className="h-24 p-2 text-center" colSpan={columns.length}>
+              <TableRow>
+                <TableCell
+                  className="h-24 text-center"
+                  colSpan={columns.length}
+                >
                   No results.
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
-          </tbody>
+          </TableBody>
         </table>
       </div>
     </WidgetLayout>
