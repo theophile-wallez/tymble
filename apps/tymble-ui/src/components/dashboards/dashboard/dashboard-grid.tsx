@@ -49,22 +49,24 @@ export const DashboardGrid = ({
           />
         )}
       </AnimatePresence>
-      <GridLayout
-        className="layout"
-        cols={12}
-        containerPadding={[0, 0]}
-        draggableHandle=".drag-handle"
-        isDraggable={isEditing}
-        isResizable={isEditing}
-        layout={layout}
-        margin={[10, 10]}
-        onLayoutChange={onLayoutChange}
-        resizeHandle={<ResizeHandle />}
-        rowHeight={30}
-        width={width}
-      >
-        {children}
-      </GridLayout>
+      {width && (
+        <GridLayout
+          className="layout"
+          cols={12}
+          containerPadding={[0, 0]}
+          draggableHandle=".drag-handle"
+          isDraggable={isEditing}
+          isResizable={isEditing}
+          layout={layout}
+          margin={[10, 10]}
+          onLayoutChange={onLayoutChange}
+          resizeHandle={<ResizeHandle />}
+          rowHeight={30}
+          width={width}
+        >
+          {children}
+        </GridLayout>
+      )}
     </div>
   );
 };

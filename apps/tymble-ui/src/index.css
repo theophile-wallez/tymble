@@ -178,6 +178,15 @@ html,
   }
 }
 
+/* Disable react-grid-layout animations */
+.react-grid-layout > .react-grid-item {
+  transition: none !important;
+}
+
+.react-grid-layout > .react-grid-placeholder {
+  transition: none !important;
+}
+
 /* Reset react-grid-layout default resize handle styles */
 .react-grid-layout .react-resizable-handle {
   background: none !important;
