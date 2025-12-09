@@ -114,13 +114,13 @@ export function DataTable<TData>({
                   }
                 >
                   {renderSubComponent && (
-                    <TableCell className="w-10">
-                      <motion.div
-                        animate={{ rotate: row.getIsExpanded() ? 90 : 0 }}
-                        transition={{ duration: 0.15, ease: 'easeOut' }}
-                      >
-                        <ChevronRight className="size-4 text-muted-foreground" />
-                      </motion.div>
+                    <TableCell>
+                      <ChevronRight
+                        className={cn(
+                          'size-4 shrink-0 origin-center text-muted-foreground transition-transform',
+                          row.getIsExpanded() ? 'rotate-90' : undefined
+                        )}
+                      />
                     </TableCell>
                   )}
                   {row.getVisibleCells().map((cell) => (
@@ -133,9 +133,9 @@ export function DataTable<TData>({
                   ))}
                 </TableRow>
                 {renderSubComponent && (
-                  <tr className="bg-muted/30">
+                  <tr className="">
                     <TableCell
-                      className="p-0!"
+                      className="rounded-b-md bg-muted/30 p-0!"
                       colSpan={row.getVisibleCells().length + 1}
                     >
                       <motion.div
@@ -156,8 +156,7 @@ export function DataTable<TData>({
                           className="overflow-hidden"
                           initial={{ opacity: 0 }}
                           transition={{
-                            duration: 0.2,
-                            delay: row.getIsExpanded() ? 0.1 : 0,
+                            duration: 0.15,
                           }}
                         >
                           <div className="px-2 py-3">
