@@ -3,6 +3,7 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
+  type SortDirection,
   type SortingState,
   useReactTable,
 } from '@tanstack/react-table';
@@ -46,6 +47,20 @@ const Badge = ({
   </span>
 );
 
+type SortIconProps = {
+  direction: false | SortDirection;
+};
+
+const SortIcon = ({ direction }: SortIconProps) => {
+  if (direction === 'asc') {
+    return <ArrowUp className="size-3.5" />;
+  }
+  if (direction === 'desc') {
+    return <ArrowDown className="size-3.5" />;
+  }
+  return <ArrowUpDown className="size-3.5 opacity-50" />;
+};
+
 export const TableWidget = ({
   columns,
   rows,
@@ -59,22 +74,26 @@ export const TableWidget = ({
   // Convert schema columns to TanStack Table column defs
   const tableColumns = useMemo<ColumnDef<Record<string, unknown>>[]>(
     () =>
-      columns.map((col) => ({
-        id: col.id,
-        accessorKey: col.accessorKey,
-        header: col.header,
-        cell: ({ getValue }) => {
-          const value = getValue();
-          const stringValue = String(value ?? '');
+      columns.map(
+        (col) =>
+          ({
+            id: col.id,
 
-          if (col.variant === 'badge') {
-            const colorClass = col.badgeColors?.[stringValue];
-            return <Badge colorClass={colorClass} value={stringValue} />;
-          }
+            accessorKey: col.accessorKey,
+            header: col.header,
+            cell: ({ getValue }) => {
+              const value = getValue();
+              const stringValue = String(value ?? '');
 
-          return stringValue;
-        },
-      })),
+              if (col.variant === 'badge') {
+                const colorClass = col.badgeColors?.[stringValue];
+                return <Badge colorClass={colorClass} value={stringValue} />;
+              }
+
+              return stringValue;
+            },
+          }) satisfies ColumnDef<Record<string, unknown>>
+      ),
     [columns]
   );
 
@@ -127,13 +146,7 @@ export const TableWidget = ({
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        {isSorted === 'asc' ? (
-                          <ArrowUp className="size-3.5" />
-                        ) : isSorted === 'desc' ? (
-                          <ArrowDown className="size-3.5" />
-                        ) : (
-                          <ArrowUpDown className="size-3.5 opacity-50" />
-                        )}
+                        <SortIcon direction={isSorted} />
                       </button>
                     )}
                   </div>
