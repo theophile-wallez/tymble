@@ -21,6 +21,9 @@
       "cache": false,
       "dependsOn": ["@tymble/db#build", "@tymble/schemas#build"],
       "persistent": true
+    },
+    "env:init": {
+      "cache": false
     }
   }
 }
