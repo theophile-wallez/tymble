@@ -10,7 +10,7 @@ import {
   type SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Fragment, useState } from 'react';
 import {
@@ -76,6 +76,7 @@ export function DataTable<TData>({
         <TableHeader className="sticky top-0 bg-card">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
+              {renderSubComponent && <TableHead className="w-10" />}
               {headerGroup.headers.map((header) => {
                 const isSorted = header.column.getIsSorted();
                 return (
@@ -112,6 +113,16 @@ export function DataTable<TData>({
                     renderSubComponent ? () => row.toggleExpanded() : undefined
                   }
                 >
+                  {renderSubComponent && (
+                    <TableCell className="w-10">
+                      <motion.div
+                        animate={{ rotate: row.getIsExpanded() ? 90 : 0 }}
+                        transition={{ duration: 0.15, ease: 'easeOut' }}
+                      >
+                        <ChevronRight className="size-4 text-muted-foreground" />
+                      </motion.div>
+                    </TableCell>
+                  )}
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -125,7 +136,7 @@ export function DataTable<TData>({
                   <tr className="bg-muted/30">
                     <TableCell
                       className="p-0!"
-                      colSpan={row.getVisibleCells().length}
+                      colSpan={row.getVisibleCells().length + 1}
                     >
                       <motion.div
                         animate={{
@@ -163,7 +174,7 @@ export function DataTable<TData>({
             <TableRow>
               <TableCell
                 className="h-24 text-center text-muted-foreground"
-                colSpan={columns.length}
+                colSpan={columns.length + (renderSubComponent ? 1 : 0)}
               >
                 {emptyMessage}
               </TableCell>
