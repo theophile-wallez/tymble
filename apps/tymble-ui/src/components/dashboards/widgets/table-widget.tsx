@@ -1,4 +1,4 @@
-import type { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef, Row } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { DataTable } from '@/components/table/data-table';
 import { cn } from '@/ui/utils';
@@ -38,6 +38,44 @@ const Badge = ({
     {value}
   </span>
 );
+
+const TaskDetails = ({ row }: { row: Row<Record<string, unknown>> }) => {
+  const data = row.original;
+  const description = data.description as string | undefined;
+  const assignee = data.assignee as string | undefined;
+  const dueDate = data.dueDate as string | undefined;
+
+  return (
+    <div className="space-y-2 py-2 text-sm">
+      {description && (
+        <div>
+          <span className="font-medium text-muted-foreground">
+            Description:{' '}
+          </span>
+          <span>{description}</span>
+        </div>
+      )}
+      <div className="flex gap-6">
+        {assignee && (
+          <div>
+            <span className="font-medium text-muted-foreground">
+              Assignee:{' '}
+            </span>
+            <span>{assignee}</span>
+          </div>
+        )}
+        {dueDate && (
+          <div>
+            <span className="font-medium text-muted-foreground">
+              Due Date:{' '}
+            </span>
+            <span>{dueDate}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export const TableWidget = ({
   columns,
@@ -80,7 +118,11 @@ export const TableWidget = ({
       title={title}
       transparent={transparent}
     >
-      <DataTable columns={tableColumns} data={rows} />
+      <DataTable
+        columns={tableColumns}
+        data={rows}
+        renderSubComponent={TaskDetails}
+      />
     </WidgetLayout>
   );
 };
