@@ -147,7 +147,7 @@ export const mockDashboardData: Dashboard = {
         x: 0,
         y: 18,
         w: 12,
-        h: 8,
+        h: 12,
         minW: 4,
         minH: 4,
       },
@@ -188,60 +188,72 @@ export const mockDashboardData: Dashboard = {
               title: 'Review pull requests',
               status: 'In Progress',
               priority: 'High',
-              description:
-                'Review and approve pending pull requests for the authentication module. Focus on security best practices.',
-              assignee: 'Théophile',
-              dueDate: '2025-12-10',
+              details: {
+                description:
+                  'Review and approve pending pull requests for the authentication module. Focus on security best practices.',
+                assignee: 'Théophile',
+                dueDate: '2025-12-10',
+              },
             },
             {
               id: 't2',
               title: 'Update documentation',
               status: 'Pending',
               priority: 'Medium',
-              description:
-                'Update the API documentation with new endpoints and deprecate old ones. Include code examples.',
-              assignee: 'Sarah',
-              dueDate: '2025-12-15',
+              details: {
+                description:
+                  'Update the API documentation with new endpoints and deprecate old ones. Include code examples.',
+                assignee: 'Sarah',
+                dueDate: '2025-12-15',
+              },
             },
             {
               id: 't3',
               title: 'Fix authentication bug',
               status: 'Done',
               priority: 'High',
-              description:
-                'Fixed the session timeout issue that was causing users to be logged out unexpectedly.',
-              assignee: 'Théophile',
-              dueDate: '2025-12-05',
+              details: {
+                description:
+                  'Fixed the session timeout issue that was causing users to be logged out unexpectedly.',
+                assignee: 'Théophile',
+                dueDate: '2025-12-05',
+              },
             },
             {
               id: 't4',
               title: 'Design new landing page',
               status: 'In Progress',
               priority: 'Low',
-              description:
-                'Create mockups for the new landing page. Include hero section, features grid, and testimonials.',
-              assignee: 'Emma',
-              dueDate: '2025-12-20',
+              details: {
+                description:
+                  'Create mockups for the new landing page. Include hero section, features grid, and testimonials.',
+                assignee: 'Emma',
+                dueDate: '2025-12-20',
+              },
             },
             {
               id: 't5',
               title: 'Optimize database queries',
               status: 'In Progress',
               priority: 'High',
-              description:
-                'Profile and optimize slow database queries. Add proper indexes and caching where needed.',
-              assignee: 'Marcus',
-              dueDate: '2025-12-12',
+              details: {
+                description:
+                  'Profile and optimize slow database queries. Add proper indexes and caching where needed.',
+                assignee: 'Marcus',
+                dueDate: '2025-12-12',
+              },
             },
             {
               id: 't6',
               title: 'Create marketing assets',
               status: 'Pending',
               priority: 'Low',
-              description:
-                'Design social media banners, email templates, and promotional graphics for the holiday campaign.',
-              assignee: 'Emma',
-              dueDate: '2025-12-25',
+              details: {
+                description:
+                  'Design social media banners, email templates, and promotional graphics for the holiday campaign.',
+                assignee: 'Emma',
+                dueDate: '2025-12-25',
+              },
             },
           ],
         },

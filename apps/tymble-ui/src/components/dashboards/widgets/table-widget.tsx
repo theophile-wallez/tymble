@@ -39,40 +39,41 @@ const Badge = ({
   </span>
 );
 
-const TaskDetails = ({ row }: { row: Row<Record<string, unknown>> }) => {
-  const data = row.original;
-  const description = data.description as string | undefined;
-  const assignee = data.assignee as string | undefined;
-  const dueDate = data.dueDate as string | undefined;
+/**
+ * Converts camelCase to a human-readable label
+ * e.g., "dueDate" -> "Due Date"
+ */
+const formatLabel = (key: string): string =>
+  key
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, (str) => str.toUpperCase())
+    .trim();
+
+const RowDetails = ({ row }: { row: Row<Record<string, unknown>> }) => {
+  const details = row.original.details as Record<string, unknown> | undefined;
+
+  if (!details || typeof details !== 'object') {
+    return null;
+  }
+
+  const entries = Object.entries(details).filter(
+    ([, value]) => value !== null && value !== undefined && value !== ''
+  );
+
+  if (entries.length === 0) {
+    return null;
+  }
 
   return (
-    <div className="space-y-2 py-2 text-sm">
-      {description && (
-        <div>
+    <div className="flex flex-col gap-y-2 py-2 text-sm">
+      {entries.map(([key, value]) => (
+        <div key={key}>
           <span className="font-medium text-muted-foreground">
-            Description:{' '}
+            {formatLabel(key)}:{' '}
           </span>
-          <span>{description}</span>
+          <span>{String(value)}</span>
         </div>
-      )}
-      <div className="flex gap-6">
-        {assignee && (
-          <div>
-            <span className="font-medium text-muted-foreground">
-              Assignee:{' '}
-            </span>
-            <span>{assignee}</span>
-          </div>
-        )}
-        {dueDate && (
-          <div>
-            <span className="font-medium text-muted-foreground">
-              Due Date:{' '}
-            </span>
-            <span>{dueDate}</span>
-          </div>
-        )}
-      </div>
+      ))}
     </div>
   );
 };
@@ -121,7 +122,7 @@ export const TableWidget = ({
       <DataTable
         columns={tableColumns}
         data={rows}
-        renderSubComponent={TaskDetails}
+        renderSubComponent={RowDetails}
       />
     </WidgetLayout>
   );
