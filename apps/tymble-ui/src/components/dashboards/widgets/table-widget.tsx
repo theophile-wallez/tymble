@@ -9,6 +9,14 @@ import {
 } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/ui/table';
 import { cn } from '@/ui/utils';
 import { WidgetLayout } from './widget-layout';
 
@@ -78,7 +86,6 @@ export const TableWidget = ({
         (col) =>
           ({
             id: col.id,
-
             accessorKey: col.accessorKey,
             header: col.header,
             cell: ({ getValue }) => {
@@ -116,69 +123,65 @@ export const TableWidget = ({
       title={title}
       transparent={transparent}
     >
-      <div className="flex size-full flex-col overflow-hidden">
-        <div className="shrink-0 border-b bg-card">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <div
-              className="grid"
-              key={headerGroup.id}
-              style={{
-                gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
-              }}
-            >
-              {headerGroup.headers.map((header) => {
-                const isSorted = header.column.getIsSorted();
-                return (
-                  <div
-                    className="flex h-10 items-center px-2 font-medium text-foreground"
-                    key={header.id}
-                  >
-                    {header.isPlaceholder ? null : (
-                      <button
-                        className={cn(
-                          'flex items-center gap-1 text-sm transition-colors hover:text-foreground',
-                          isSorted ? 'text-foreground' : 'text-muted-foreground'
-                        )}
-                        onClick={header.column.getToggleSortingHandler()}
-                        type="button"
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        <SortIcon direction={isSorted} />
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-
-        <div className="flex-1 overflow-auto">
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <div
-                className="grid border-b transition-colors hover:bg-muted/50"
-                key={row.id}
-                style={{
-                  gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
-                }}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <div className="flex items-center p-2 text-sm" key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </div>
-                ))}
-              </div>
-            ))
-          ) : (
-            <div className="flex h-24 items-center justify-center text-muted-foreground">
-              No results.
-            </div>
-          )}
-        </div>
+      <div className="size-full overflow-auto">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  const isSorted = header.column.getIsSorted();
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder ? null : (
+                        <button
+                          className={cn(
+                            'flex items-center gap-1 text-sm transition-colors hover:text-foreground',
+                            isSorted
+                              ? 'text-foreground'
+                              : 'text-muted-foreground'
+                          )}
+                          onClick={header.column.getToggleSortingHandler()}
+                          type="button"
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          <SortIcon direction={isSorted} />
+                        </button>
+                      )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  className="h-24 text-center text-muted-foreground"
+                  colSpan={columns.length}
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
     </WidgetLayout>
   );
