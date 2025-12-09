@@ -5,14 +5,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/ui/table';
 import { cn } from '@/ui/utils';
 import { WidgetLayout } from './widget-layout';
 
@@ -89,48 +81,66 @@ export const TableWidget = ({
 
   return (
     <WidgetLayout
+      cardClassName="overflow-hidden"
       description={description}
       isEditing={isEditing}
       title={title}
       transparent={transparent}
     >
-      <Table className="size-full">
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody className="overflow-auto">
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
+      <div className="relative size-full overflow-auto">
+        <table className="w-full caption-bottom text-sm">
+          <thead className="sticky top-0 z-10 bg-card [&_tr]:border-b">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr
+                className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                key={headerGroup.id}
+              >
+                {headerGroup.headers.map((header) => (
+                  <th
+                    className="h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]"
+                    key={header.id}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </th>
                 ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell className="h-24 text-center" colSpan={columns.length}>
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+              </tr>
+            ))}
+          </thead>
+          <tbody className="[&_tr:last-child]:border-0">
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <tr
+                  className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  key={row.id}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      className="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]"
+                      key={cell.id}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr className="border-b transition-colors hover:bg-muted/50">
+                <td className="h-24 p-2 text-center" colSpan={columns.length}>
+                  No results.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </WidgetLayout>
   );
 };
