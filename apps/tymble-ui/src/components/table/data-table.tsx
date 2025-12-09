@@ -11,6 +11,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Fragment, useState } from 'react';
 import {
   Table,
@@ -120,13 +121,41 @@ export function DataTable<TData>({
                     </TableCell>
                   ))}
                 </TableRow>
-                {renderSubComponent && row.getIsExpanded() && (
-                  <TableRow>
-                    {/* 2nd row is a custom 1 cell row */}
-                    <TableCell colSpan={row.getVisibleCells().length}>
-                      {renderSubComponent({ row })}
+                {renderSubComponent && (
+                  <tr className="bg-muted/30">
+                    <TableCell
+                      className="!p-0"
+                      colSpan={row.getVisibleCells().length}
+                    >
+                      <motion.div
+                        animate={{
+                          gridTemplateRows: row.getIsExpanded() ? '1fr' : '0fr',
+                        }}
+                        className="grid"
+                        initial={{ gridTemplateRows: '0fr' }}
+                        transition={{
+                          duration: 0.15,
+                          ease: 'easeOut',
+                        }}
+                      >
+                        <motion.div
+                          animate={{
+                            opacity: row.getIsExpanded() ? 1 : 0,
+                          }}
+                          className="overflow-hidden"
+                          initial={{ opacity: 0 }}
+                          transition={{
+                            duration: 0.2,
+                            delay: row.getIsExpanded() ? 0.1 : 0,
+                          }}
+                        >
+                          <div className="px-2 py-3">
+                            {renderSubComponent({ row })}
+                          </div>
+                        </motion.div>
+                      </motion.div>
                     </TableCell>
-                  </TableRow>
+                  </tr>
                 )}
               </Fragment>
             ))
