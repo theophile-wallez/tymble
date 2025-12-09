@@ -2,9 +2,12 @@ import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
+  type SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { useMemo } from 'react';
+import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { cn } from '@/ui/utils';
 import { WidgetLayout } from './widget-layout';
 
@@ -51,6 +54,8 @@ export const TableWidget = ({
   isEditing,
   transparent,
 }: TableWidgetProps) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   // Convert schema columns to TanStack Table column defs
   const tableColumns = useMemo<ColumnDef<Record<string, unknown>>[]>(
     () =>
@@ -76,7 +81,12 @@ export const TableWidget = ({
   const table = useReactTable({
     data: rows,
     columns: tableColumns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -91,23 +101,39 @@ export const TableWidget = ({
         <table className="w-full caption-bottom text-sm">
           <thead className="sticky top-0 z-10 bg-card [&_tr]:border-b">
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr
-                className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                key={headerGroup.id}
-              >
-                {headerGroup.headers.map((header) => (
-                  <th
-                    className="h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]"
-                    key={header.id}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
+              <tr className="border-b transition-colors" key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  const isSorted = header.column.getIsSorted();
+                  return (
+                    <th
+                      className="h-10 px-2 text-left align-middle font-medium text-muted-foreground"
+                      key={header.id}
+                    >
+                      {header.isPlaceholder ? null : (
+                        <button
+                          className={cn(
+                            'flex items-center gap-1 transition-colors hover:text-foreground',
+                            isSorted && 'text-foreground'
+                          )}
+                          onClick={header.column.getToggleSortingHandler()}
+                          type="button"
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {isSorted === 'asc' ? (
+                            <ArrowUp className="size-3.5" />
+                          ) : isSorted === 'desc' ? (
+                            <ArrowDown className="size-3.5" />
+                          ) : (
+                            <ArrowUpDown className="size-3.5 opacity-50" />
+                          )}
+                        </button>
+                      )}
+                    </th>
+                  );
+                })}
               </tr>
             ))}
           </thead>
@@ -115,14 +141,11 @@ export const TableWidget = ({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <tr
-                  className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  className="border-b transition-colors hover:bg-muted/50"
                   key={row.id}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td
-                      className="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]"
-                      key={cell.id}
-                    >
+                    <td className="p-2 align-middle" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
