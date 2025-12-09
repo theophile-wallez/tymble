@@ -124,7 +124,7 @@ export function DataTable<TData>({
                 {renderSubComponent && (
                   <tr className="bg-muted/30">
                     <TableCell
-                      className="!p-0"
+                      className="p-0!"
                       colSpan={row.getVisibleCells().length}
                     >
                       <motion.div
