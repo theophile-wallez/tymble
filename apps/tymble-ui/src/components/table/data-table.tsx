@@ -40,7 +40,9 @@ type DataTableProps<TData> = {
   columns: ColumnDef<TData>[];
   data: TData[];
   emptyMessage?: string;
-  renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement;
+  renderSubComponent?: (props: {
+    row: Row<TData>;
+  }) => React.ReactElement | null;
 };
 
 export function DataTable<TData>({
