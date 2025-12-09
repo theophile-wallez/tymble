@@ -117,7 +117,7 @@ export function DataTable<TData>({
                     <TableCell>
                       <ChevronRight
                         className={cn(
-                          'size-4 shrink-0 origin-center text-muted-foreground transition-transform',
+                          'size-4 shrink-0 origin-center text-muted-foreground transition-transform ease-out',
                           row.getIsExpanded() ? 'rotate-90' : undefined
                         )}
                       />
