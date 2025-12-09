@@ -8,13 +8,6 @@ import {
 } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/ui/table';
 import { cn } from '@/ui/utils';
 import { WidgetLayout } from './widget-layout';
 
@@ -104,69 +97,75 @@ export const TableWidget = ({
       title={title}
       transparent={transparent}
     >
-      <div className="relative size-full overflow-auto">
-        <table className="w-full caption-bottom text-sm">
-          <TableHeader className="sticky top-0 z-10 bg-card">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow className="hover:bg-transparent" key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  const isSorted = header.column.getIsSorted();
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <button
-                          className={cn(
-                            'flex items-center gap-1 transition-colors hover:text-foreground',
-                            isSorted && 'text-foreground'
-                          )}
-                          onClick={header.column.getToggleSortingHandler()}
-                          type="button"
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {isSorted === 'asc' ? (
-                            <ArrowUp className="size-3.5" />
-                          ) : isSorted === 'desc' ? (
-                            <ArrowDown className="size-3.5" />
-                          ) : (
-                            <ArrowUpDown className="size-3.5 opacity-50" />
-                          )}
-                        </button>
-                      )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  className="h-24 text-center"
-                  colSpan={columns.length}
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </table>
+      <div className="flex size-full flex-col overflow-hidden">
+        <div className="shrink-0 border-b bg-card">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <div
+              className="grid"
+              key={headerGroup.id}
+              style={{
+                gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
+              }}
+            >
+              {headerGroup.headers.map((header) => {
+                const isSorted = header.column.getIsSorted();
+                return (
+                  <div
+                    className="flex h-10 items-center px-2 font-medium text-foreground"
+                    key={header.id}
+                  >
+                    {header.isPlaceholder ? null : (
+                      <button
+                        className={cn(
+                          'flex items-center gap-1 text-sm transition-colors hover:text-foreground',
+                          isSorted ? 'text-foreground' : 'text-muted-foreground'
+                        )}
+                        onClick={header.column.getToggleSortingHandler()}
+                        type="button"
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {isSorted === 'asc' ? (
+                          <ArrowUp className="size-3.5" />
+                        ) : isSorted === 'desc' ? (
+                          <ArrowDown className="size-3.5" />
+                        ) : (
+                          <ArrowUpDown className="size-3.5 opacity-50" />
+                        )}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        <div className="flex-1 overflow-auto">
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <div
+                className="grid border-b transition-colors hover:bg-muted/50"
+                key={row.id}
+                style={{
+                  gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
+                }}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <div className="flex items-center p-2 text-sm" key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </div>
+                ))}
+              </div>
+            ))
+          ) : (
+            <div className="flex h-24 items-center justify-center text-muted-foreground">
+              No results.
+            </div>
+          )}
+        </div>
       </div>
     </WidgetLayout>
   );
