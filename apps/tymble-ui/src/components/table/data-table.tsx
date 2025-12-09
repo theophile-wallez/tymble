@@ -1,14 +1,17 @@
 import {
   type ColumnDef,
+  type ExpandedState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getSortedRowModel,
+  type Row,
   type SortDirection,
   type SortingState,
   useReactTable,
 } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -37,24 +40,31 @@ type DataTableProps<TData> = {
   columns: ColumnDef<TData>[];
   data: TData[];
   emptyMessage?: string;
+  renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement;
 };
 
 export function DataTable<TData>({
   columns,
   data,
   emptyMessage = 'No results.',
+  renderSubComponent,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [expanded, setExpanded] = useState<ExpandedState>({});
 
   const table = useReactTable({
     data,
     columns,
     state: {
       sorting,
+      expanded,
     },
     onSortingChange: setSorting,
+    onExpandedChange: setExpanded,
+    getRowCanExpand: () => !!renderSubComponent,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
   });
 
   return (
@@ -92,13 +102,31 @@ export function DataTable<TData>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
+              <Fragment key={row.id}>
+                <TableRow
+                  className={renderSubComponent ? 'cursor-pointer' : undefined}
+                  onClick={
+                    renderSubComponent ? () => row.toggleExpanded() : undefined
+                  }
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+                {renderSubComponent && row.getIsExpanded() && (
+                  <TableRow>
+                    {/* 2nd row is a custom 1 cell row */}
+                    <TableCell colSpan={row.getVisibleCells().length}>
+                      {renderSubComponent({ row })}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </Fragment>
             ))
           ) : (
             <TableRow>

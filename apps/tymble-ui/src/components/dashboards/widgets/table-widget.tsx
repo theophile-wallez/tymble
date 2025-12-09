@@ -1,6 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { DataTable } from '@/components/table';
+import { DataTable } from '@/components/table/data-table';
 import { cn } from '@/ui/utils';
 import { WidgetLayout } from './widget-layout';
 
