@@ -25,5 +25,6 @@ export default defineConfig({
   server: {
     port: 3001,
     host: 'app.local.tymble.xyz',
+    allowedHosts: ['app.local.tymble.xyz']
   },
 });

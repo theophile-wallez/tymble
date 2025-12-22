@@ -1,0 +1,45 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/tymble-api/Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - apps/tymble-api/.env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - tymble-network
+
+  ui:
+    build:
+      context: .
+      dockerfile: apps/tymble-ui/Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - tymble-network
+    depends_on:
+      - api
+
+  logs:
+    image: amir20/dozzle:latest
+    container_name: logs
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      - tymble-network
+
+networks:
+  tymble-network:
+    external: true

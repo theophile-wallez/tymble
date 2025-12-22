@@ -10,7 +10,14 @@
     "lint:fix": "turbo run lint:fix",
     "check-types": "turbo run check-types",
     "init:hosts": "./scripts/add-api-host.sh",
-    "env:init": "turbo run env:init"
+    "env:init": "turbo run env:init",
+    "init": "pnpm install && pnpm build && pnpm start:all",
+    "start:apps": "docker compose up -d",
+    "start:db": "docker compose -f ./docker-compose.db.yml up -d db",
+    "start:all": "pnpm start:db && pnpm start:apps",
+    "stop:apps": "docker compose stop ui api logs",
+    "stop:db": "docker compose -f ./docker-compose.db.yml stop db",
+    "stop:all": "pnpm stop:db && pnpm stop:apps"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.4",
