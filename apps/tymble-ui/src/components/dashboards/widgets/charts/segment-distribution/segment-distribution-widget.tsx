@@ -1,4 +1,5 @@
 import { TooltipProvider } from '@radix-ui/react-tooltip';
+import type { ColumnDef } from '@tanstack/react-table';
 import {
   ChevronDown,
   Info,
@@ -6,6 +7,7 @@ import {
   TrendingDown,
   TrendingUp,
 } from 'lucide-react';
+import { DataTable } from '@/components/table/data-table';
 import { WidgetLayout } from '../../widget-layout';
 import { SegmentBarItem } from './bar.segment';
 
@@ -33,6 +35,43 @@ const formatNumber = (num: number) =>
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+
+const columns: ColumnDef<SegmentData>[] = [
+  {
+    accessorKey: 'name',
+    header: 'Products',
+    cell: ({ row }) => (
+      <div className="flex items-center gap-3">
+        <div
+          className="size-3 shrink-0 rounded"
+          style={{ backgroundColor: row.original.color }}
+        />
+        <span className="font-medium text-foreground">{row.original.name}</span>
+        <span className="text-muted-foreground text-sm">
+          {row.original.value.toFixed(2)}%
+        </span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'conversionRate',
+    header: 'Conversion Rate',
+    cell: ({ row }) => (
+      <span className="text-foreground">
+        {row.original.conversionRate?.toFixed(2)}%
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'visitors',
+    header: 'Visitors',
+    cell: ({ row }) => (
+      <span className="text-foreground">
+        {formatNumber(row.original.visitors ?? 0)}
+      </span>
+    ),
+  },
+];
 
 export const SegmentDistributionWidget = ({
   isEditing,
@@ -149,41 +188,7 @@ export const SegmentDistributionWidget = ({
 
         {/* Table */}
         <div className="mt-6 flex-1 overflow-auto">
-          {/* Table Header */}
-          <div className="grid grid-cols-[1fr_auto_auto] gap-4 border-border border-b pb-3 text-muted-foreground text-sm">
-            <span>Products</span>
-            <span className="w-28 text-center">Conversion Rate</span>
-            <span className="w-24 text-right">Visitors</span>
-          </div>
-
-          {/* Table Rows */}
-          <div className="divide-y divide-border">
-            {data.map((item) => (
-              <div
-                className="grid grid-cols-[1fr_auto_auto] items-center gap-4 py-3 transition-colors hover:bg-muted/30"
-                key={item.name}
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="size-3 shrink-0 rounded"
-                    style={{ backgroundColor: item.color }}
-                  />
-                  <span className="font-medium text-foreground">
-                    {item.name}
-                  </span>
-                  <span className="text-muted-foreground text-sm">
-                    {item.value.toFixed(2)}%
-                  </span>
-                </div>
-                <span className="w-28 text-center text-foreground">
-                  {item.conversionRate?.toFixed(2)}%
-                </span>
-                <span className="w-24 text-right text-foreground">
-                  {formatNumber(item.visitors ?? 0)}
-                </span>
-              </div>
-            ))}
-          </div>
+          <DataTable columns={columns} data={data} />
         </div>
       </div>
     </WidgetLayout>
