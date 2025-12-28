@@ -118,6 +118,28 @@ const WalletWidgetConfigSchema = z.object({
   }),
 });
 
+// 9. Segment Distribution Widget
+const SegmentDataSchema = z.object({
+  name: z.string(),
+  value: z.number(),
+  color: z.string(),
+});
+
+const SegmentDistributionWidgetConfigSchema = z.object({
+  type: z.literal('segmentDistribution'),
+  config: z
+    .object({
+      title: z.string().optional(),
+      description: z.string().optional(),
+    })
+    .optional(),
+  data: z
+    .object({
+      segments: z.array(SegmentDataSchema),
+    })
+    .optional(),
+});
+
 // --- Discriminated Union ---
 
 export const WidgetContentSchema = z.discriminatedUnion('type', [
@@ -129,6 +151,7 @@ export const WidgetContentSchema = z.discriminatedUnion('type', [
   TextWidgetConfigSchema,
   TableWidgetConfigSchema,
   WalletWidgetConfigSchema,
+  SegmentDistributionWidgetConfigSchema,
 ]);
 
 // --- Dashboard Item Schema ---
@@ -165,6 +188,7 @@ export const WIDGET_MIN_SIZES: Record<
   text: { minW: 3, minH: 2 },
   table: { minW: 4, minH: 4 },
   wallet: { minW: 4, minH: 4 },
+  segmentDistribution: { minW: 4, minH: 5 },
 };
 
 // --- Mock Data ---

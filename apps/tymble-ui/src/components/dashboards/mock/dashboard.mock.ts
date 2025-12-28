@@ -285,5 +285,34 @@ export const mockDashboardData: Dashboard = {
         minH: 4,
       },
     },
+    // Segment Distribution Widget
+    {
+      id: 'segment-distribution',
+      layout: {
+        i: 'segment-distribution',
+        x: 0,
+        y: 39,
+        w: 6,
+        h: 7,
+        minW: 4,
+        minH: 5,
+      },
+      content: {
+        type: 'segmentDistribution',
+        config: {
+          title: 'Portfolio Allocation',
+          description: 'Distribution by sector',
+        },
+        data: {
+          segments: [
+            { name: 'Technology', value: 35, color: '#6366f1' },
+            { name: 'Healthcare', value: 22, color: '#8b5cf6' },
+            { name: 'Finance', value: 18, color: '#a855f7' },
+            { name: 'Energy', value: 15, color: '#d946ef' },
+            { name: 'Consumer', value: 10, color: '#ec4899' },
+          ],
+        },
+      },
+    },
   ],
 };

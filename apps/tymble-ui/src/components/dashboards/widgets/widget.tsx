@@ -1,6 +1,7 @@
 import type { DashboardItem } from '../dashboard/dashboard-schema';
 import { ActivityWidget } from './charts/activity-widget';
 import { RevenueWidget } from './charts/revenue-widget';
+import { SegmentDistributionWidget } from './charts/segment-distribution-widget';
 import { TrafficWidget } from './charts/traffic-widget';
 import { TableWidget } from './table-widget';
 import { TextWidget } from './text-widget';
@@ -88,6 +89,16 @@ export const Widget = ({
           description={item.content.config?.description}
           isEditing={isEditing}
           rows={item.content.data.rows}
+          title={item.content.config?.title}
+          transparent={item.transparent}
+        />
+      );
+    case 'segmentDistribution':
+      return (
+        <SegmentDistributionWidget
+          data={item.content.data?.segments}
+          description={item.content.config?.description}
+          isEditing={isEditing}
           title={item.content.config?.title}
           transparent={item.transparent}
         />
