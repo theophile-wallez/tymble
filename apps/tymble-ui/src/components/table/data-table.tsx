@@ -44,6 +44,8 @@ type DataTableProps<TData> = {
   renderSubComponent?: (props: {
     row: Row<TData>;
   }) => React.ReactElement | null;
+  hoveredIndex?: number | null;
+  onHoverChange?: (index: number | null) => void;
 };
 
 export function DataTable<TData>({
@@ -51,6 +53,8 @@ export function DataTable<TData>({
   data,
   emptyMessage = 'No results.',
   renderSubComponent,
+  hoveredIndex,
+  onHoverChange,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -73,7 +77,7 @@ export function DataTable<TData>({
   return (
     <div className="size-full overflow-auto">
       <Table>
-        <TableHeader className="sticky top-0 bg-card">
+        <TableHeader className="sticky top-0 z-10 bg-card">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {renderSubComponent && <TableHead className="w-10" />}
@@ -108,10 +112,19 @@ export function DataTable<TData>({
             table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
                 <TableRow
-                  className={renderSubComponent ? 'cursor-pointer' : undefined}
+                  className={cn(
+                    renderSubComponent && 'cursor-pointer',
+                    onHoverChange && 'cursor-pointer',
+                    hoveredIndex === row.index && 'bg-muted/50',
+                    hoveredIndex !== null &&
+                      hoveredIndex !== row.index &&
+                      'opacity-60'
+                  )}
                   onClick={
                     renderSubComponent ? () => row.toggleExpanded() : undefined
                   }
+                  onMouseEnter={() => onHoverChange?.(row.index)}
+                  onMouseLeave={() => onHoverChange?.(null)}
                 >
                   {renderSubComponent && (
                     <TableCell>

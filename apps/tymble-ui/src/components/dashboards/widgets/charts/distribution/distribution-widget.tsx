@@ -172,7 +172,12 @@ export const DistributionWidget = ({
 
         {/* Table */}
         <div className="mt-6 flex-1 overflow-auto">
-          <DataTable columns={columns} data={data} />
+          <DataTable
+            columns={columns}
+            data={data}
+            hoveredIndex={hoveredIndex}
+            onHoverChange={setHoveredIndex}
+          />
         </div>
       </div>
     </WidgetLayout>
