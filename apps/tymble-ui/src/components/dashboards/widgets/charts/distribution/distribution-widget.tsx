@@ -1,13 +1,9 @@
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import type { ColumnDef } from '@tanstack/react-table';
-import {
-  ChevronDown,
-  Info,
-  Phone,
-  TrendingDown,
-  TrendingUp,
-} from 'lucide-react';
+import { Info, TrendingDown, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
 import { DataTable } from '@/components/table/data-table';
+import { getChartColorByIndex } from '@/utils/getChartColorByIndex';
 import { WidgetLayout } from '../../widget-layout';
 import { SegmentBarItem } from './bar.segment';
 
@@ -22,7 +18,6 @@ type SegmentData = {
 type Props = {
   isEditing?: boolean;
   transparent?: boolean;
-  title?: string;
   data: SegmentData[];
   totalRevenue?: string;
   revenueChange?: number;
@@ -44,7 +39,7 @@ const columns: ColumnDef<SegmentData>[] = [
       <div className="flex items-center gap-3">
         <div
           className="size-3 shrink-0 rounded"
-          style={{ backgroundColor: row.original.color }}
+          style={{ backgroundColor: getChartColorByIndex(row.index) }}
         />
         <span className="font-medium text-foreground">{row.original.name}</span>
         <span className="text-muted-foreground text-sm">
@@ -73,10 +68,9 @@ const columns: ColumnDef<SegmentData>[] = [
   },
 ];
 
-export const SegmentDistributionWidget = ({
+export const DistributionWidget = ({
   isEditing,
   transparent,
-  title = 'Funnels',
   data,
   totalRevenue,
   revenueChange,
@@ -84,29 +78,16 @@ export const SegmentDistributionWidget = ({
   visitorsChange,
 }: Props) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <WidgetLayout
-      cardClassName=""
+      description="Distribution of your portfolio across different type of assets"
       isEditing={isEditing}
+      title="Portfolio distribution"
       transparent={transparent}
     >
       <div className="flex h-full w-full flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between px-1 pb-4">
-          <div className="flex items-center gap-2">
-            <Phone className="size-5 text-muted-foreground" />
-            <span className="font-semibold text-foreground">{title}</span>
-          </div>
-          <button
-            className="flex items-center gap-1.5 rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-foreground text-sm transition-colors hover:bg-muted"
-            type="button"
-          >
-            Most Visitors
-            <ChevronDown className="size-4" />
-          </button>
-        </div>
-
         {/* Stats Row */}
         <div className="flex gap-8 px-1 pb-4">
           {totalRevenue && (
@@ -170,15 +151,18 @@ export const SegmentDistributionWidget = ({
         </div>
 
         {/* Distribution Bar */}
-        <div className="flex h-4 w-full gap-1 overflow-hidden rounded-lg px-1">
+        <div className="flex h-5 w-full gap-1 overflow-hidden rounded-lg px-1">
           <TooltipProvider>
             {data.map((item, index) => {
               const widthPercent = (item.value / total) * 100;
               return (
                 <SegmentBarItem
+                  hoveredIndex={hoveredIndex}
                   index={index}
                   item={item}
                   key={item.name}
+                  onHover={setHoveredIndex}
+                  onLeave={() => setHoveredIndex(null)}
                   widthPercent={widthPercent}
                 />
               );

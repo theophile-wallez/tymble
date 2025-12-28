@@ -1,5 +1,6 @@
-import type { CSSProperties } from 'react';
+import type { MouseEventHandler } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/tooltip';
+import { getChartColorByIndex } from '@/utils/getChartColorByIndex';
 
 type Props = {
   item: {
@@ -8,28 +9,35 @@ type Props = {
   };
   widthPercent: number;
   index: number;
+  hoveredIndex: number | null;
+  onHover: (index: number) => void;
+  onLeave: MouseEventHandler<HTMLDivElement>;
 };
 
-const colors: CSSProperties['backgroundColor'][] = [
-  '#ff6b6b',
-  '#20c997',
-  '#fcc419',
-  '#4c6ef5',
-  '#e64980',
-  '#868e96',
-];
+export const SegmentBarItem = ({
+  item,
+  widthPercent,
+  index,
+  hoveredIndex,
+  onHover,
+  onLeave,
+}: Props) => {
+  const isHovered = hoveredIndex === index;
+  const isDimmed = hoveredIndex !== null && !isHovered;
 
-export const SegmentBarItem = ({ item, widthPercent, index }: Props) => {
-  const color = colors[index % colors.length];
+  const color = getChartColorByIndex(index);
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <div
-          className="h-full cursor-pointer rounded transition-opacity hover:opacity-80"
+          className="h-full cursor-pointer rounded transition-opacity"
+          onMouseEnter={() => onHover(index)}
+          onMouseLeave={onLeave}
           style={{
             backgroundColor: color,
             width: `${widthPercent}%`,
-            minWidth: widthPercent > 0 ? '4px' : '0',
+            minWidth: widthPercent > 0 ? 4 : 0,
+            opacity: isDimmed ? 0.6 : 1,
           }}
         />
       </TooltipTrigger>
