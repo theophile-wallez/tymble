@@ -123,6 +123,8 @@ const SegmentDataSchema = z.object({
   name: z.string(),
   value: z.number(),
   color: z.string(),
+  conversionRate: z.number().optional(),
+  visitors: z.number().optional(),
 });
 
 const SegmentDistributionWidgetConfigSchema = z.object({
@@ -130,14 +132,15 @@ const SegmentDistributionWidgetConfigSchema = z.object({
   config: z
     .object({
       title: z.string().optional(),
-      description: z.string().optional(),
+      totalRevenue: z.string().optional(),
+      revenueChange: z.number().optional(),
+      totalVisitors: z.string().optional(),
+      visitorsChange: z.number().optional(),
     })
     .optional(),
-  data: z
-    .object({
-      segments: z.array(SegmentDataSchema),
-    })
-    .optional(),
+  data: z.object({
+    segments: z.array(SegmentDataSchema),
+  }),
 });
 
 // --- Discriminated Union ---
