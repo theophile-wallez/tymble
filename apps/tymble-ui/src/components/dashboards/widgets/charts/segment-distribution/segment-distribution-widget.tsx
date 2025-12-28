@@ -87,7 +87,7 @@ export const SegmentDistributionWidget = ({
 
   return (
     <WidgetLayout
-      cardClassName="p-0"
+      cardClassName=""
       isEditing={isEditing}
       transparent={transparent}
     >
