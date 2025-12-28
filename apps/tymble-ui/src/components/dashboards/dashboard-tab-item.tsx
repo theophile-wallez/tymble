@@ -33,7 +33,7 @@ export const SortableDashboardTabItem = ({
       className={cn(
         'group relative flex shrink-0 cursor-pointer select-none items-center gap-1 rounded-sm px-3 py-1.5 text-sm backdrop-blur-md transition-colors',
         isActive
-          ? 'border-border bg-accent text-primary'
+          ? 'border-border bg-accent text-foreground'
           : 'border-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
       )}
       data-cy={`dashboard-tab-item-${dashboard.id}`}

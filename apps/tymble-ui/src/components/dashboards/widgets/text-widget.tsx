@@ -2,15 +2,13 @@ import { TiptapEditor } from '@/components/editor';
 import { cn } from '@/ui/utils';
 import { WidgetLayout } from './widget-layout';
 
-export const TextWidget = ({
-  content,
-  isEditing,
-  transparent,
-}: {
+type Props = {
   content: string;
   isEditing?: boolean;
   transparent?: boolean;
-}) => (
+};
+
+export const TextWidget = ({ content, isEditing, transparent }: Props) => (
   <WidgetLayout
     cardClassName={cn('overflow-hidden', isEditing && 'overflow-auto')}
     className="pb-2"

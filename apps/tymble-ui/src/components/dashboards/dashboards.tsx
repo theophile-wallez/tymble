@@ -106,10 +106,10 @@ export const Dashboards = () => {
             <AnimatePresence initial={false} mode="popLayout">
               {isEditing ? (
                 <motion.div
-                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  animate={{ opacity: 1, y: 0 }}
                   className="flex items-center"
-                  exit={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
-                  initial={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
+                  exit={{ opacity: 0, y: 0 }}
+                  initial={{ opacity: 0, y: 0 }}
                   key="save"
                   transition={{
                     bounce: 0,
@@ -122,10 +122,10 @@ export const Dashboards = () => {
                 </motion.div>
               ) : (
                 <motion.div
-                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  animate={{ opacity: 1, y: 0 }}
                   className="flex items-center"
-                  exit={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
-                  initial={{ opacity: 0, y: 0, filter: 'blur(4px)' }}
+                  exit={{ opacity: 0, y: 0 }}
+                  initial={{ opacity: 0, y: 0 }}
                   key="edit"
                   transition={{
                     bounce: 0,

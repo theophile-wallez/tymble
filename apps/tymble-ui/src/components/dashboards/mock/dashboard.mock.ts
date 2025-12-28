@@ -263,5 +263,27 @@ export const mockDashboardData: Dashboard = {
         },
       },
     },
+    // Wallet Widget
+    {
+      id: 'wallet',
+      content: {
+        type: 'wallet',
+        config: {
+          totalLabel: 'Total Balance',
+          amount: '$534,435.53',
+          subAmount: '9.300554 BTC',
+          fundingAmount: '$243,940.03',
+        },
+      },
+      layout: {
+        i: 'wallet',
+        x: 0,
+        y: 27,
+        w: 12,
+        h: 12,
+        minW: 4,
+        minH: 4,
+      },
+    },
   ],
 };

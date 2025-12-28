@@ -107,6 +107,17 @@ const TableWidgetConfigSchema = z.object({
     .optional(),
 });
 
+// 8. Wallet Widget
+const WalletWidgetConfigSchema = z.object({
+  type: z.literal('wallet'),
+  config: z.object({
+    fundingAmount: z.string(),
+    totalLabel: z.string(),
+    amount: z.string(),
+    subAmount: z.string(),
+  }),
+});
+
 // --- Discriminated Union ---
 
 export const WidgetContentSchema = z.discriminatedUnion('type', [
@@ -117,6 +128,7 @@ export const WidgetContentSchema = z.discriminatedUnion('type', [
   TrafficWidgetConfigSchema,
   TextWidgetConfigSchema,
   TableWidgetConfigSchema,
+  WalletWidgetConfigSchema,
 ]);
 
 // --- Dashboard Item Schema ---
@@ -152,6 +164,7 @@ export const WIDGET_MIN_SIZES: Record<
   traffic: { minW: 3, minH: 6 },
   text: { minW: 3, minH: 2 },
   table: { minW: 4, minH: 4 },
+  wallet: { minW: 4, minH: 4 },
 };
 
 // --- Mock Data ---

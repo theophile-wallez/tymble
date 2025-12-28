@@ -31,7 +31,7 @@ export const WidgetLayout = ({
 }: Props) => (
   <Card
     className={cn(
-      'relative size-full overflow-hidden',
+      'relative z-10 size-full overflow-hidden',
       transparent && 'border-transparent bg-background shadow-none',
       transparent && isEditing && 'border border-border border-dashed',
       className

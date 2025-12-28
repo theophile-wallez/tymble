@@ -18,7 +18,7 @@
   },
   "auth": {
     "login": {
-      "title": "Bon retour",
+      "title": "Bienvenue",
       "subtitle": "Connectez-vous à votre compte Tymble",
       "email": "Email",
       "emailPlaceholder": "m@exemple.com",
