@@ -10,7 +10,7 @@ type MyRouterContext = {
 
 const RootLayout = () => (
   <I18nProvider>
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Outlet />
       <Toaster />
       {/* <ReactQueryDevtools initialIsOpen={false} />

@@ -114,7 +114,6 @@ export function DataTable<TData>({
                 <TableRow
                   className={cn(
                     renderSubComponent && 'cursor-pointer',
-                    onHoverChange && 'cursor-pointer',
                     hoveredIndex === row.index && 'bg-muted/50',
                     hoveredIndex !== null &&
                       hoveredIndex !== row.index &&
@@ -158,18 +157,20 @@ export function DataTable<TData>({
                         className="grid"
                         initial={{ gridTemplateRows: '0fr' }}
                         transition={{
-                          duration: 0.15,
+                          duration: 0.2,
                           ease: 'easeOut',
                         }}
                       >
                         <motion.div
                           animate={{
                             opacity: row.getIsExpanded() ? 1 : 0,
+                            filter: row.getIsExpanded()
+                              ? 'blur(0px)'
+                              : 'blur(3px)',
                           }}
                           className="overflow-hidden"
-                          initial={{ opacity: 0 }}
                           transition={{
-                            duration: 0.15,
+                            duration: 0.2,
                           }}
                         >
                           <div className="px-2 py-3">
