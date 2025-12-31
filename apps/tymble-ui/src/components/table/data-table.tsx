@@ -148,7 +148,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                         isExpanded &&
                         '[&_td:first-child]:rounded-tl-lg [&_td:last-child]:rounded-tr-lg',
                       props.renderSubComponent && 'cursor-pointer',
-                      isHovered && 'bg-muted/50',
+                      (isHovered || isExpanded) && 'bg-muted/50',
                       isFaded && 'opacity-60'
                     )}
                     onClick={
