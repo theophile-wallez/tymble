@@ -46,6 +46,7 @@ type DataTableProps<TData> = {
   renderSubComponent?: (props: {
     row: Row<TData>;
   }) => React.ReactElement | null;
+  onRowClick?: (row: TData) => void;
   variant?: 'default' | 'spaced';
   className?: string;
 } & (
@@ -147,15 +148,18 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                       isSpaced &&
                         isExpanded &&
                         '[&_td:first-child]:rounded-tl-lg [&_td:last-child]:rounded-tr-lg',
-                      props.renderSubComponent && 'cursor-pointer',
+                      (props.renderSubComponent || props.onRowClick) &&
+                        'cursor-pointer',
                       (isHovered || isExpanded) && 'bg-muted/50',
                       isFaded && 'opacity-60'
                     )}
-                    onClick={
-                      props.renderSubComponent
-                        ? () => row.toggleExpanded()
-                        : undefined
-                    }
+                    onClick={() => {
+                      if (props.renderSubComponent) {
+                        row.toggleExpanded();
+                      } else if (props.onRowClick) {
+                        props.onRowClick(row.original);
+                      }
+                    }}
                     onMouseEnter={() =>
                       props.canHover && props.onHoverChange?.(row.index)
                     }

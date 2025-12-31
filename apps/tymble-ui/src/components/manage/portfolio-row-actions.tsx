@@ -1,10 +1,4 @@
-import {
-  MoreHorizontal,
-  Pencil,
-  PlusCircle,
-  Settings,
-  Trash2,
-} from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Portfolio } from '@/api/portfolios';
 import { useTranslation } from '@/hooks/use-translation';
@@ -20,29 +14,13 @@ import {
 type Props = {
   portfolio: Portfolio;
   onDelete: (e: React.MouseEvent, portfolio: Portfolio) => void;
-  onManage?: (e: React.MouseEvent, portfolio: Portfolio) => void;
 };
 
-export const PortfolioRowActions = ({
-  portfolio,
-  onDelete,
-  onManage,
-}: Props) => {
+export const PortfolioRowActions = ({ portfolio, onDelete }: Props) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center justify-end gap-1 py-2">
-      <Button
-        onClick={(e) => {
-          e.stopPropagation();
-          onManage?.(e, portfolio);
-        }}
-        size="sm"
-        variant="outline"
-      >
-        <Settings className="size-4" />
-        {t('manage.table.manage')}
-      </Button>
+    <div className="flex items-center justify-end py-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -54,16 +32,6 @@ export const PortfolioRowActions = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              // TODO: Implement add asset
-              toast.info('Add asset coming soon!');
-            }}
-          >
-            <PlusCircle className="size-4" />
-            {t('manage.table.addAsset')}
-          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();

@@ -7,18 +7,17 @@ import { useTranslation } from '@/hooks/use-translation';
 import { Badge } from '@/ui/badge';
 import { getProviderLabel } from './portfolio-constants';
 import { PortfolioRowActions } from './portfolio-row-actions';
-import { PortfolioRowDetails } from './portfolio-row-details';
 
 type Props = {
   portfolios: Portfolio[];
   onDeleteClick: (e: React.MouseEvent, portfolio: Portfolio) => void;
-  onManageClick?: (e: React.MouseEvent, portfolio: Portfolio) => void;
+  onRowClick: (portfolio: Portfolio) => void;
 };
 
 export const PortfolioTable = ({
   portfolios,
   onDeleteClick,
-  onManageClick,
+  onRowClick,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -66,13 +65,12 @@ export const PortfolioTable = ({
         cell: ({ row }) => (
           <PortfolioRowActions
             onDelete={onDeleteClick}
-            onManage={onManageClick}
             portfolio={row.original}
           />
         ),
       },
     ],
-    [onDeleteClick, onManageClick, t]
+    [onDeleteClick, t]
   );
 
   return (
@@ -82,7 +80,7 @@ export const PortfolioTable = ({
         columns={columns}
         data={portfolios}
         emptyMessage={t('manage.table.noPortfolios')}
-        renderSubComponent={PortfolioRowDetails}
+        onRowClick={onRowClick}
         variant="spaced"
       />
     </section>

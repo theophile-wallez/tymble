@@ -69,8 +69,7 @@ function ManagePage() {
     setPortfolioToDelete(portfolio);
   };
 
-  const handleManageClick = (e: React.MouseEvent, portfolio: Portfolio) => {
-    e.stopPropagation();
+  const handleRowClick = (portfolio: Portfolio) => {
     navigate({
       to: '/portfolio/$portfolioId',
       params: { portfolioId: portfolio.id },
@@ -142,7 +141,7 @@ function ManagePage() {
           <div className="flex flex-col gap-4">
             <PortfolioTable
               onDeleteClick={handleDeleteClick}
-              onManageClick={handleManageClick}
+              onRowClick={handleRowClick}
               portfolios={portfolios}
             />
           </div>
