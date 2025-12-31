@@ -56,6 +56,12 @@ function ManagePage() {
     setPortfolioToDelete(portfolio);
   };
 
+  const handleManageClick = (e: React.MouseEvent, portfolio: Portfolio) => {
+    e.stopPropagation();
+    // TODO: Navigate to portfolio detail page
+    toast.info(`Managing ${portfolio.name} coming soon!`);
+  };
+
   const confirmDelete = () => {
     if (portfolioToDelete) {
       deleteMutation.mutate(portfolioToDelete.id);
@@ -102,6 +108,7 @@ function ManagePage() {
           <div className="flex flex-col gap-4">
             <PortfolioTable
               onDeleteClick={handleDeleteClick}
+              onManageClick={handleManageClick}
               portfolios={portfolios}
             />
           </div>

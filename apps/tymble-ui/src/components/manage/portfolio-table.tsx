@@ -8,15 +8,17 @@ import { getProviderLabel } from './portfolio-constants';
 import { PortfolioRowActions } from './portfolio-row-actions';
 import { PortfolioRowDetails } from './portfolio-row-details';
 
-type PortfolioTableProps = {
+type Props = {
   portfolios: Portfolio[];
   onDeleteClick: (e: React.MouseEvent, portfolio: Portfolio) => void;
+  onManageClick?: (e: React.MouseEvent, portfolio: Portfolio) => void;
 };
 
 export const PortfolioTable = ({
   portfolios,
   onDeleteClick,
-}: PortfolioTableProps) => {
+  onManageClick,
+}: Props) => {
   const columns = useMemo<ColumnDef<Portfolio>[]>(
     () => [
       {
@@ -61,12 +63,13 @@ export const PortfolioTable = ({
         cell: ({ row }) => (
           <PortfolioRowActions
             onDelete={onDeleteClick}
+            onManage={onManageClick}
             portfolio={row.original}
           />
         ),
       },
     ],
-    [onDeleteClick]
+    [onDeleteClick, onManageClick]
   );
 
   return (

@@ -1,4 +1,10 @@
-import { MoreHorizontal, Pencil, PlusCircle, Trash2 } from 'lucide-react';
+import {
+  MoreHorizontal,
+  Pencil,
+  PlusCircle,
+  Settings,
+  Trash2,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import type { Portfolio } from '@/api/portfolios';
 import { Button } from '@/ui/button';
@@ -13,14 +19,27 @@ import {
 type PortfolioRowActionsProps = {
   portfolio: Portfolio;
   onDelete: (e: React.MouseEvent, portfolio: Portfolio) => void;
+  onManage?: (e: React.MouseEvent, portfolio: Portfolio) => void;
 };
 
 export const PortfolioRowActions = ({
   portfolio,
   onDelete,
+  onManage,
 }: PortfolioRowActionsProps) => {
   return (
-    <div className="flex justify-end py-2">
+    <div className="flex items-center justify-end gap-1 py-2">
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          onManage?.(e, portfolio);
+        }}
+        size="sm"
+        variant="outline"
+      >
+        <Settings className="size-4" />
+        Manage
+      </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
