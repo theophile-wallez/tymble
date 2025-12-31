@@ -131,13 +131,20 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                 props.hoveredIndex !== null &&
                 props.hoveredIndex !== row.index;
 
+              const isExpanded = row.getIsExpanded();
+
               return (
                 <Fragment key={row.id}>
                   <TableRow
                     className={cn(
                       'hover:bg-muted/50',
+                      isSpaced && 'border-0 bg-muted/20',
                       isSpaced &&
-                        'border-0 bg-muted/20 [&_td:first-child]:rounded-l-lg [&_td:last-child]:rounded-r-lg',
+                        !isExpanded &&
+                        '[&_td:first-child]:rounded-l-lg [&_td:last-child]:rounded-r-lg',
+                      isSpaced &&
+                        isExpanded &&
+                        '[&_td:first-child]:rounded-tl-lg [&_td:last-child]:rounded-tr-lg',
                       props.renderSubComponent && 'cursor-pointer',
                       isHovered && 'bg-muted/50',
                       isFaded && 'opacity-60'
@@ -159,7 +166,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                         <ChevronRight
                           className={cn(
                             'size-4 shrink-0 origin-center text-muted-foreground transition-transform ease-out',
-                            row.getIsExpanded() ? 'rotate-90' : undefined
+                            isExpanded ? 'rotate-90' : undefined
                           )}
                         />
                       </TableCell>
@@ -174,16 +181,23 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                     ))}
                   </TableRow>
                   {props.renderSubComponent && (
-                    <tr className="">
+                    <tr
+                      className={cn(
+                        isSpaced &&
+                          isExpanded &&
+                          '-top-2 relative [&_td:first-child]:rounded-bl-lg [&_td:last-child]:rounded-br-lg [&_td]:bg-muted/20'
+                      )}
+                    >
                       <TableCell
-                        className="rounded-b-md bg-muted/30 p-0!"
+                        className={cn(
+                          'p-0!',
+                          !isSpaced && 'rounded-b-md bg-muted/30'
+                        )}
                         colSpan={row.getVisibleCells().length + 1}
                       >
                         <motion.div
                           animate={{
-                            gridTemplateRows: row.getIsExpanded()
-                              ? '1fr'
-                              : '0fr',
+                            gridTemplateRows: isExpanded ? '1fr' : '0fr',
                           }}
                           className="grid"
                           initial={{ gridTemplateRows: '0fr' }}
@@ -194,10 +208,8 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                         >
                           <motion.div
                             animate={{
-                              opacity: row.getIsExpanded() ? 1 : 0,
-                              filter: row.getIsExpanded()
-                                ? 'blur(0px)'
-                                : 'blur(3px)',
+                              opacity: isExpanded ? 1 : 0,
+                              filter: isExpanded ? 'blur(0px)' : 'blur(3px)',
                             }}
                             className="overflow-hidden"
                             transition={{
