@@ -34,7 +34,9 @@ const SortIcon = ({ direction }: SortIconProps) => {
   if (direction === 'desc') {
     return <ArrowDown className="size-3.5" />;
   }
-  return <ArrowUpDown className="size-3.5 opacity-50" />;
+  return (
+    <ArrowUpDown className="size-3.5 opacity-0 transition-opacity group-hover:opacity-50" />
+  );
 };
 
 type DataTableProps<TData> = {
@@ -102,7 +104,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                     {header.isPlaceholder ? null : (
                       <button
                         className={cn(
-                          'flex size-full cursor-pointer items-center gap-2 transition-colors hover:text-foreground',
+                          'group flex size-full cursor-pointer items-center gap-2 transition-colors hover:text-foreground',
                           isSorted ? 'text-foreground' : 'text-muted-foreground'
                         )}
                         onClick={header.column.getToggleSortingHandler()}
