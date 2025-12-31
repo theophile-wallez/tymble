@@ -45,6 +45,7 @@ type DataTableProps<TData> = {
     row: Row<TData>;
   }) => React.ReactElement | null;
   variant?: 'default' | 'spaced';
+  className?: string;
 } & (
   | {
       canHover?: false;
@@ -81,24 +82,27 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
 
   return (
     <div
-      className="size-full overflow-auto"
+      className={cn('size-full overflow-auto', props.className)}
       style={{ scrollbarGutter: 'stable' }}
     >
-      <Table
-        className={cn(isSpaced && 'border-separate border-spacing-y-2')}
-      >
-        <TableHeader className="sticky top-0 z-10 bg-card">
+      <Table className={cn(isSpaced && 'border-separate border-spacing-y-2')}>
+        <TableHeader
+          className={cn('sticky top-0 z-10 bg-card', props.className)}
+        >
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow
+              className="border-0 bg-transparent hover:bg-transparent"
+              key={headerGroup.id}
+            >
               {props.renderSubComponent && <TableHead className="w-10" />}
               {headerGroup.headers.map((header) => {
                 const isSorted = header.column.getIsSorted();
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead className="text-xs" key={header.id}>
                     {header.isPlaceholder ? null : (
                       <button
                         className={cn(
-                          'flex items-center gap-1 text-sm transition-colors hover:text-foreground',
+                          'flex size-full cursor-pointer items-center gap-2 transition-colors hover:text-foreground',
                           isSorted ? 'text-foreground' : 'text-muted-foreground'
                         )}
                         onClick={header.column.getToggleSortingHandler()}

@@ -151,7 +151,7 @@ export const AppSidebar = ({
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex h-header-height flex-row items-center gap-4 p-4">
-        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary-background text-primary">
           <GalleryVerticalEnd className="size-4" />
         </div>
         <div className="grid flex-1 text-left text-normal leading-tight">

@@ -100,11 +100,6 @@ function ManagePage() {
       <ContentBody className="flex-1" cy="manage">
         {hasPortfolios ? (
           <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <p className="text-muted-foreground">
-                You have {portfolios.length} portfolio(s).
-              </p>
-            </div>
             <PortfolioTable
               onDeleteClick={handleDeleteClick}
               portfolios={portfolios}

@@ -72,6 +72,7 @@ export const PortfolioTable = ({
   return (
     <section className="w-full">
       <DataTable
+        className="bg-background"
         columns={columns}
         data={portfolios}
         emptyMessage="No portfolios found."
