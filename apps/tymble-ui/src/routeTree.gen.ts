@@ -17,6 +17,8 @@ import { Route as AppPortfoliosRouteImport } from './routes/_app/portfolios'
 import { Route as AppManageRouteImport } from './routes/_app/manage'
 import { Route as AppDashboardsRouteImport } from './routes/_app/dashboards'
 import { Route as AppAboutRouteImport } from './routes/_app/about'
+import { Route as AppPortfolioPortfolioIdRouteImport } from './routes/_app/portfolio.$portfolioId'
+import { Route as AppManagePortfolioIdRouteImport } from './routes/_app/manage.$portfolioId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -57,24 +59,38 @@ const AppAboutRoute = AppAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppPortfolioPortfolioIdRoute = AppPortfolioPortfolioIdRouteImport.update({
+  id: '/portfolio/$portfolioId',
+  path: '/portfolio/$portfolioId',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppManagePortfolioIdRoute = AppManagePortfolioIdRouteImport.update({
+  id: '/$portfolioId',
+  path: '/$portfolioId',
+  getParentRoute: () => AppManageRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
   '/dashboards': typeof AppDashboardsRoute
-  '/manage': typeof AppManageRoute
+  '/manage': typeof AppManageRouteWithChildren
   '/portfolios': typeof AppPortfoliosRoute
   '/profile': typeof AppProfileRoute
   '/': typeof AppIndexRoute
+  '/manage/$portfolioId': typeof AppManagePortfolioIdRoute
+  '/portfolio/$portfolioId': typeof AppPortfolioPortfolioIdRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
   '/dashboards': typeof AppDashboardsRoute
-  '/manage': typeof AppManageRoute
+  '/manage': typeof AppManageRouteWithChildren
   '/portfolios': typeof AppPortfoliosRoute
   '/profile': typeof AppProfileRoute
   '/': typeof AppIndexRoute
+  '/manage/$portfolioId': typeof AppManagePortfolioIdRoute
+  '/portfolio/$portfolioId': typeof AppPortfolioPortfolioIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -82,10 +98,12 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_app/about': typeof AppAboutRoute
   '/_app/dashboards': typeof AppDashboardsRoute
-  '/_app/manage': typeof AppManageRoute
+  '/_app/manage': typeof AppManageRouteWithChildren
   '/_app/portfolios': typeof AppPortfoliosRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/manage/$portfolioId': typeof AppManagePortfolioIdRoute
+  '/_app/portfolio/$portfolioId': typeof AppPortfolioPortfolioIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +115,8 @@ export interface FileRouteTypes {
     | '/portfolios'
     | '/profile'
     | '/'
+    | '/manage/$portfolioId'
+    | '/portfolio/$portfolioId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -106,6 +126,8 @@ export interface FileRouteTypes {
     | '/portfolios'
     | '/profile'
     | '/'
+    | '/manage/$portfolioId'
+    | '/portfolio/$portfolioId'
   id:
     | '__root__'
     | '/_app'
@@ -116,6 +138,8 @@ export interface FileRouteTypes {
     | '/_app/portfolios'
     | '/_app/profile'
     | '/_app/'
+    | '/_app/manage/$portfolioId'
+    | '/_app/portfolio/$portfolioId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -181,25 +205,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAboutRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/portfolio/$portfolioId': {
+      id: '/_app/portfolio/$portfolioId'
+      path: '/portfolio/$portfolioId'
+      fullPath: '/portfolio/$portfolioId'
+      preLoaderRoute: typeof AppPortfolioPortfolioIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/manage/$portfolioId': {
+      id: '/_app/manage/$portfolioId'
+      path: '/$portfolioId'
+      fullPath: '/manage/$portfolioId'
+      preLoaderRoute: typeof AppManagePortfolioIdRouteImport
+      parentRoute: typeof AppManageRoute
+    }
   }
 }
+
+interface AppManageRouteChildren {
+  AppManagePortfolioIdRoute: typeof AppManagePortfolioIdRoute
+}
+
+const AppManageRouteChildren: AppManageRouteChildren = {
+  AppManagePortfolioIdRoute: AppManagePortfolioIdRoute,
+}
+
+const AppManageRouteWithChildren = AppManageRoute._addFileChildren(
+  AppManageRouteChildren,
+)
 
 interface AppRouteRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
   AppDashboardsRoute: typeof AppDashboardsRoute
-  AppManageRoute: typeof AppManageRoute
+  AppManageRoute: typeof AppManageRouteWithChildren
   AppPortfoliosRoute: typeof AppPortfoliosRoute
   AppProfileRoute: typeof AppProfileRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppPortfolioPortfolioIdRoute: typeof AppPortfolioPortfolioIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAboutRoute: AppAboutRoute,
   AppDashboardsRoute: AppDashboardsRoute,
-  AppManageRoute: AppManageRoute,
+  AppManageRoute: AppManageRouteWithChildren,
   AppPortfoliosRoute: AppPortfoliosRoute,
   AppProfileRoute: AppProfileRoute,
   AppIndexRoute: AppIndexRoute,
+  AppPortfolioPortfolioIdRoute: AppPortfolioPortfolioIdRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

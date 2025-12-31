@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Briefcase, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -27,6 +27,7 @@ export const Route = createFileRoute('/_app/manage')({
 
 function ManagePage() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [portfolioToDelete, setPortfolioToDelete] = useState<Portfolio | null>(
     null
   );
@@ -58,8 +59,7 @@ function ManagePage() {
 
   const handleManageClick = (e: React.MouseEvent, portfolio: Portfolio) => {
     e.stopPropagation();
-    // TODO: Navigate to portfolio detail page
-    toast.info(`Managing ${portfolio.name} coming soon!`);
+    navigate({ to: '/portfolio/$portfolioId', params: { portfolioId: portfolio.id } });
   };
 
   const confirmDelete = () => {
