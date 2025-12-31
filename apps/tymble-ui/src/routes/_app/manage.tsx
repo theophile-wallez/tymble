@@ -20,6 +20,7 @@ import {
   ContentSubHeader,
   ContentTitle,
 } from '@/layouts/content.layout';
+import { Badge } from '@/ui/badge';
 
 export const Route = createFileRoute('/_app/manage')({
   component: ManagePage,
@@ -59,7 +60,10 @@ function ManagePage() {
 
   const handleManageClick = (e: React.MouseEvent, portfolio: Portfolio) => {
     e.stopPropagation();
-    navigate({ to: '/portfolio/$portfolioId', params: { portfolioId: portfolio.id } });
+    navigate({
+      to: '/portfolio/$portfolioId',
+      params: { portfolioId: portfolio.id },
+    });
   };
 
   const confirmDelete = () => {
@@ -95,6 +99,9 @@ function ManagePage() {
         <ContentTitle cy="manage">
           <Briefcase className="size-4" />
           Manage your portfolios
+          {portfolios && portfolios.length > 0 && (
+            <Badge variant="outline">{portfolios.length}</Badge>
+          )}
         </ContentTitle>
       </ContentHeader>
       <ContentSubHeader cy="manage">
