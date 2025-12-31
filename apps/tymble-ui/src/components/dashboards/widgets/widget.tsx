@@ -99,7 +99,6 @@ export const Widget = ({
           data={item.content.data.segments}
           isEditing={isEditing}
           revenueChange={item.content.config?.revenueChange}
-          title={item.content.config?.title}
           totalRevenue={item.content.config?.totalRevenue}
           totalVisitors={item.content.config?.totalVisitors}
           transparent={item.transparent}

@@ -151,7 +151,7 @@ export const DistributionWidget = ({
         </div>
 
         {/* Distribution Bar */}
-        <div className="flex h-5 w-full gap-1 overflow-hidden rounded-lg px-1">
+        <div className="flex h-5 w-full overflow-hidden rounded-lg px-1">
           <TooltipProvider>
             {data.map((item, index) => {
               const widthPercent = (item.value / total) * 100;

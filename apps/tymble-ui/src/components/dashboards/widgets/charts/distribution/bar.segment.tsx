@@ -30,16 +30,22 @@ export const SegmentBarItem = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <div
-          className="h-full cursor-pointer rounded transition-opacity"
+          className="h-full grow cursor-pointer not-last:pr-1"
           onMouseEnter={() => onHover(index)}
           onMouseLeave={onLeave}
           style={{
-            backgroundColor: color,
             width: `${widthPercent}%`,
             minWidth: widthPercent > 0 ? 4 : 0,
-            opacity: isDimmed ? 0.6 : 1,
           }}
-        />
+        >
+          <div
+            className="h-full shrink-0 rounded transition-opacity"
+            style={{
+              backgroundColor: color,
+              opacity: isDimmed ? 0.6 : 1,
+            }}
+          />
+        </div>
       </TooltipTrigger>
       <TooltipContent>
         <div className="flex items-center gap-2">
