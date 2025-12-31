@@ -1,51 +1,18 @@
+import type { CreatePortfolio } from '@tymble/schemas';
 import { apiRequest } from '@/lib/api';
 
-export type Instrument = {
-  id: string;
-  symbol: string;
-  name: string;
-  type: string;
-  exchange: string | null;
-  currency: string | null;
-  createdAt: string;
-  updatedAt: string;
-};
+// Re-export types from @tymble/schemas for convenience
+export type {
+  Asset,
+  Instrument,
+  Portfolio,
+  PortfolioWithAssets,
+} from '@tymble/schemas';
 
-export type Asset = {
-  id: string;
-  instrumentId: string;
-  portfolioId: string;
-  quantity: string;
-  averagePrice: string;
-  lastFees: string;
-  lastTaxes: string;
-  createdAt: string;
-  updatedAt: string;
-  instrument?: Instrument;
-};
+// Import types for use in this file
+import type { Portfolio, PortfolioWithAssets } from '@tymble/schemas';
 
-export type Portfolio = {
-  id: string;
-  userId: string;
-  type: string;
-  provider: string;
-  description: string | null;
-  name: string;
-  iconId: string | null;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type PortfolioWithAssets = Portfolio & {
-  assets: Asset[];
-};
-
-export type CreatePortfolioRequest = {
-  name: string;
-  type: string;
-  provider: string;
-  description?: string;
-};
+export type CreatePortfolioRequest = CreatePortfolio['dto'];
 
 export const fetchPortfolios = () => apiRequest<Portfolio[]>('/portfolio');
 
@@ -73,4 +40,6 @@ export type StockSearchResult = {
 };
 
 export const searchStocks = (name: string) =>
-  apiRequest<{ quotes: StockSearchResult[] }>(`/stocks/search?name=${encodeURIComponent(name)}`);
+  apiRequest<{ quotes: StockSearchResult[] }>(
+    `/stocks/search?name=${encodeURIComponent(name)}`
+  );

@@ -1,5 +1,6 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createPortfolioSchema } from '@tymble/schemas';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { createPortfolio } from '@/api/portfolios';
@@ -71,6 +72,9 @@ export const CreatePortfolioForm = ({ hideCard, onSuccess }: Props) => {
       type: '',
       provider: '',
       description: '',
+    },
+    validators: {
+      onSubmit: createPortfolioSchema.dto,
     },
     onSubmit: ({ value }) => {
       createMutation.mutate({
