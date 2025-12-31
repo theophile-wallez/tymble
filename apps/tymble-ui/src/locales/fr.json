@@ -65,6 +65,9 @@
     "dashboards": {
       "title": "Dashboards"
     },
+    "manage": {
+      "title": "Gérer"
+    },
     "documentation": {
       "title": "Documentation",
       "introduction": "Introduction",
@@ -112,5 +115,30 @@
     "designEngineering": "Ingénierie de conception",
     "salesAndMarketing": "Ventes et marketing",
     "travel": "Voyage"
+  },
+  "manage": {
+    "title": "Gérer",
+    "portfolio": {
+      "emptyTitle": "Aucun portefeuille",
+      "emptyDescription": "Créez votre premier portefeuille pour commencer à suivre vos investissements.",
+      "createTitle": "Créer un portefeuille",
+      "createDescription": "Ajoutez votre premier portefeuille d'investissement pour commencer.",
+      "name": "Nom du portefeuille",
+      "namePlaceholder": "ex: Mon PEA Boursobank",
+      "type": "Type de portefeuille",
+      "typePlaceholder": "Sélectionnez un type",
+      "typeDescription": "Le type de compte d'investissement (PEA, CTO, etc.)",
+      "provider": "Courtier",
+      "providerPlaceholder": "Sélectionnez votre courtier",
+      "providerDescription": "Le courtier ou la banque où votre portefeuille est détenu.",
+      "description": "Description (optionnel)",
+      "descriptionPlaceholder": "Ajouter une description...",
+      "descriptionHelp": "Une courte description pour identifier ce portefeuille.",
+      "createButton": "Créer le portefeuille",
+      "creating": "Création en cours...",
+      "createSuccess": "Portefeuille créé avec succès !",
+      "createError": "Échec de la création du portefeuille. Veuillez réessayer.",
+      "listDescription": "Vous avez {{count}} portefeuille(s)."
+    }
   }
 }

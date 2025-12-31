@@ -5,7 +5,6 @@ import { RevenueWidget } from './charts/revenue-widget';
 import { TrafficWidget } from './charts/traffic-widget';
 import { TableWidget } from './table-widget';
 import { TextWidget } from './text-widget';
-import { WalletWidget } from './wallet-widget';
 import { WidgetLayout } from './widget-layout';
 
 const getStatusColor = (status: string) => {
@@ -70,16 +69,6 @@ export const Widget = ({
           content={item.content.data.content}
           isEditing={isEditing}
           transparent={item.transparent}
-        />
-      );
-    case 'wallet':
-      return (
-        <WalletWidget
-          amount={item.content.config?.amount}
-          fundingAmount={item.content.config?.fundingAmount}
-          isEditing={isEditing}
-          subAmount={item.content.config?.subAmount}
-          totalLabel={item.content.config?.totalLabel}
         />
       );
     case 'table':

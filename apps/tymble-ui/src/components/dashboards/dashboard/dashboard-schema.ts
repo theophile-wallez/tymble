@@ -107,18 +107,7 @@ const TableWidgetConfigSchema = z.object({
     .optional(),
 });
 
-// 8. Wallet Widget
-const WalletWidgetConfigSchema = z.object({
-  type: z.literal('wallet'),
-  config: z.object({
-    fundingAmount: z.string(),
-    totalLabel: z.string(),
-    amount: z.string(),
-    subAmount: z.string(),
-  }),
-});
-
-// 9. Segment Distribution Widget
+// 8. Segment Distribution Widget
 const SegmentDataSchema = z.object({
   name: z.string(),
   value: z.number(),
@@ -153,7 +142,6 @@ export const WidgetContentSchema = z.discriminatedUnion('type', [
   TrafficWidgetConfigSchema,
   TextWidgetConfigSchema,
   TableWidgetConfigSchema,
-  WalletWidgetConfigSchema,
   SegmentDistributionWidgetConfigSchema,
 ]);
 

@@ -65,6 +65,9 @@
     "dashboards": {
       "title": "Dashboards"
     },
+    "manage": {
+      "title": "Manage"
+    },
     "documentation": {
       "title": "Documentation",
       "introduction": "Introduction",
@@ -112,5 +115,30 @@
     "designEngineering": "Design Engineering",
     "salesAndMarketing": "Sales & Marketing",
     "travel": "Travel"
+  },
+  "manage": {
+    "title": "Manage",
+    "portfolio": {
+      "emptyTitle": "No portfolio yet",
+      "emptyDescription": "Create your first portfolio to start tracking your investments.",
+      "createTitle": "Create a portfolio",
+      "createDescription": "Add your first investment portfolio to get started.",
+      "name": "Portfolio name",
+      "namePlaceholder": "e.g., My PEA Portfolio",
+      "type": "Portfolio type",
+      "typePlaceholder": "Select a portfolio type",
+      "typeDescription": "The type of investment account (PEA, CTO, etc.)",
+      "provider": "Provider",
+      "providerPlaceholder": "Select your broker",
+      "providerDescription": "The broker or bank where your portfolio is held.",
+      "description": "Description (optional)",
+      "descriptionPlaceholder": "Add a description...",
+      "descriptionHelp": "A short description to help you identify this portfolio.",
+      "createButton": "Create portfolio",
+      "creating": "Creating...",
+      "createSuccess": "Portfolio created successfully!",
+      "createError": "Failed to create portfolio. Please try again.",
+      "listDescription": "You have {{count}} portfolio(s)."
+    }
   }
 }

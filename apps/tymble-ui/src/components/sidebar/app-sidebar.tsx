@@ -1,5 +1,6 @@
 import {
   BookOpen,
+  Briefcase,
   ChartArea,
   ChartNoAxesCombined,
   Frame,
@@ -33,7 +34,6 @@ export const AppSidebar = ({
 }: React.ComponentProps<typeof Sidebar>) => {
   const { t } = useTranslation();
 
-  // Data structure using translations
   const data = {
     navMain: [
       {
@@ -78,8 +78,13 @@ export const AppSidebar = ({
         icon: ChartArea,
       },
       {
-        title: t('navigation.documentation.title'),
+        title: t('navigation.manage.title'),
         url: '/manage',
+        icon: Briefcase,
+      },
+      {
+        title: t('navigation.documentation.title'),
+        url: '/documentation',
         icon: BookOpen,
         items: [
           {

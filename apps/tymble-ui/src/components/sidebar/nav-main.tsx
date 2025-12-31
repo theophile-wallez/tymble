@@ -37,7 +37,6 @@ export const NavMain = ({ items }: Props) => {
               <Collapsible
                 asChild
                 className="group/collapsible"
-                defaultOpen={item.isActive}
                 key={item.title}
               >
                 <SidebarMenuItem>
