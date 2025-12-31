@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Portfolio } from '@/api/portfolios';
+import { useTranslation } from '@/hooks/use-translation';
 import { Button } from '@/ui/button';
 import {
   DropdownMenu,
@@ -16,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from '@/ui/dropdown-menu';
 
-type PortfolioRowActionsProps = {
+type Props = {
   portfolio: Portfolio;
   onDelete: (e: React.MouseEvent, portfolio: Portfolio) => void;
   onManage?: (e: React.MouseEvent, portfolio: Portfolio) => void;
@@ -26,7 +27,9 @@ export const PortfolioRowActions = ({
   portfolio,
   onDelete,
   onManage,
-}: PortfolioRowActionsProps) => {
+}: Props) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center justify-end gap-1 py-2">
       <Button
@@ -38,7 +41,7 @@ export const PortfolioRowActions = ({
         variant="outline"
       >
         <Settings className="size-4" />
-        Manage
+        {t('manage.table.manage')}
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -59,7 +62,7 @@ export const PortfolioRowActions = ({
             }}
           >
             <PlusCircle className="size-4" />
-            Add asset
+            {t('manage.table.addAsset')}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={(e) => {
@@ -69,7 +72,7 @@ export const PortfolioRowActions = ({
             }}
           >
             <Pencil className="size-4" />
-            Edit
+            {t('manage.table.edit')}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -77,7 +80,7 @@ export const PortfolioRowActions = ({
             variant="destructive"
           >
             <Trash2 className="size-4" />
-            Delete
+            {t('manage.table.delete')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

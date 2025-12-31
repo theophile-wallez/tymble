@@ -118,6 +118,20 @@
   },
   "manage": {
     "title": "Gérer",
+    "pageTitle": "Gérer vos portefeuilles",
+    "addPortfolio": "Ajouter un portefeuille",
+    "createDialog": {
+      "title": "Créer un nouveau portefeuille",
+      "description": "Ajoutez un nouveau portefeuille d'investissement pour suivre vos actifs."
+    },
+    "deleteSuccess": "Portefeuille supprimé avec succès !",
+    "deleteError": "Échec de la suppression du portefeuille. Veuillez réessayer.",
+    "deleteDialog": {
+      "title": "Supprimer le portefeuille",
+      "description": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible.",
+      "cancel": "Annuler",
+      "confirm": "Supprimer"
+    },
     "portfolio": {
       "emptyTitle": "Aucun portefeuille",
       "emptyDescription": "Créez votre premier portefeuille pour commencer à suivre vos investissements.",
@@ -139,6 +153,17 @@
       "createSuccess": "Portefeuille créé avec succès !",
       "createError": "Échec de la création du portefeuille. Veuillez réessayer.",
       "listDescription": "Vous avez {{count}} portefeuille(s)."
+    },
+    "table": {
+      "name": "Nom",
+      "type": "Type",
+      "provider": "Courtier",
+      "created": "Créé le",
+      "noPortfolios": "Aucun portefeuille trouvé.",
+      "manage": "Gérer",
+      "addAsset": "Ajouter un actif",
+      "edit": "Modifier",
+      "delete": "Supprimer"
     }
   }
 }

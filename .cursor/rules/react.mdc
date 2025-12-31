@@ -25,6 +25,18 @@ When defining props for a component, follow these steps:
 2. Only export the props if needed.
 3. Name the props type "Props" if it's not exported.
 
+## Language
+
+When writing code, you should not write any text directly in the code, you should use the `useTranslation` hook to get the text.
+If the text does not exist, create it in the `locales/en.json` and `locales/fr.json` files.
+
+## Translation Keys
+
+When creating a new translation key, follow these steps:
+
+1. Create a new key in the `locales/en.json` and `locales/fr.json` files.
+2. Use the `t` function to get the text.
+
 ## Styling
 
 When styling a component, follow these steps: use the `cn` utility to merge classes, use the `tailwindcss` plugin to style the component.

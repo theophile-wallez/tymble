@@ -118,6 +118,20 @@
   },
   "manage": {
     "title": "Manage",
+    "pageTitle": "Manage your portfolios",
+    "addPortfolio": "Add Portfolio",
+    "createDialog": {
+      "title": "Create a new portfolio",
+      "description": "Add a new investment portfolio to track your assets."
+    },
+    "deleteSuccess": "Portfolio deleted successfully!",
+    "deleteError": "Failed to delete portfolio. Please try again.",
+    "deleteDialog": {
+      "title": "Delete portfolio",
+      "description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
     "portfolio": {
       "emptyTitle": "No portfolio yet",
       "emptyDescription": "Create your first portfolio to start tracking your investments.",
@@ -139,6 +153,17 @@
       "createSuccess": "Portfolio created successfully!",
       "createError": "Failed to create portfolio. Please try again.",
       "listDescription": "You have {{count}} portfolio(s)."
+    },
+    "table": {
+      "name": "Name",
+      "type": "Type",
+      "provider": "Provider",
+      "created": "Created",
+      "noPortfolios": "No portfolios found.",
+      "manage": "Manage",
+      "addAsset": "Add asset",
+      "edit": "Edit",
+      "delete": "Delete"
     }
   }
 }

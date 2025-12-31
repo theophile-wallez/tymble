@@ -9,10 +9,12 @@ import {
   type Portfolio,
 } from '@/api/portfolios';
 import {
+  CreatePortfolioForm,
   DeletePortfolioDialog,
   EmptyState,
   PortfolioTable,
 } from '@/components/manage';
+import { useTranslation } from '@/hooks/use-translation';
 import {
   ContentBody,
   ContentHeader,
@@ -21,17 +23,28 @@ import {
   ContentTitle,
 } from '@/layouts/content.layout';
 import { Badge } from '@/ui/badge';
+import { Button } from '@/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/ui/dialog';
 
 export const Route = createFileRoute('/_app/manage')({
   component: ManagePage,
 });
 
 function ManagePage() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [portfolioToDelete, setPortfolioToDelete] = useState<Portfolio | null>(
     null
   );
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const { data: portfolios, isLoading } = useQuery({
     queryKey: ['portfolios'],
@@ -43,13 +56,11 @@ function ManagePage() {
     mutationKey: ['deletePortfolio'],
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['portfolios'] });
-      toast.success('Portfolio deleted successfully!');
+      toast.success(t('manage.deleteSuccess'));
       setPortfolioToDelete(null);
     },
     onError: (error) => {
-      toast.error(
-        error.message || 'Failed to delete portfolio. Please try again.'
-      );
+      toast.error(error.message || t('manage.deleteError'));
     },
   });
 
@@ -80,14 +91,14 @@ function ManagePage() {
         <ContentHeader cy="manage">
           <ContentTitle cy="manage">
             <Briefcase className="size-4" />
-            Manage
+            {t('manage.title')}
           </ContentTitle>
         </ContentHeader>
         <ContentBody
           className="flex flex-1 items-center justify-center"
           cy="manage"
         >
-          <div className="text-muted-foreground">Loading...</div>
+          <div className="text-muted-foreground">{t('common.loading')}</div>
         </ContentBody>
       </ContentLayout>
     );
@@ -98,17 +109,33 @@ function ManagePage() {
       <ContentHeader cy="manage">
         <ContentTitle cy="manage">
           <Briefcase className="size-4" />
-          Manage your portfolios
+          {t('manage.pageTitle')}
           {portfolios && portfolios.length > 0 && (
             <Badge variant="outline">{portfolios.length}</Badge>
           )}
         </ContentTitle>
       </ContentHeader>
-      <ContentSubHeader cy="manage">
-        <ContentTitle cy="manage">
-          <Plus className="size-4" />
-          Add Portfolio
-        </ContentTitle>
+      <ContentSubHeader className="justify-end" cy="manage">
+        <Dialog onOpenChange={setIsCreateDialogOpen} open={isCreateDialogOpen}>
+          <DialogTrigger asChild>
+            <Button size="sm" variant="outline">
+              <Plus className="size-4" />
+              {t('manage.addPortfolio')}
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t('manage.createDialog.title')}</DialogTitle>
+              <DialogDescription>
+                {t('manage.createDialog.description')}
+              </DialogDescription>
+            </DialogHeader>
+            <CreatePortfolioForm
+              hideCard
+              onSuccess={() => setIsCreateDialogOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
       </ContentSubHeader>
       <ContentBody className="flex-1" cy="manage">
         {hasPortfolios ? (

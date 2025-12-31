@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { useMemo } from 'react';
 import type { Portfolio } from '@/api/portfolios';
 import { DataTable } from '@/components/table/data-table';
+import { useTranslation } from '@/hooks/use-translation';
 import { Badge } from '@/ui/badge';
 import { getProviderLabel } from './portfolio-constants';
 import { PortfolioRowActions } from './portfolio-row-actions';
@@ -19,11 +20,13 @@ export const PortfolioTable = ({
   onDeleteClick,
   onManageClick,
 }: Props) => {
+  const { t } = useTranslation();
+
   const columns = useMemo<ColumnDef<Portfolio>[]>(
     () => [
       {
         accessorKey: 'name',
-        header: 'Name',
+        header: t('manage.table.name'),
         cell: ({ row }) => (
           <div className="py-2">
             <span className="font-medium">{row.getValue('name')}</span>
@@ -32,7 +35,7 @@ export const PortfolioTable = ({
       },
       {
         accessorKey: 'type',
-        header: 'Type',
+        header: t('manage.table.type'),
         cell: ({ row }) => (
           <div className="py-2">
             <Badge variant="outline">{row.getValue('type')}</Badge>
@@ -41,7 +44,7 @@ export const PortfolioTable = ({
       },
       {
         accessorKey: 'provider',
-        header: 'Provider',
+        header: t('manage.table.provider'),
         cell: ({ row }) => (
           <div className="py-2">
             {getProviderLabel(row.getValue('provider'))}
@@ -50,7 +53,7 @@ export const PortfolioTable = ({
       },
       {
         accessorKey: 'createdAt',
-        header: 'Created',
+        header: t('manage.table.created'),
         cell: ({ row }) => (
           <div className="py-2">
             {format(new Date(row.getValue('createdAt')), 'MMM d, yyyy')}
@@ -69,7 +72,7 @@ export const PortfolioTable = ({
         ),
       },
     ],
-    [onDeleteClick, onManageClick]
+    [onDeleteClick, onManageClick, t]
   );
 
   return (
@@ -78,7 +81,7 @@ export const PortfolioTable = ({
         className="bg-background"
         columns={columns}
         data={portfolios}
-        emptyMessage="No portfolios found."
+        emptyMessage={t('manage.table.noPortfolios')}
         renderSubComponent={PortfolioRowDetails}
         variant="spaced"
       />
