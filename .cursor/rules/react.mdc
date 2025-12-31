@@ -1,0 +1,30 @@
+---
+name: react
+description: This is a new rule
+---
+
+# Overview
+
+Insert overview text here. The agent will only see this should they choose to apply the rule.
+
+## Componentization
+
+When creating a new component, follow these steps:
+
+1. Create a new file in the `components` directory.
+2. Create a new component in the file.
+3. Export the component.
+4. Import the component into the file where it is used.
+5. Use the component in the file.
+
+## Props
+
+When defining props for a component, follow these steps:
+
+1. Define the props in the file.
+2. Only export the props if needed.
+3. Name the props type "Props" if it's not exported.
+
+## Styling
+
+When styling a component, follow these steps: use the `cn` utility to merge classes, use the `tailwindcss` plugin to style the component.
