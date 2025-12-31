@@ -76,6 +76,7 @@ export const PortfolioTable = ({
         data={portfolios}
         emptyMessage="No portfolios found."
         renderSubComponent={PortfolioRowDetails}
+        variant="spaced"
       />
     </section>
   );

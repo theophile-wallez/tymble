@@ -44,6 +44,7 @@ type DataTableProps<TData> = {
   renderSubComponent?: (props: {
     row: Row<TData>;
   }) => React.ReactElement | null;
+  variant?: 'default' | 'spaced';
 } & (
   | {
       canHover?: false;
@@ -76,12 +77,16 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
     getExpandedRowModel: getExpandedRowModel(),
   });
 
+  const isSpaced = props.variant === 'spaced';
+
   return (
     <div
       className="size-full overflow-auto"
       style={{ scrollbarGutter: 'stable' }}
     >
-      <Table className="border-separate border-spacing-y-2">
+      <Table
+        className={cn(isSpaced && 'border-separate border-spacing-y-2')}
+      >
         <TableHeader className="sticky top-0 z-10 bg-card">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -126,7 +131,9 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                 <Fragment key={row.id}>
                   <TableRow
                     className={cn(
-                      'border-0 bg-muted/20 hover:bg-muted/50 [&_td:first-child]:rounded-l-lg [&_td:last-child]:rounded-r-lg',
+                      'hover:bg-muted/50',
+                      isSpaced &&
+                        'border-0 bg-muted/20 [&_td:first-child]:rounded-l-lg [&_td:last-child]:rounded-r-lg',
                       props.renderSubComponent && 'cursor-pointer',
                       isHovered && 'bg-muted/50',
                       isFaded && 'opacity-60'
