@@ -129,6 +129,7 @@
     "deleteDialog": {
       "title": "Delete portfolio",
       "description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+      "confirmLabel": "Type the portfolio name to confirm",
       "cancel": "Cancel",
       "confirm": "Delete"
     },

@@ -77,9 +77,11 @@ function ManagePage() {
   };
 
   const confirmDelete = () => {
-    if (portfolioToDelete) {
-      deleteMutation.mutate(portfolioToDelete.id);
+    if (!portfolioToDelete) {
+      toast.error(t('manage.deleteError'));
+      return;
     }
+    deleteMutation.mutate(portfolioToDelete.id);
   };
 
   const hasPortfolios = portfolios && portfolios.length > 0;

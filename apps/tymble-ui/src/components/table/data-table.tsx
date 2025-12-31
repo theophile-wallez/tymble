@@ -13,7 +13,11 @@ import {
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Fragment, useState } from 'react';
-import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '@/ui/context-menu';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuTrigger,
+} from '@/ui/context-menu';
 import {
   Table,
   TableBody,
