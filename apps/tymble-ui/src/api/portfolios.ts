@@ -26,3 +26,8 @@ export const createPortfolio = (data: CreatePortfolioRequest) =>
     method: 'POST',
     body: JSON.stringify(data),
   });
+
+export const deletePortfolio = (id: string) =>
+  apiRequest<{ id: string }>(`/portfolio/${id}`, {
+    method: 'DELETE',
+  });

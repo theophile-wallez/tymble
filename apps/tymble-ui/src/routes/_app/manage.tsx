@@ -3,11 +3,20 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import type { ColumnDef, Row } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { Briefcase, Plus, Wallet } from 'lucide-react';
-import { useMemo } from 'react';
+import {
+  Briefcase,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  PlusCircle,
+  Trash2,
+  Wallet,
+} from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import {
   createPortfolio,
+  deletePortfolio,
   fetchPortfolios,
   type Portfolio,
 } from '@/api/portfolios';
@@ -18,6 +27,16 @@ import {
   ContentLayout,
   ContentTitle,
 } from '@/layouts/content.layout';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/ui/alert-dialog';
 import { Badge } from '@/ui/badge';
 import { Button } from '@/ui/button';
 import {
@@ -35,6 +54,13 @@ import {
   FieldLabel,
 } from '@/ui/field';
 import { Input } from '@/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
@@ -129,11 +155,40 @@ const PortfolioSubComponent = ({ row }: { row: Row<Portfolio> }) => {
 
 function ManagePage() {
   const queryClient = useQueryClient();
+  const [portfolioToDelete, setPortfolioToDelete] = useState<Portfolio | null>(
+    null
+  );
 
   const { data: portfolios, isLoading } = useQuery({
     queryKey: ['portfolios'],
     queryFn: fetchPortfolios,
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: deletePortfolio,
+    mutationKey: ['deletePortfolio'],
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['portfolios'] });
+      toast.success('Portfolio deleted successfully!');
+      setPortfolioToDelete(null);
+    },
+    onError: (error) => {
+      toast.error(
+        error.message || 'Failed to delete portfolio. Please try again.'
+      );
+    },
+  });
+
+  const handleDeleteClick = (e: React.MouseEvent, portfolio: Portfolio) => {
+    e.stopPropagation();
+    setPortfolioToDelete(portfolio);
+  };
+
+  const confirmDelete = () => {
+    if (portfolioToDelete) {
+      deleteMutation.mutate(portfolioToDelete.id);
+    }
+  };
 
   const columns = useMemo<ColumnDef<Portfolio>[]>(
     () => [
@@ -170,6 +225,55 @@ function ManagePage() {
         cell: ({ row }) => (
           <div className="py-2">
             {format(new Date(row.getValue('createdAt')), 'MMM d, yyyy')}
+          </div>
+        ),
+      },
+      {
+        id: 'actions',
+        header: '',
+        cell: ({ row }) => (
+          <div className="flex justify-end py-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  onClick={(e) => e.stopPropagation()}
+                  size="icon-sm"
+                  variant="ghost"
+                >
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // TODO: Implement add asset
+                    toast.info('Add asset coming soon!');
+                  }}
+                >
+                  <PlusCircle className="size-4" />
+                  Add asset
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // TODO: Implement edit
+                    toast.info('Edit coming soon!');
+                  }}
+                >
+                  <Pencil className="size-4" />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={(e) => handleDeleteClick(e, row.original)}
+                  variant="destructive"
+                >
+                  <Trash2 className="size-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ),
       },
@@ -407,6 +511,33 @@ function ManagePage() {
           </div>
         )}
       </ContentBody>
+
+      <AlertDialog
+        onOpenChange={(open: boolean) => !open && setPortfolioToDelete(null)}
+        open={!!portfolioToDelete}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete portfolio</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete{' '}
+              <span className="font-medium">{portfolioToDelete?.name}</span>?
+              This action cannot be undone. All associated transactions will
+              also be deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-white hover:bg-destructive/90"
+              disabled={deleteMutation.isPending}
+              onClick={confirmDelete}
+            >
+              {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </ContentLayout>
   );
 }

@@ -177,7 +177,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                           className="grid"
                           initial={{ gridTemplateRows: '0fr' }}
                           transition={{
-                            duration: 0.2,
+                            duration: 0.15,
                             ease: 'easeOut',
                           }}
                         >
@@ -190,7 +190,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                             }}
                             className="overflow-hidden"
                             transition={{
-                              duration: 0.2,
+                              duration: 0.15,
                             }}
                           >
                             <div className="px-2 py-3">
