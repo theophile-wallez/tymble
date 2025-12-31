@@ -1,4 +1,4 @@
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Portfolio } from '@/api/portfolios';
 import { useTranslation } from '@/hooks/use-translation';
@@ -47,7 +47,7 @@ export const PortfolioRowActions = ({ portfolio, onDelete }: Props) => {
             onClick={(e) => onDelete(e, portfolio)}
             variant="destructive"
           >
-            <Trash2 className="size-4" />
+            <Trash className="size-4" />
             {t('manage.table.delete')}
           </DropdownMenuItem>
         </DropdownMenuContent>

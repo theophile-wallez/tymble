@@ -1,10 +1,13 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { useMemo } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
+import { useCallback, useMemo } from 'react';
+import { toast } from 'sonner';
 import type { Portfolio } from '@/api/portfolios';
 import { DataTable } from '@/components/table/data-table';
 import { useTranslation } from '@/hooks/use-translation';
 import { Badge } from '@/ui/badge';
+import { ContextMenuItem, ContextMenuSeparator } from '@/ui/context-menu';
 import { getProviderLabel } from './portfolio-constants';
 import { PortfolioRowActions } from './portfolio-row-actions';
 
@@ -73,6 +76,31 @@ export const PortfolioTable = ({
     [onDeleteClick, t]
   );
 
+  const renderContextMenu = useCallback(
+    (portfolio: Portfolio) => (
+      <>
+        <ContextMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            toast.info('Edit coming soon!');
+          }}
+        >
+          <Pencil className="size-4" />
+          {t('manage.table.edit')}
+        </ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem
+          onClick={(e) => onDeleteClick(e, portfolio)}
+          variant="destructive"
+        >
+          <Trash2 className="size-4" />
+          {t('manage.table.delete')}
+        </ContextMenuItem>
+      </>
+    ),
+    [onDeleteClick, t]
+  );
+
   return (
     <section className="w-full">
       <DataTable
@@ -81,6 +109,7 @@ export const PortfolioTable = ({
         data={portfolios}
         emptyMessage={t('manage.table.noPortfolios')}
         onRowClick={onRowClick}
+        renderContextMenu={renderContextMenu}
         variant="spaced"
       />
     </section>

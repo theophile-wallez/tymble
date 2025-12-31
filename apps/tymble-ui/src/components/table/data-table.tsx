@@ -13,6 +13,7 @@ import {
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Fragment, useState } from 'react';
+import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '@/ui/context-menu';
 import {
   Table,
   TableBody,
@@ -46,6 +47,7 @@ type DataTableProps<TData> = {
   renderSubComponent?: (props: {
     row: Row<TData>;
   }) => React.ReactElement | null;
+  renderContextMenu?: (row: TData) => React.ReactNode;
   onRowClick?: (row: TData) => void;
   variant?: 'default' | 'spaced';
   className?: string;
@@ -136,56 +138,71 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
 
               const isExpanded = row.getIsExpanded();
 
+              const rowContent = (
+                <TableRow
+                  className={cn(
+                    'hover:bg-muted/50',
+                    isSpaced && 'border-0 bg-muted/20',
+                    isSpaced &&
+                      !isExpanded &&
+                      '[&_td:first-child]:rounded-l-lg [&_td:last-child]:rounded-r-lg',
+                    isSpaced &&
+                      isExpanded &&
+                      '[&_td:first-child]:rounded-tl-lg [&_td:last-child]:rounded-tr-lg',
+                    (props.renderSubComponent || props.onRowClick) &&
+                      'cursor-pointer',
+                    (isHovered || isExpanded) && 'bg-muted/50',
+                    isFaded && 'opacity-60'
+                  )}
+                  onClick={() => {
+                    if (props.renderSubComponent) {
+                      row.toggleExpanded();
+                    } else if (props.onRowClick) {
+                      props.onRowClick(row.original);
+                    }
+                  }}
+                  onMouseEnter={() =>
+                    props.canHover && props.onHoverChange?.(row.index)
+                  }
+                  onMouseLeave={() =>
+                    props.canHover && props.onHoverChange?.(null)
+                  }
+                >
+                  {props.renderSubComponent && (
+                    <TableCell>
+                      <ChevronRight
+                        className={cn(
+                          'size-4 shrink-0 origin-center text-muted-foreground transition-transform ease-out',
+                          isExpanded ? 'rotate-90' : undefined
+                        )}
+                      />
+                    </TableCell>
+                  )}
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+
               return (
                 <Fragment key={row.id}>
-                  <TableRow
-                    className={cn(
-                      'hover:bg-muted/50',
-                      isSpaced && 'border-0 bg-muted/20',
-                      isSpaced &&
-                        !isExpanded &&
-                        '[&_td:first-child]:rounded-l-lg [&_td:last-child]:rounded-r-lg',
-                      isSpaced &&
-                        isExpanded &&
-                        '[&_td:first-child]:rounded-tl-lg [&_td:last-child]:rounded-tr-lg',
-                      (props.renderSubComponent || props.onRowClick) &&
-                        'cursor-pointer',
-                      (isHovered || isExpanded) && 'bg-muted/50',
-                      isFaded && 'opacity-60'
-                    )}
-                    onClick={() => {
-                      if (props.renderSubComponent) {
-                        row.toggleExpanded();
-                      } else if (props.onRowClick) {
-                        props.onRowClick(row.original);
-                      }
-                    }}
-                    onMouseEnter={() =>
-                      props.canHover && props.onHoverChange?.(row.index)
-                    }
-                    onMouseLeave={() =>
-                      props.canHover && props.onHoverChange?.(null)
-                    }
-                  >
-                    {props.renderSubComponent && (
-                      <TableCell>
-                        <ChevronRight
-                          className={cn(
-                            'size-4 shrink-0 origin-center text-muted-foreground transition-transform ease-out',
-                            isExpanded ? 'rotate-90' : undefined
-                          )}
-                        />
-                      </TableCell>
-                    )}
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
+                  {props.renderContextMenu ? (
+                    <ContextMenu>
+                      <ContextMenuTrigger asChild>
+                        {rowContent}
+                      </ContextMenuTrigger>
+                      <ContextMenuContent>
+                        {props.renderContextMenu(row.original)}
+                      </ContextMenuContent>
+                    </ContextMenu>
+                  ) : (
+                    rowContent
+                  )}
                   {props.renderSubComponent && (
                     <tr
                       className={cn(
