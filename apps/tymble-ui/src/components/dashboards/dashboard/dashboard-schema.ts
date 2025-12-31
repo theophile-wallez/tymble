@@ -178,7 +178,6 @@ export const WIDGET_MIN_SIZES: Record<
   traffic: { minW: 3, minH: 6 },
   text: { minW: 3, minH: 2 },
   table: { minW: 4, minH: 4 },
-  wallet: { minW: 4, minH: 4 },
   segmentDistribution: { minW: 4, minH: 5 },
 };
 
