@@ -44,43 +44,48 @@ type DataTableProps<TData> = {
   renderSubComponent?: (props: {
     row: Row<TData>;
   }) => React.ReactElement | null;
-  hoveredIndex?: number | null;
-  onHoverChange?: (index: number | null) => void;
-};
+} & (
+  | {
+      canHover?: false;
+      hoveredIndex?: never;
+      onHoverChange?: never;
+    }
+  | {
+      canHover: true;
+      hoveredIndex?: number | null;
+      onHoverChange?: (index: number | null) => void;
+    }
+);
 
-export function DataTable<TData>({
-  columns,
-  data,
-  emptyMessage = 'No results.',
-  renderSubComponent,
-  hoveredIndex,
-  onHoverChange,
-}: DataTableProps<TData>) {
+export function DataTable<TData>(props: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
 
   const table = useReactTable({
-    data,
-    columns,
+    data: props.data,
+    columns: props.columns,
     state: {
       sorting,
       expanded,
     },
     onSortingChange: setSorting,
     onExpandedChange: setExpanded,
-    getRowCanExpand: () => !!renderSubComponent,
+    getRowCanExpand: () => !!props?.renderSubComponent,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
   });
 
   return (
-    <div className="size-full overflow-auto">
+    <div
+      className="size-full overflow-auto"
+      style={{ scrollbarGutter: 'stable' }}
+    >
       <Table>
         <TableHeader className="sticky top-0 z-10 bg-card">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {renderSubComponent && <TableHead className="w-10" />}
+              {props.renderSubComponent && <TableHead className="w-10" />}
               {headerGroup.headers.map((header) => {
                 const isSorted = header.column.getIsSorted();
                 return (
@@ -109,87 +114,105 @@ export function DataTable<TData>({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <Fragment key={row.id}>
-                <TableRow
-                  className={cn(
-                    renderSubComponent && 'cursor-pointer',
-                    hoveredIndex === row.index && 'bg-muted/50',
-                    hoveredIndex !== null &&
-                      hoveredIndex !== row.index &&
-                      'opacity-60'
-                  )}
-                  onClick={
-                    renderSubComponent ? () => row.toggleExpanded() : undefined
-                  }
-                  onMouseEnter={() => onHoverChange?.(row.index)}
-                  onMouseLeave={() => onHoverChange?.(null)}
-                >
-                  {renderSubComponent && (
-                    <TableCell>
-                      <ChevronRight
-                        className={cn(
-                          'size-4 shrink-0 origin-center text-muted-foreground transition-transform ease-out',
-                          row.getIsExpanded() ? 'rotate-90' : undefined
+            table.getRowModel().rows.map((row) => {
+              const isHovered =
+                props.canHover && props.hoveredIndex === row.index;
+              const isFaded =
+                props.canHover &&
+                props.hoveredIndex !== null &&
+                props.hoveredIndex !== row.index;
+
+              return (
+                <Fragment key={row.id}>
+                  <TableRow
+                    className={cn(
+                      'hover:bg-muted/50',
+                      props.renderSubComponent && 'cursor-pointer',
+                      isHovered && 'bg-muted/50',
+                      isFaded && 'opacity-60'
+                    )}
+                    onClick={
+                      props.renderSubComponent
+                        ? () => row.toggleExpanded()
+                        : undefined
+                    }
+                    onMouseEnter={() =>
+                      props.canHover && props.onHoverChange?.(row.index)
+                    }
+                    onMouseLeave={() =>
+                      props.canHover && props.onHoverChange?.(null)
+                    }
+                  >
+                    {props.renderSubComponent && (
+                      <TableCell>
+                        <ChevronRight
+                          className={cn(
+                            'size-4 shrink-0 origin-center text-muted-foreground transition-transform ease-out',
+                            row.getIsExpanded() ? 'rotate-90' : undefined
+                          )}
+                        />
+                      </TableCell>
+                    )}
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
                         )}
-                      />
-                    </TableCell>
-                  )}
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-                {renderSubComponent && (
-                  <tr className="">
-                    <TableCell
-                      className="rounded-b-md bg-muted/30 p-0!"
-                      colSpan={row.getVisibleCells().length + 1}
-                    >
-                      <motion.div
-                        animate={{
-                          gridTemplateRows: row.getIsExpanded() ? '1fr' : '0fr',
-                        }}
-                        className="grid"
-                        initial={{ gridTemplateRows: '0fr' }}
-                        transition={{
-                          duration: 0.2,
-                          ease: 'easeOut',
-                        }}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  {props.renderSubComponent && (
+                    <tr className="">
+                      <TableCell
+                        className="rounded-b-md bg-muted/30 p-0!"
+                        colSpan={row.getVisibleCells().length + 1}
                       >
                         <motion.div
                           animate={{
-                            opacity: row.getIsExpanded() ? 1 : 0,
-                            filter: row.getIsExpanded()
-                              ? 'blur(0px)'
-                              : 'blur(3px)',
+                            gridTemplateRows: row.getIsExpanded()
+                              ? '1fr'
+                              : '0fr',
                           }}
-                          className="overflow-hidden"
+                          className="grid"
+                          initial={{ gridTemplateRows: '0fr' }}
                           transition={{
                             duration: 0.2,
+                            ease: 'easeOut',
                           }}
                         >
-                          <div className="px-2 py-3">
-                            {renderSubComponent({ row })}
-                          </div>
+                          <motion.div
+                            animate={{
+                              opacity: row.getIsExpanded() ? 1 : 0,
+                              filter: row.getIsExpanded()
+                                ? 'blur(0px)'
+                                : 'blur(3px)',
+                            }}
+                            className="overflow-hidden"
+                            transition={{
+                              duration: 0.2,
+                            }}
+                          >
+                            <div className="px-2 py-3">
+                              {props.renderSubComponent({ row })}
+                            </div>
+                          </motion.div>
                         </motion.div>
-                      </motion.div>
-                    </TableCell>
-                  </tr>
-                )}
-              </Fragment>
-            ))
+                      </TableCell>
+                    </tr>
+                  )}
+                </Fragment>
+              );
+            })
           ) : (
             <TableRow>
               <TableCell
                 className="h-24 text-center text-muted-foreground"
-                colSpan={columns.length + (renderSubComponent ? 1 : 0)}
+                colSpan={
+                  props.columns.length + (props.renderSubComponent ? 1 : 0)
+                }
               >
-                {emptyMessage}
+                {props.emptyMessage ?? 'No results.'}
               </TableCell>
             </TableRow>
           )}
