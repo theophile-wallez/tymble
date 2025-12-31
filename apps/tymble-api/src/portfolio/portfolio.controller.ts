@@ -9,9 +9,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ZodResponse } from 'nestjs-zod';
 import { JwtAuthGuard } from '@/auth/guards/jwt.guard';
 import type { GuardedRequest } from '@/types/guardedRequest.type';
-import { CreatePortfolioDto } from './dto/create-portfolio.dto';
+import {
+  CreatePortfolioDto,
+  CreatePortfolioResponseDto,
+} from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import { PortfolioService } from './portfolio.service';
 
@@ -21,6 +25,9 @@ export class PortfolioController {
   constructor(private readonly portfolioService: PortfolioService) {}
 
   @Post()
+  @ZodResponse({
+    type: CreatePortfolioResponseDto,
+  })
   create(
     @Req() req: GuardedRequest,
     @Body() createPortfolioDto: CreatePortfolioDto

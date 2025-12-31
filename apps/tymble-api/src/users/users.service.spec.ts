@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { UUID_REGEX } from '@/tests/utils';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
@@ -21,12 +22,12 @@ describe('UsersService', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
+      password: 'password',
+      passwordConfirmation: 'password',
     };
 
     const user = await service.createLocalUser(createUserDto);
-    expect(user).toHaveProperty('id');
-    expect(user.firstName).toBe(createUserDto.firstName);
-    expect(user.lastName).toBe(createUserDto.lastName);
-    expect(user.email).toBe(createUserDto.email);
+    expect(user).toBeDefined();
+    expect(user).toMatch(UUID_REGEX);
   });
 });

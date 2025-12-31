@@ -12,15 +12,13 @@ export type {
 // Import types for use in this file
 import type { Portfolio, PortfolioWithAssets } from '@tymble/schemas';
 
-export type CreatePortfolioRequest = CreatePortfolio['dto'];
-
 export const fetchPortfolios = () => apiRequest<Portfolio[]>('/portfolio');
 
 export const fetchPortfolio = (id: string) =>
   apiRequest<PortfolioWithAssets>(`/portfolio/${id}`);
 
-export const createPortfolio = (data: CreatePortfolioRequest) =>
-  apiRequest<Portfolio>('/portfolio', {
+export const createPortfolio = (data: CreatePortfolio['dto']) =>
+  apiRequest<CreatePortfolio['res']>('/portfolio', {
     method: 'POST',
     body: JSON.stringify(data),
   });

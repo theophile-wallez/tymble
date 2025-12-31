@@ -4,3 +4,7 @@ import { createZodDto } from 'nestjs-zod';
 export class CreatePortfolioDto extends createZodDto(
   createPortfolioSchema.dto
 ) {}
+
+export class CreatePortfolioResponseDto extends createZodDto(
+  createPortfolioSchema.res
+) {}

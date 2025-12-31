@@ -97,7 +97,9 @@ export const CreatePortfolioForm = ({ hideCard, onSuccess }: Props) => {
         <form.AppField
           children={(field) => (
             <Field>
-              <FieldLabel htmlFor="name">{t('manage.portfolio.name')}</FieldLabel>
+              <FieldLabel htmlFor="name">
+                {t('manage.portfolio.name')}
+              </FieldLabel>
               <field.Input
                 id="name"
                 onBlur={field.handleBlur}
@@ -115,13 +117,17 @@ export const CreatePortfolioForm = ({ hideCard, onSuccess }: Props) => {
         <form.AppField
           children={(field) => (
             <Field>
-              <FieldLabel htmlFor="type">{t('manage.portfolio.type')}</FieldLabel>
+              <FieldLabel htmlFor="type">
+                {t('manage.portfolio.type')}
+              </FieldLabel>
               <Select
                 onValueChange={(value) => field.handleChange(value)}
                 value={field.state.value}
               >
                 <SelectTrigger id="type">
-                  <SelectValue placeholder={t('manage.portfolio.typePlaceholder')} />
+                  <SelectValue
+                    placeholder={t('manage.portfolio.typePlaceholder')}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {PORTFOLIO_TYPES.map((type) => (
@@ -151,7 +157,9 @@ export const CreatePortfolioForm = ({ hideCard, onSuccess }: Props) => {
                 value={field.state.value}
               >
                 <SelectTrigger id="provider">
-                  <SelectValue placeholder={t('manage.portfolio.providerPlaceholder')} />
+                  <SelectValue
+                    placeholder={t('manage.portfolio.providerPlaceholder')}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {PROVIDERS.map((provider) => (
