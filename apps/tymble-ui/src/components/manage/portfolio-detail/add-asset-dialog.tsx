@@ -129,7 +129,8 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
     searchQuery.length === 0 && suggestionsQuery.isFetching;
   const isLoadingSearch =
     searchQuery.length >= 2 && searchQueryResult.isFetching;
-  const isTypingWithoutResults = searchQuery.length > 0 && searchQuery.length < 2;
+  const isTypingWithoutResults =
+    searchQuery.length > 0 && searchQuery.length < 2;
 
   useEffect(() => {
     if (suggestionsQuery.isError) {
@@ -176,6 +177,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
       </Card>
 
       <CommandDialog
+        className="top-[12vh] translate-y-0 sm:top-[18vh]"
         description={t('manage.addAssetDialog.description')}
         onOpenChange={handleDialogChange}
         open={dialogOpen}
@@ -187,7 +189,9 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
           value={searchQuery}
         />
         <CommandList>
-          {(isLoadingSuggestions || isTypingWithoutResults || isLoadingSearch) && (
+          {(isLoadingSuggestions ||
+            isTypingWithoutResults ||
+            isLoadingSearch) && (
             <CommandGroup>
               {Array.from({ length: 5 }).map((_, index) => (
                 <CommandItem disabled key={`suggested-skeleton-${index}`}>
