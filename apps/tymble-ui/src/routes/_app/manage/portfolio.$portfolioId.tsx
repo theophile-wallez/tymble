@@ -1,6 +1,10 @@
+import {
+  ArrowLeft01Icon,
+  Briefcase01Icon,
+  PackageIcon,
+} from '@hugeicons/core-free-icons';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ArrowLeft, Briefcase, Package } from 'lucide-react';
 import { fetchPortfolio } from '@/api/portfolios';
 import { AddAssetDialog } from '@/components/manage/portfolio-detail/add-asset-dialog';
 import { AssetCard } from '@/components/manage/portfolio-detail/asset-card';
@@ -12,6 +16,7 @@ import {
 } from '@/layouts/content.layout';
 import { Badge } from '@/ui/badge';
 import { Button } from '@/ui/button';
+import { Icon } from '@/ui/icon';
 
 export const Route = createFileRoute('/_app/manage/portfolio/$portfolioId')({
   component: PortfolioDetailPage,
@@ -30,7 +35,7 @@ function PortfolioDetailPage() {
       <ContentLayout cy="portfolio-detail">
         <ContentHeader cy="portfolio-detail">
           <ContentTitle cy="portfolio-detail">
-            <Briefcase className="size-4" />
+            <Icon className="size-4" icon={Briefcase01Icon} />
             Loading...
           </ContentTitle>
         </ContentHeader>
@@ -49,7 +54,7 @@ function PortfolioDetailPage() {
       <ContentLayout cy="portfolio-detail">
         <ContentHeader cy="portfolio-detail">
           <ContentTitle cy="portfolio-detail">
-            <Briefcase className="size-4" />
+            <Icon className="size-4" icon={Briefcase01Icon} />
             Portfolio not found
           </ContentTitle>
         </ContentHeader>
@@ -82,11 +87,11 @@ function PortfolioDetailPage() {
           <div className="flex items-center gap-4">
             <Link to="/manage">
               <Button size="icon-sm" variant="ghost">
-                <ArrowLeft className="size-4" />
+                <Icon className="size-4" icon={ArrowLeft01Icon} />
               </Button>
             </Link>
             <ContentTitle cy="portfolio-detail">
-              <Briefcase className="size-4" />
+              <Icon className="size-4" icon={Briefcase01Icon} />
               {portfolio.name}
               <Badge className="ml-2" variant="outline">
                 {portfolio.type}
@@ -110,7 +115,7 @@ function PortfolioDetailPage() {
 
       <ContentBody className="flex flex-1 flex-col gap-6" cy="portfolio-detail">
         <div className="flex items-center gap-2">
-          <Package className="size-4" />
+          <Icon className="size-4" icon={PackageIcon} />
           <h2 className="font-medium text-lg">
             Assets{' '}
             {portfolio.assets &&

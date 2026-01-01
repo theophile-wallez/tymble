@@ -1,4 +1,5 @@
-import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { Delete01Icon, MoreHorizontalIcon, PencilEdit01Icon } from '@hugeicons/core-free-icons';
+import { Icon } from '@/ui/icon';
 import { toast } from 'sonner';
 import type { Portfolio } from '@/api/portfolios';
 import { useTranslation } from '@/hooks/use-translation';
@@ -28,7 +29,7 @@ export const PortfolioRowActions = ({ portfolio, onDelete }: Props) => {
             size="icon-sm"
             variant="ghost"
           >
-            <MoreHorizontal className="size-4" />
+            <Icon icon={MoreHorizontalIcon} className="size-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -39,7 +40,7 @@ export const PortfolioRowActions = ({ portfolio, onDelete }: Props) => {
               toast.info('Edit coming soon!');
             }}
           >
-            <Pencil className="size-4" />
+            <Icon icon={PencilEdit01Icon} className="size-4" />
             {t('manage.table.edit')}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -47,7 +48,7 @@ export const PortfolioRowActions = ({ portfolio, onDelete }: Props) => {
             onClick={(e) => onDelete(e, portfolio)}
             variant="destructive"
           >
-            <Trash className="size-4" />
+            <Icon icon={Delete01Icon} className="size-4" />
             {t('manage.table.delete')}
           </DropdownMenuItem>
         </DropdownMenuContent>

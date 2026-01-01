@@ -1,5 +1,6 @@
 import { useForm } from '@tanstack/react-form';
-import { Plus, X } from 'lucide-react';
+import { Add01Icon, Cancel01Icon } from '@hugeicons/core-free-icons';
+import { Icon } from '@/ui/icon';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { type StockSearchResult, searchStocks } from '@/api/portfolios';
@@ -140,7 +141,7 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
               </CardDescription>
             </div>
             <Button onClick={cancelCustomForm} size="icon-sm" variant="ghost">
-              <X className="size-4" />
+              <Icon icon={Cancel01Icon} className="size-4" />
             </Button>
           </div>
         </CardHeader>
@@ -293,7 +294,7 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
               <CommandList>
                 <CommandGroup>
                   <CommandItem onSelect={openCustomForm}>
-                    <Plus className="size-4" />
+                    <Icon icon={Add01Icon} className="size-4" />
                     <span>Custom asset</span>
                   </CommandItem>
                 </CommandGroup>

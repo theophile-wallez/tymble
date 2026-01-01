@@ -1,4 +1,5 @@
-import { GripVertical } from 'lucide-react';
+import { DragDropVerticalIcon } from '@hugeicons/core-free-icons';
+import { Icon } from '@/ui/icon';
 import { AnimatePresence, motion } from 'motion/react';
 import type { PropsWithChildren } from 'react';
 import {
@@ -60,7 +61,7 @@ export const WidgetLayout = ({
           initial={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.15, ease: 'easeOut' }}
         >
-          <GripVertical className="size-4" />
+          <Icon icon={DragDropVerticalIcon} className="size-4" />
         </motion.div>
       )}
     </AnimatePresence>

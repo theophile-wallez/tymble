@@ -1,8 +1,13 @@
+import {
+  ChartDecreaseIcon,
+  ChartIncreaseIcon,
+  InformationCircleIcon,
+} from '@hugeicons/core-free-icons';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Info, TrendingDown, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 import { DataTable } from '@/components/table/data-table';
+import { Icon } from '@/ui/icon';
 import { getChartColorByIndex } from '@/utils/getChartColorByIndex';
 import { WidgetLayout } from '../../widget-layout';
 import { SegmentBarItem } from './bar.segment';
@@ -94,7 +99,7 @@ export const DistributionWidget = ({
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
                 Total Revenue
-                <Info className="size-3.5" />
+                <Icon className="size-3.5" icon={InformationCircleIcon} />
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-2xl text-foreground">
@@ -109,9 +114,9 @@ export const DistributionWidget = ({
                     }`}
                   >
                     {revenueChange >= 0 ? (
-                      <TrendingUp className="size-3" />
+                      <Icon className="size-3" icon={ChartIncreaseIcon} />
                     ) : (
-                      <TrendingDown className="size-3" />
+                      <Icon className="size-3" icon={ChartDecreaseIcon} />
                     )}
                     {Math.abs(revenueChange)}%
                   </span>
@@ -123,7 +128,7 @@ export const DistributionWidget = ({
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
                 Total Visitors
-                <Info className="size-3.5" />
+                <Icon className="size-3.5" icon={InformationCircleIcon} />
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-2xl text-foreground">
@@ -138,9 +143,9 @@ export const DistributionWidget = ({
                     }`}
                   >
                     {visitorsChange >= 0 ? (
-                      <TrendingUp className="size-3" />
+                      <Icon className="size-3" icon={ChartIncreaseIcon} />
                     ) : (
-                      <TrendingDown className="size-3" />
+                      <Icon className="size-3" icon={ChartDecreaseIcon} />
                     )}
                     {Math.abs(visitorsChange)}%
                   </span>

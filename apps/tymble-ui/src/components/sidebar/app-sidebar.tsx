@@ -1,20 +1,20 @@
 import {
-  BookOpen,
-  Briefcase,
-  ChartArea,
-  ChartNoAxesCombined,
-  Frame,
-  GalleryVerticalEnd,
-  type LucideIcon,
-  MapIcon,
-  PieChart,
-  Settings2,
-} from 'lucide-react';
+  BookOpen01Icon,
+  Briefcase01Icon,
+  ChartBarLineIcon,
+  ChartLineData01Icon,
+  Image01Icon,
+  KeyframeIcon,
+  MapsLocation01Icon,
+  PieChartIcon,
+  SettingsIcon,
+} from '@hugeicons/core-free-icons';
 import type * as React from 'react';
 import { NavMain } from '@/components/sidebar/nav-main';
 import { NavProjects } from '@/components/sidebar/nav-projects';
 import { NavUser } from '@/components/sidebar/nav-user';
 import { useTranslation } from '@/hooks/use-translation';
+import { Icon, type IconType } from '@/ui/icon';
 import {
   Sidebar,
   SidebarContent,
@@ -25,7 +25,7 @@ import {
 export type NavItem = {
   title: string;
   url: string;
-  icon?: LucideIcon;
+  icon?: IconType;
   items?: NavItem[];
 };
 
@@ -39,7 +39,7 @@ export const AppSidebar = ({
       {
         title: t('navigation.portfolio.title'),
         url: '/portfolio',
-        icon: ChartNoAxesCombined,
+        icon: ChartBarLineIcon,
         isActive: true,
         items: [
           {
@@ -75,17 +75,17 @@ export const AppSidebar = ({
       {
         title: t('navigation.dashboards.title'),
         url: '/dashboards',
-        icon: ChartArea,
+        icon: ChartLineData01Icon,
       },
       {
         title: t('navigation.manage.title'),
         url: '/manage',
-        icon: Briefcase,
+        icon: Briefcase01Icon,
       },
       {
         title: t('navigation.documentation.title'),
         url: '/documentation',
-        icon: BookOpen,
+        icon: BookOpen01Icon,
         items: [
           {
             title: t('navigation.documentation.introduction'),
@@ -108,7 +108,7 @@ export const AppSidebar = ({
       {
         title: t('navigation.settingsMenu.title'),
         url: '/settings',
-        icon: Settings2,
+        icon: SettingsIcon,
         items: [
           {
             title: t('navigation.settingsMenu.general'),
@@ -133,17 +133,17 @@ export const AppSidebar = ({
       {
         name: t('projects.designEngineering'),
         url: '#',
-        icon: Frame,
+        icon: KeyframeIcon,
       },
       {
         name: t('projects.salesAndMarketing'),
         url: '#',
-        icon: PieChart,
+        icon: PieChartIcon,
       },
       {
         name: t('projects.travel'),
         url: '#',
-        icon: MapIcon,
+        icon: MapsLocation01Icon,
       },
     ],
   };
@@ -152,7 +152,7 @@ export const AppSidebar = ({
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex h-header-height flex-row items-center gap-4 p-4">
         <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary-background text-primary">
-          <GalleryVerticalEnd className="size-4" />
+          <Icon className="size-4" icon={Image01Icon} />
         </div>
         <div className="grid flex-1 text-left text-normal leading-tight">
           <span className="truncate font-medium">Tymble</span>

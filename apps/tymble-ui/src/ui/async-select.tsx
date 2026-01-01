@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { ArrowUpDownIcon, Loading03Icon, Tick02Icon } from '@hugeicons/core-free-icons';
+import { Icon } from '@/ui/icon';
 import { useDebounce } from "@/hooks/use-debounce";
 
 import { cn } from "@/ui/utils";
@@ -189,7 +190,7 @@ export function AsyncSelect<T>({
           ) : (
             placeholder
           )}
-          <ChevronsUpDown className="opacity-50" size={10} />
+          <Icon icon={ArrowUpDownIcon} className="opacity-50 size-2.5" />
         </Button>
       </PopoverTrigger>
       <PopoverContent style={{ width: width }} className={cn("p-0", className)}>
@@ -204,7 +205,7 @@ export function AsyncSelect<T>({
             />
             {loading && options.length > 0 && (
               <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center">
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Icon icon={Loading03Icon} className="size-4 animate-spin" />
               </div>
             )}
           </div>
@@ -228,9 +229,10 @@ export function AsyncSelect<T>({
                   onSelect={handleSelect}
                 >
                   {renderOption(option)}
-                  <Check
+                  <Icon
+                    icon={Tick02Icon}
                     className={cn(
-                      "ml-auto h-3 w-3",
+                      "ml-auto size-3",
                       selectedValue === getOptionValue(option) ? "opacity-100" : "opacity-0"
                     )}
                   />

@@ -1,6 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Delete01Icon, PencilEdit01Icon } from '@hugeicons/core-free-icons';
+import { Icon } from '@/ui/icon';
 import { useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import type { Portfolio } from '@/api/portfolios';
@@ -85,7 +86,7 @@ export const PortfolioTable = ({
             toast.info('Edit coming soon!');
           }}
         >
-          <Pencil className="size-4" />
+          <Icon icon={PencilEdit01Icon} className="size-4" />
           {t('manage.table.edit')}
         </ContextMenuItem>
         <ContextMenuSeparator />
@@ -93,7 +94,7 @@ export const PortfolioTable = ({
           onClick={(e) => onDeleteClick(e, portfolio)}
           variant="destructive"
         >
-          <Trash2 className="size-4" />
+          <Icon icon={Delete01Icon} className="size-4" />
           {t('manage.table.delete')}
         </ContextMenuItem>
       </>

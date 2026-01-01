@@ -16,7 +16,8 @@ import {
   horizontalListSortingStrategy,
   SortableContext,
 } from '@dnd-kit/sortable';
-import { Check, Pencil } from 'lucide-react';
+import { PencilEdit01Icon, Tick02Icon } from '@hugeicons/core-free-icons';
+import { Icon } from '@/ui/icon';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import {
@@ -117,7 +118,7 @@ export const Dashboards = () => {
                     type: 'spring',
                   }}
                 >
-                  <Check className="mr-2 size-4" />
+                  <Icon icon={Tick02Icon} className="mr-2 size-4" />
                   Save dashboard
                 </motion.div>
               ) : (
@@ -133,7 +134,7 @@ export const Dashboards = () => {
                     type: 'spring',
                   }}
                 >
-                  <Pencil className="mr-2 size-4" />
+                  <Icon icon={PencilEdit01Icon} className="mr-2 size-4" />
                   Edit dashboard
                 </motion.div>
               )}

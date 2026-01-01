@@ -1,12 +1,12 @@
+import { ArrowRight01Icon } from '@hugeicons/core-free-icons';
 import { Link } from '@tanstack/react-router';
-import { ChevronRight } from 'lucide-react';
 import { useTranslation } from '@/hooks/use-translation';
-
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/ui/collapsible';
+import { Icon } from '@/ui/icon';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -42,9 +42,12 @@ export const NavMain = ({ items }: Props) => {
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton tooltip={item.title}>
-                      {item.icon && <item.icon />}
+                      {item.icon && <Icon icon={item.icon} />}
                       <span>{item.title}</span>
-                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      <Icon
+                        className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+                        icon={ArrowRight01Icon}
+                      />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
@@ -68,7 +71,7 @@ export const NavMain = ({ items }: Props) => {
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <Link to={item.url}>
-                  {item.icon && <item.icon />}
+                  {item.icon && <Icon icon={item.icon} />}
                   <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>

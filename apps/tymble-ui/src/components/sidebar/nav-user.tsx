@@ -1,13 +1,13 @@
+import {
+  ArrowUpDownIcon,
+  CheckmarkBadge01Icon,
+  CreditCardIcon,
+  Logout01Icon,
+  Notification01Icon,
+  SparklesIcon,
+} from '@hugeicons/core-free-icons';
 import { IconLanguage } from '@tabler/icons-react';
 import { Link } from '@tanstack/react-router';
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from 'lucide-react';
 import type { Language } from '@/contexts/i18n-context';
 import { useAuth } from '@/hooks/use-auth';
 import { useTranslation } from '@/hooks/use-translation';
@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/ui/dropdown-menu';
+import { Icon } from '@/ui/icon';
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -58,7 +59,7 @@ export function NavUser() {
                 <span className="truncate font-medium">{user?.firstName}</span>
                 <span className="truncate text-xs">{user?.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <Icon className="ml-auto size-4" icon={ArrowUpDownIcon} />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -87,7 +88,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Sparkles />
+                <Icon icon={SparklesIcon} />
                 {t('user.upgradeToPro')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -95,16 +96,16 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link to="/profile">
-                  <BadgeCheck />
+                  <Icon icon={CheckmarkBadge01Icon} />
                   {t('user.account')}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <CreditCard />
+                <Icon icon={CreditCardIcon} />
                 {t('user.billing')}
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Bell />
+                <Icon icon={Notification01Icon} />
                 {t('user.notifications')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -126,7 +127,7 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LogOut />
+              <Icon icon={Logout01Icon} />
               {t('user.logOut')}
             </DropdownMenuItem>
           </DropdownMenuContent>

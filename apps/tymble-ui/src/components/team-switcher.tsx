@@ -1,6 +1,7 @@
 'use client';
 
-import { ChevronsUpDown, Plus } from 'lucide-react';
+import { Add01Icon, ArrowUpDownIcon } from '@hugeicons/core-free-icons';
+import { Icon } from '@/ui/icon';
 import * as React from 'react';
 import { useTranslation } from '@/hooks/use-translation';
 
@@ -53,7 +54,7 @@ export function TeamSwitcher({
                 <span className="truncate font-medium">{activeTeam.name}</span>
                 <span className="truncate text-xs">{activeTeam.plan}</span>
               </div>
-              <ChevronsUpDown className="ml-auto" />
+              <Icon icon={ArrowUpDownIcon} className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -81,7 +82,7 @@ export function TeamSwitcher({
             <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2 p-2">
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                <Plus className="size-4" />
+                <Icon icon={Add01Icon} className="size-4" />
               </div>
               <div className="font-medium text-muted-foreground">
                 {t('sidebar.addTeam')}

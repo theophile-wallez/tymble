@@ -1,4 +1,11 @@
 import {
+  ArrowDown01Icon,
+  ArrowRight01Icon,
+  ArrowUp01Icon,
+  ArrowUpDownIcon,
+} from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import {
   type ColumnDef,
   type ExpandedState,
   flexRender,
@@ -10,7 +17,6 @@ import {
   type SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Fragment, useState } from 'react';
 import {
@@ -34,13 +40,16 @@ type SortIconProps = {
 
 const SortIcon = ({ direction }: SortIconProps) => {
   if (direction === 'asc') {
-    return <ArrowUp className="size-3.5" />;
+    return <HugeiconsIcon className="size-3.5" icon={ArrowUp01Icon} />;
   }
   if (direction === 'desc') {
-    return <ArrowDown className="size-3.5" />;
+    return <HugeiconsIcon className="size-3.5" icon={ArrowDown01Icon} />;
   }
   return (
-    <ArrowUpDown className="size-3.5 opacity-0 transition-opacity group-hover:opacity-50" />
+    <HugeiconsIcon
+      className="size-3.5 opacity-0 transition-opacity group-hover:opacity-50"
+      icon={ArrowUpDownIcon}
+    />
   );
 };
 
@@ -179,11 +188,12 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                 >
                   {props.renderSubComponent && (
                     <TableCell>
-                      <ChevronRight
+                      <HugeiconsIcon
                         className={cn(
                           'size-4 shrink-0 origin-center text-muted-foreground transition-transform ease-out',
                           isExpanded ? 'rotate-90' : undefined
                         )}
+                        icon={ArrowRight01Icon}
                       />
                     </TableCell>
                   )}

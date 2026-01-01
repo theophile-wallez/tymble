@@ -1,6 +1,6 @@
+import { Add01Icon } from '@hugeicons/core-free-icons';
 import { useForm } from '@tanstack/react-form';
 import type { InstrumentType } from '@tymble/schemas';
-import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { type StockSearchResult, searchStocks } from '@/api/portfolios';
@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/ui/dialog';
+import { Icon } from '@/ui/icon';
 import { Input } from '@/ui/input';
 import { Label } from '@/ui/label';
 import {
@@ -97,7 +98,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
       <DialogTrigger asChild>
         <Card className="flex h-full min-h-[180px] cursor-pointer items-center justify-center border-2 border-dashed transition-colors hover:border-primary hover:bg-muted/50">
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
-            <Plus className="size-8" />
+            <Icon className="size-8" icon={Add01Icon} />
             <span className="font-medium">
               {t('manage.addAssetDialog.trigger')}
             </span>
@@ -292,7 +293,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
               onClick={() => setShowCustomForm(true)}
               variant="outline"
             >
-              <Plus className="size-4" />
+              <Icon className="size-4" icon={Add01Icon} />
               {t('manage.addAssetDialog.addCustomAsset')}
             </Button>
           </div>

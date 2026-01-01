@@ -1,6 +1,6 @@
+import { Add01Icon, Briefcase01Icon } from '@hugeicons/core-free-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Briefcase, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import {
@@ -32,6 +32,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/ui/dialog';
+import { Icon } from '@/ui/icon';
 
 export const Route = createFileRoute('/_app/manage/')({
   component: ManagePage,
@@ -91,7 +92,7 @@ function ManagePage() {
       <ContentLayout cy="manage">
         <ContentHeader cy="manage">
           <ContentTitle cy="manage">
-            <Briefcase className="size-4" />
+            <Icon className="size-4" icon={Briefcase01Icon} />
             {t('manage.title')}
           </ContentTitle>
         </ContentHeader>
@@ -109,7 +110,7 @@ function ManagePage() {
     <ContentLayout cy="manage">
       <ContentHeader cy="manage">
         <ContentTitle cy="manage">
-          <Briefcase className="size-4" />
+          <Icon className="size-4" icon={Briefcase01Icon} />
           {t('manage.pageTitle')}
           {portfolios && portfolios.length > 0 && (
             <Badge variant="outline">{portfolios.length}</Badge>
@@ -120,7 +121,7 @@ function ManagePage() {
         <Dialog onOpenChange={setIsCreateDialogOpen} open={isCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button size="sm" variant="outline">
-              <Plus className="size-4" />
+              <Icon className="size-4" icon={Add01Icon} />
               {t('manage.addPortfolio')}
             </Button>
           </DialogTrigger>

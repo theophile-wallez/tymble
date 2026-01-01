@@ -1,11 +1,21 @@
+import {
+  ChartDecreaseIcon,
+  ChartIncreaseIcon,
+} from '@hugeicons/core-free-icons';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { TrendingDown, TrendingUp } from 'lucide-react';
 import { useMemo } from 'react';
 import type { Asset } from '@/api/portfolios';
 import { DataTable } from '@/components/table/data-table';
 import { Badge } from '@/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/ui/card';
+import { Icon } from '@/ui/icon';
 
 type Props = {
   assets: Asset[];
@@ -36,10 +46,13 @@ export const AssetsList = ({ assets }: Props) => {
         header: 'Quantity',
         cell: ({ row }) => (
           <div className="py-2">
-            {Number.parseFloat(row.getValue('quantity')).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 6,
-            })}
+            {Number.parseFloat(row.getValue('quantity')).toLocaleString(
+              undefined,
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 6,
+              }
+            )}
           </div>
         ),
       },
@@ -49,10 +62,13 @@ export const AssetsList = ({ assets }: Props) => {
         cell: ({ row }) => (
           <div className="py-2">
             $
-            {Number.parseFloat(row.getValue('averagePrice')).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {Number.parseFloat(row.getValue('averagePrice')).toLocaleString(
+              undefined,
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }
+            )}
           </div>
         ),
       },
@@ -109,18 +125,24 @@ export const AssetsList = ({ assets }: Props) => {
         <div className="space-y-2">
           {mockTransactions.map((tx) => (
             <div
-              key={tx.id}
               className="flex items-center justify-between rounded-md bg-background p-3"
+              key={tx.id}
             >
               <div className="flex items-center gap-3">
                 {tx.side === 'BUY' ? (
-                  <Badge className="bg-green-500/10 text-green-500" variant="outline">
-                    <TrendingUp className="mr-1 size-3" />
+                  <Badge
+                    className="bg-green-500/10 text-green-500"
+                    variant="outline"
+                  >
+                    <Icon className="mr-1 size-3" icon={ChartIncreaseIcon} />
                     Buy
                   </Badge>
                 ) : (
-                  <Badge className="bg-red-500/10 text-red-500" variant="outline">
-                    <TrendingDown className="mr-1 size-3" />
+                  <Badge
+                    className="bg-red-500/10 text-red-500"
+                    variant="outline"
+                  >
+                    <Icon className="mr-1 size-3" icon={ChartDecreaseIcon} />
                     Sell
                   </Badge>
                 )}

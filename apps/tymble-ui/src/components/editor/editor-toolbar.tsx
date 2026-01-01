@@ -1,15 +1,16 @@
 import { type Editor, useEditorState } from '@tiptap/react';
 import {
-  Bold,
-  Code,
-  Heading1,
-  Heading2,
-  Italic,
-  List,
-  ListOrdered,
-  Quote,
-  Strikethrough,
-} from 'lucide-react';
+  CodeIcon,
+  Heading01Icon,
+  Heading02Icon,
+  LeftToRightBlockQuoteIcon,
+  LeftToRightListBulletIcon,
+  LeftToRightListNumberIcon,
+  TextBoldIcon,
+  TextItalicIcon,
+  TextStrikethroughIcon,
+} from '@hugeicons/core-free-icons';
+import { Icon } from '@/ui/icon';
 import { Toggle } from '@/ui/toggle';
 
 type Props = {
@@ -40,7 +41,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isBold}
         size="sm"
       >
-        <Bold className="size-4" />
+        <Icon icon={TextBoldIcon} className="size-4" />
       </Toggle>
       <Toggle
         aria-label="Toggle italic"
@@ -56,7 +57,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isStrikethrough}
         size="sm"
       >
-        <Strikethrough className="size-4" />
+        <Icon icon={TextStrikethroughIcon} className="size-4" />
       </Toggle>
       <Toggle
         aria-label="Toggle code"
@@ -74,7 +75,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isHeading1}
         size="sm"
       >
-        <Heading1 className="size-4" />
+        <Icon icon={Heading01Icon} className="size-4" />
       </Toggle>
       <Toggle
         aria-label="Toggle heading 2"
@@ -92,7 +93,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isBulletList}
         size="sm"
       >
-        <List className="size-4" />
+        <Icon icon={LeftToRightListBulletIcon} className="size-4" />
       </Toggle>
       <Toggle
         aria-label="Toggle ordered list"
@@ -108,7 +109,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isBlockquote}
         size="sm"
       >
-        <Quote className="size-4" />
+        <Icon icon={LeftToRightBlockQuoteIcon} className="size-4" />
       </Toggle>
     </div>
   );

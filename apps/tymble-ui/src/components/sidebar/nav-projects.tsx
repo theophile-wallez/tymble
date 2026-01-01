@@ -1,15 +1,13 @@
 'use client';
 
-import { Link } from '@tanstack/react-router';
 import {
-  Folder,
-  Forward,
-  type LucideIcon,
-  MoreHorizontal,
-  Trash2,
-} from 'lucide-react';
+  Delete01Icon,
+  Folder01Icon,
+  Forward01Icon,
+  MoreHorizontalIcon,
+} from '@hugeicons/core-free-icons';
+import { Link } from '@tanstack/react-router';
 import { useTranslation } from '@/hooks/use-translation';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/ui/dropdown-menu';
+import { Icon, type IconType } from '@/ui/icon';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -33,7 +32,7 @@ export function NavProjects({
   projects: {
     name: string;
     url: string;
-    icon: LucideIcon;
+    icon: IconType;
   }[];
 }) {
   const { isMobile } = useSidebar();
@@ -47,14 +46,14 @@ export function NavProjects({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <Link to={item.url}>
-                <item.icon />
+                <Icon icon={item.icon} />
                 <span>{item.name}</span>
               </Link>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
+                  <Icon icon={MoreHorizontalIcon} />
                   <span className="sr-only">{t('sidebar.more')}</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
@@ -64,16 +63,19 @@ export function NavProjects({
                 side={isMobile ? 'bottom' : 'right'}
               >
                 <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
+                  <Icon className="text-muted-foreground" icon={Folder01Icon} />
                   <span>{t('sidebar.viewProject')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
+                  <Icon
+                    className="text-muted-foreground"
+                    icon={Forward01Icon}
+                  />
                   <span>{t('sidebar.shareProject')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
+                  <Icon className="text-muted-foreground" icon={Delete01Icon} />
                   <span>{t('sidebar.deleteProject')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -82,7 +84,10 @@ export function NavProjects({
         ))}
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal className="text-sidebar-foreground/70" />
+            <Icon
+              className="text-sidebar-foreground/70"
+              icon={MoreHorizontalIcon}
+            />
             <span>{t('sidebar.more')}</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
