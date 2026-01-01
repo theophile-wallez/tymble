@@ -5,13 +5,7 @@ import YahooFinance from 'yahoo-finance2';
 import type { SeedDatabase } from '../utils/getSeedDatabase.utils';
 import { msciWorldSymbols } from './msci-world-symbols';
 
-const yf = new YahooFinance({
-  cookieJar: {
-    // Persist cookies to avoid re-fetching crumb
-    store: 'file',
-    path: './.yf-cookies.json',
-  },
-});
+const yf = new YahooFinance();
 
 // Rate limiting helper
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -26,8 +20,7 @@ async function withRetry<T>(
     try {
       return await fn();
     } catch (error) {
-      const is429 =
-        error instanceof Error && error.message.includes('429');
+      const is429 = error instanceof Error && error.message.includes('429');
       if (is429 && attempt < maxRetries - 1) {
         const waitTime = baseDelay * 2 ** attempt;
         console.log(`  ⏳ Rate limited, waiting ${waitTime / 1000}s...`);
@@ -144,9 +137,9 @@ export async function seedInstruments(db: SeedDatabase) {
       failed += 1;
     }
 
-    // Rate limiting: wait 1s between requests to avoid hitting Yahoo Finance limits
+    // Rate limiting: wait 2s between requests to avoid hitting Yahoo Finance limits
     if (i < totalSymbols - 1) {
-      await delay(1000);
+      await delay(2000);
     }
   }
 
