@@ -1,7 +1,7 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import type { InstrumentType } from '@tymble/db';
 import * as schema from '@tymble/db';
-import { eq, ilike, or } from 'drizzle-orm';
+import { eq, ilike, inArray, or } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import type { SearchResult } from 'yahoo-finance2/modules/search';
 import { DrizzleAsyncProvider } from '@/drizzle/drizzle.provider';
@@ -11,6 +11,22 @@ import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 
 const MIN_DB_RESULTS = 3;
+const SUGGESTED_SYMBOLS = [
+  'AAPL',
+  'MSFT',
+  'GOOGL',
+  'AMZN',
+  'NVDA',
+  'META',
+  'TSLA',
+  'BRK.B',
+  'JPM',
+  'V',
+  'SPY',
+  'QQQ',
+  'BTC-USD',
+  'ETH-USD',
+];
 
 const QUOTE_TYPE_MAP: Record<string, InstrumentType> = {
   EQUITY: 'stock',
@@ -113,13 +129,48 @@ export class InstrumentService {
     }
   }
 
+  private async getSuggestedInstruments() {
+    const dbResults = await this.db
+      .select()
+      .from(schema.instrumentTable)
+      .where(inArray(schema.instrumentTable.symbol, SUGGESTED_SYMBOLS));
+
+    const bySymbol = new Map(
+      dbResults.map((instrument) => [
+        instrument.symbol.toUpperCase(),
+        instrument,
+      ])
+    );
+
+    return SUGGESTED_SYMBOLS.map((symbol) => {
+      const instrument = bySymbol.get(symbol.toUpperCase());
+      if (!instrument) {
+        return null;
+      }
+      return {
+        symbol: instrument.symbol,
+        name: instrument.name,
+        type: instrument.type,
+        exchange: instrument.exchange,
+        isLocalData: false,
+        metadata: instrument.metadata,
+      };
+    }).filter((quote): quote is NonNullable<typeof quote> => Boolean(quote));
+  }
+
   async searchByName(name: string) {
-    this.logger.log(`Searching for instruments by name: ${name}`);
+    const query = name?.trim() ?? '';
+    if (query.length === 0) {
+      this.logger.log('Returning suggested instruments');
+      return { quotes: await this.getSuggestedInstruments() };
+    }
+
+    this.logger.log(`Searching for instruments by name: ${query}`);
 
     // First, search our database
-    const dbResults = await this.fuzzySearch(name);
+    const dbResults = await this.fuzzySearch(query);
     this.logger.log(
-      `Found ${dbResults.length} results in database for "${name}"`
+      `Found ${dbResults.length} results in database for "${query}"`
     );
 
     // Map DB results to a consistent format
@@ -139,13 +190,13 @@ export class InstrumentService {
     }
 
     // Otherwise, supplement with Yahoo Finance
-    this.logger.log(`Supplementing with Yahoo Finance search for "${name}"`);
+    this.logger.log(`Supplementing with Yahoo Finance search for "${query}"`);
 
     let yfQuotes: SearchResult['quotes'] = [];
     try {
       // TODO: Handle metadata from Yahoo Finance
       // TODO: Use the stock service to search for instruments by symbol
-      const yfRes = await this.yf.search(name, {
+      const yfRes = await this.yf.search(query, {
         enableCb: false,
         lang: 'en-US',
         newsCount: 0,

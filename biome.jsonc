@@ -17,6 +17,9 @@
         "noNamespaceImport": "off",
         "noBarrelFile": "info"
       },
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      },
       "complexity": {
         "noExcessiveCognitiveComplexity": "off"
       }

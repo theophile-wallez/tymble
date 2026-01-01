@@ -125,10 +125,8 @@ function PortfolioDetailPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {/* Add Asset Card - Always first */}
           <AddAssetDialog portfolioId={portfolioId} />
 
-          {/* Asset Cards */}
           {portfolio.assets?.map((asset) => (
             <AssetCard asset={asset} key={asset.id} />
           ))}
