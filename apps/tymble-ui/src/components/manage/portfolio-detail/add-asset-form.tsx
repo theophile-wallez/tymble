@@ -1,6 +1,5 @@
-import { useForm } from '@tanstack/react-form';
 import { Add01Icon, Cancel01Icon } from '@hugeicons/core-free-icons';
-import { Icon } from '@/ui/icon';
+import { useForm } from '@tanstack/react-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { type StockSearchResult, searchStocks } from '@/api/portfolios';
@@ -21,6 +20,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/ui/command';
+import { Icon } from '@/ui/icon';
 import { Input } from '@/ui/input';
 import { Label } from '@/ui/label';
 import { Popover, PopoverAnchor, PopoverContent } from '@/ui/popover';
@@ -141,7 +141,7 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
               </CardDescription>
             </div>
             <Button onClick={cancelCustomForm} size="icon-sm" variant="ghost">
-              <Icon icon={Cancel01Icon} className="size-4" />
+              <Icon className="size-4" icon={Cancel01Icon} />
             </Button>
           </div>
         </CardHeader>
@@ -294,7 +294,7 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
               <CommandList>
                 <CommandGroup>
                   <CommandItem onSelect={openCustomForm}>
-                    <Icon icon={Add01Icon} className="size-4" />
+                    <Icon className="size-4" icon={Add01Icon} />
                     <span>Custom asset</span>
                   </CommandItem>
                 </CommandGroup>
@@ -313,11 +313,11 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
                             <div>
                               <div className="font-medium">{stock.symbol}</div>
                               <div className="text-muted-foreground text-xs">
-                                {stock.shortname || stock.longname}
+                                {stock.name}
                               </div>
                             </div>
                             <span className="text-muted-foreground text-xs">
-                              {stock.exchDisp} • {stock.typeDisp}
+                              {stock.exchange} • {stock.type}
                             </span>
                           </div>
                         </CommandItem>
