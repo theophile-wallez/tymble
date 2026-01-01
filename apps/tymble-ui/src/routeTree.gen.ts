@@ -14,11 +14,10 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppPortfoliosRouteImport } from './routes/_app/portfolios'
-import { Route as AppManageRouteImport } from './routes/_app/manage'
 import { Route as AppDashboardsRouteImport } from './routes/_app/dashboards'
 import { Route as AppAboutRouteImport } from './routes/_app/about'
-import { Route as AppPortfolioPortfolioIdRouteImport } from './routes/_app/portfolio.$portfolioId'
-import { Route as AppManagePortfolioIdRouteImport } from './routes/_app/manage.$portfolioId'
+import { Route as AppManageIndexRouteImport } from './routes/_app/manage/index'
+import { Route as AppManagePortfolioPortfolioIdRouteImport } from './routes/_app/manage/portfolio.$portfolioId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -44,11 +43,6 @@ const AppPortfoliosRoute = AppPortfoliosRouteImport.update({
   path: '/portfolios',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppManageRoute = AppManageRouteImport.update({
-  id: '/manage',
-  path: '/manage',
-  getParentRoute: () => AppRouteRoute,
-} as any)
 const AppDashboardsRoute = AppDashboardsRouteImport.update({
   id: '/dashboards',
   path: '/dashboards',
@@ -59,38 +53,37 @@ const AppAboutRoute = AppAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppPortfolioPortfolioIdRoute = AppPortfolioPortfolioIdRouteImport.update({
-  id: '/portfolio/$portfolioId',
-  path: '/portfolio/$portfolioId',
+const AppManageIndexRoute = AppManageIndexRouteImport.update({
+  id: '/manage/',
+  path: '/manage/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppManagePortfolioIdRoute = AppManagePortfolioIdRouteImport.update({
-  id: '/$portfolioId',
-  path: '/$portfolioId',
-  getParentRoute: () => AppManageRoute,
-} as any)
+const AppManagePortfolioPortfolioIdRoute =
+  AppManagePortfolioPortfolioIdRouteImport.update({
+    id: '/manage/portfolio/$portfolioId',
+    path: '/manage/portfolio/$portfolioId',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
   '/dashboards': typeof AppDashboardsRoute
-  '/manage': typeof AppManageRouteWithChildren
   '/portfolios': typeof AppPortfoliosRoute
   '/profile': typeof AppProfileRoute
   '/': typeof AppIndexRoute
-  '/manage/$portfolioId': typeof AppManagePortfolioIdRoute
-  '/portfolio/$portfolioId': typeof AppPortfolioPortfolioIdRoute
+  '/manage': typeof AppManageIndexRoute
+  '/manage/portfolio/$portfolioId': typeof AppManagePortfolioPortfolioIdRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof AppAboutRoute
   '/dashboards': typeof AppDashboardsRoute
-  '/manage': typeof AppManageRouteWithChildren
   '/portfolios': typeof AppPortfoliosRoute
   '/profile': typeof AppProfileRoute
   '/': typeof AppIndexRoute
-  '/manage/$portfolioId': typeof AppManagePortfolioIdRoute
-  '/portfolio/$portfolioId': typeof AppPortfolioPortfolioIdRoute
+  '/manage': typeof AppManageIndexRoute
+  '/manage/portfolio/$portfolioId': typeof AppManagePortfolioPortfolioIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,12 +91,11 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_app/about': typeof AppAboutRoute
   '/_app/dashboards': typeof AppDashboardsRoute
-  '/_app/manage': typeof AppManageRouteWithChildren
   '/_app/portfolios': typeof AppPortfoliosRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/': typeof AppIndexRoute
-  '/_app/manage/$portfolioId': typeof AppManagePortfolioIdRoute
-  '/_app/portfolio/$portfolioId': typeof AppPortfolioPortfolioIdRoute
+  '/_app/manage/': typeof AppManageIndexRoute
+  '/_app/manage/portfolio/$portfolioId': typeof AppManagePortfolioPortfolioIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,35 +103,32 @@ export interface FileRouteTypes {
     | '/login'
     | '/about'
     | '/dashboards'
-    | '/manage'
     | '/portfolios'
     | '/profile'
     | '/'
-    | '/manage/$portfolioId'
-    | '/portfolio/$portfolioId'
+    | '/manage'
+    | '/manage/portfolio/$portfolioId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/about'
     | '/dashboards'
-    | '/manage'
     | '/portfolios'
     | '/profile'
     | '/'
-    | '/manage/$portfolioId'
-    | '/portfolio/$portfolioId'
+    | '/manage'
+    | '/manage/portfolio/$portfolioId'
   id:
     | '__root__'
     | '/_app'
     | '/login'
     | '/_app/about'
     | '/_app/dashboards'
-    | '/_app/manage'
     | '/_app/portfolios'
     | '/_app/profile'
     | '/_app/'
-    | '/_app/manage/$portfolioId'
-    | '/_app/portfolio/$portfolioId'
+    | '/_app/manage/'
+    | '/_app/manage/portfolio/$portfolioId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,13 +173,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPortfoliosRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/manage': {
-      id: '/_app/manage'
-      path: '/manage'
-      fullPath: '/manage'
-      preLoaderRoute: typeof AppManageRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
     '/_app/dashboards': {
       id: '/_app/dashboards'
       path: '/dashboards'
@@ -205,53 +187,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAboutRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/portfolio/$portfolioId': {
-      id: '/_app/portfolio/$portfolioId'
-      path: '/portfolio/$portfolioId'
-      fullPath: '/portfolio/$portfolioId'
-      preLoaderRoute: typeof AppPortfolioPortfolioIdRouteImport
+    '/_app/manage/': {
+      id: '/_app/manage/'
+      path: '/manage'
+      fullPath: '/manage'
+      preLoaderRoute: typeof AppManageIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/manage/$portfolioId': {
-      id: '/_app/manage/$portfolioId'
-      path: '/$portfolioId'
-      fullPath: '/manage/$portfolioId'
-      preLoaderRoute: typeof AppManagePortfolioIdRouteImport
-      parentRoute: typeof AppManageRoute
+    '/_app/manage/portfolio/$portfolioId': {
+      id: '/_app/manage/portfolio/$portfolioId'
+      path: '/manage/portfolio/$portfolioId'
+      fullPath: '/manage/portfolio/$portfolioId'
+      preLoaderRoute: typeof AppManagePortfolioPortfolioIdRouteImport
+      parentRoute: typeof AppRouteRoute
     }
   }
 }
 
-interface AppManageRouteChildren {
-  AppManagePortfolioIdRoute: typeof AppManagePortfolioIdRoute
-}
-
-const AppManageRouteChildren: AppManageRouteChildren = {
-  AppManagePortfolioIdRoute: AppManagePortfolioIdRoute,
-}
-
-const AppManageRouteWithChildren = AppManageRoute._addFileChildren(
-  AppManageRouteChildren,
-)
-
 interface AppRouteRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
   AppDashboardsRoute: typeof AppDashboardsRoute
-  AppManageRoute: typeof AppManageRouteWithChildren
   AppPortfoliosRoute: typeof AppPortfoliosRoute
   AppProfileRoute: typeof AppProfileRoute
   AppIndexRoute: typeof AppIndexRoute
-  AppPortfolioPortfolioIdRoute: typeof AppPortfolioPortfolioIdRoute
+  AppManageIndexRoute: typeof AppManageIndexRoute
+  AppManagePortfolioPortfolioIdRoute: typeof AppManagePortfolioPortfolioIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAboutRoute: AppAboutRoute,
   AppDashboardsRoute: AppDashboardsRoute,
-  AppManageRoute: AppManageRouteWithChildren,
   AppPortfoliosRoute: AppPortfoliosRoute,
   AppProfileRoute: AppProfileRoute,
   AppIndexRoute: AppIndexRoute,
-  AppPortfolioPortfolioIdRoute: AppPortfolioPortfolioIdRoute,
+  AppManageIndexRoute: AppManageIndexRoute,
+  AppManagePortfolioPortfolioIdRoute: AppManagePortfolioPortfolioIdRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

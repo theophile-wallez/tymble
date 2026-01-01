@@ -33,7 +33,7 @@ import {
   DialogTrigger,
 } from '@/ui/dialog';
 
-export const Route = createFileRoute('/_app/manage')({
+export const Route = createFileRoute('/_app/manage/')({
   component: ManagePage,
 });
 
@@ -71,7 +71,7 @@ function ManagePage() {
 
   const handleRowClick = (portfolio: Portfolio) => {
     navigate({
-      to: '/portfolio/$portfolioId',
+      to: '/manage/portfolio/$portfolioId',
       params: { portfolioId: portfolio.id },
     });
   };
