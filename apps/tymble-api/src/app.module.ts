@@ -8,6 +8,7 @@ import { AssetModule } from './asset/asset.module';
 import { AuthModule } from './auth/auth.module';
 import { DrizzleModule } from './drizzle/drizzle.module';
 import { HttpExceptionFilter } from './http-exception.filter';
+import { InstrumentModule } from './instrument/instrument.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
 import { StocksModule } from './stocks/stockes.module';
 import { TransactionModule } from './transaction/transaction.module';
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
     TransactionModule,
     PortfolioModule,
     AssetModule,
+    InstrumentModule,
     AuthModule,
   ],
   controllers: [AppController],
