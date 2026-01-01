@@ -94,7 +94,9 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
       className={cn('size-full overflow-auto', props.className)}
       style={{ scrollbarGutter: 'stable' }}
     >
-      <Table className={cn(isSpaced && 'border-separate border-spacing-y-2')}>
+      <Table
+        className={cn(isSpaced && 'border-separate [border-spacing:0_8px]')}
+      >
         <TableHeader
           className={cn('sticky top-0 z-10 bg-card', props.className)}
         >
@@ -107,7 +109,10 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
               {headerGroup.headers.map((header) => {
                 const isSorted = header.column.getIsSorted();
                 return (
-                  <TableHead className="text-xs" key={header.id}>
+                  <TableHead
+                    className={cn('text-xs', isSpaced && 'h-2')}
+                    key={header.id}
+                  >
                     {header.isPlaceholder ? null : (
                       <button
                         className={cn(
