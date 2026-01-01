@@ -1,4 +1,5 @@
 import { Add01Icon } from '@hugeicons/core-free-icons';
+import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { type StockSearchResult, searchStocks } from '@/api/portfolios';
@@ -25,11 +26,12 @@ type Props = {
 export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
   const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState<StockSearchResult[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resetRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const suggestionErrorRef = useRef(false);
+  const searchErrorRef = useRef(false);
 
   const resetSearchState = useCallback(() => {
     if (resetRef.current) {
@@ -37,28 +39,12 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
     }
     resetRef.current = setTimeout(() => {
       setSearchQuery('');
-      setSearchResults([]);
+      setDebouncedQuery('');
     }, 300);
   }, []);
 
-  const executeSearch = useCallback(
-    async (query: string) => {
-      setIsSearching(true);
-      try {
-        const result = await searchStocks(query);
-        setSearchResults(result.quotes || []);
-      } catch {
-        toast.error(t('manage.addAssetDialog.searchFailed'));
-        setSearchResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    },
-    [t]
-  );
-
   useEffect(() => {
-    if (searchQuery.length === 0) {
+    if (!dialogOpen) {
       return;
     }
 
@@ -67,11 +53,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
     }
 
     debounceRef.current = setTimeout(() => {
-      if (searchQuery.length >= 2) {
-        executeSearch(searchQuery);
-      } else {
-        setSearchResults([]);
-      }
+      setDebouncedQuery(searchQuery.trim());
     }, DEBOUNCE_MS);
 
     return () => {
@@ -79,7 +61,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
         clearTimeout(debounceRef.current);
       }
     };
-  }, [searchQuery, executeSearch]);
+  }, [searchQuery, dialogOpen]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -95,12 +77,6 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (dialogOpen) {
-      executeSearch('');
-    }
-  }, [dialogOpen, executeSearch]);
-
   useEffect(
     () => () => {
       if (resetRef.current) {
@@ -112,13 +88,6 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
-    if (value.length === 0) {
-      executeSearch('');
-      return;
-    }
-    if (value.length < 2) {
-      setSearchResults([]);
-    }
   };
 
   const addAsset = (stock: StockSearchResult) => {
@@ -134,6 +103,55 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
       resetSearchState();
     }
   };
+
+  const suggestionsQuery = useQuery({
+    queryKey: ['instrument-suggestions'],
+    queryFn: () => searchStocks(''),
+    enabled: dialogOpen && searchQuery.length === 0,
+    retry: false,
+  });
+
+  const searchQueryResult = useQuery({
+    queryKey: ['instrument-search', debouncedQuery],
+    queryFn: () => searchStocks(debouncedQuery),
+    enabled: dialogOpen && debouncedQuery.length >= 2,
+    retry: false,
+  });
+
+  let searchResults: StockSearchResult[] = [];
+  if (searchQuery.length === 0) {
+    searchResults = suggestionsQuery.data?.quotes ?? [];
+  } else if (searchQuery.length >= 2) {
+    searchResults = searchQueryResult.data?.quotes ?? [];
+  }
+
+  const isLoadingSuggestions =
+    searchQuery.length === 0 && suggestionsQuery.isFetching;
+  const isLoadingSearch =
+    searchQuery.length >= 2 && searchQueryResult.isFetching;
+  const isTypingWithoutResults = searchQuery.length > 0 && searchQuery.length < 2;
+
+  useEffect(() => {
+    if (suggestionsQuery.isError) {
+      if (!suggestionErrorRef.current) {
+        toast.error(t('manage.addAssetDialog.searchFailed'));
+        suggestionErrorRef.current = true;
+      }
+      return;
+    }
+    suggestionErrorRef.current = false;
+  }, [suggestionsQuery.isError, t]);
+
+  useEffect(() => {
+    if (searchQueryResult.isError) {
+      if (!searchErrorRef.current) {
+        toast.error(t('manage.addAssetDialog.searchFailed'));
+        searchErrorRef.current = true;
+      }
+      return;
+    }
+    searchErrorRef.current = false;
+  }, [searchQueryResult.isError, t]);
 
   return (
     <>
@@ -169,7 +187,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
           value={searchQuery}
         />
         <CommandList>
-          {isSearching && searchQuery.length === 0 && (
+          {(isLoadingSuggestions || isTypingWithoutResults || isLoadingSearch) && (
             <CommandGroup>
               {Array.from({ length: 5 }).map((_, index) => (
                 <CommandItem disabled key={`suggested-skeleton-${index}`}>
@@ -209,7 +227,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
             ))}
           </CommandGroup>
 
-          {!isSearching &&
+          {!isLoadingSearch &&
             searchQuery.length >= 2 &&
             searchResults.length === 0 && (
               <CommandEmpty>
