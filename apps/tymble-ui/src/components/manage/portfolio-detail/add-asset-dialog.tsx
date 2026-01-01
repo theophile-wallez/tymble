@@ -1,8 +1,10 @@
 import { useForm } from '@tanstack/react-form';
+import type { InstrumentType } from '@tymble/schemas';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { type StockSearchResult, searchStocks } from '@/api/portfolios';
+import { useTranslation } from '@/hooks/use-translation';
 import { AsyncSelect } from '@/ui/async-select';
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
@@ -29,13 +31,14 @@ const INSTRUMENT_TYPES = [
   { value: 'bond', label: 'Bond' },
   { value: 'etf', label: 'ETF' },
   { value: 'crypto', label: 'Crypto' },
-] as const;
+] as const satisfies { value: InstrumentType; label: string }[];
 
 type Props = {
   portfolioId: string;
 };
 
 export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
+  const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedInstrument, setSelectedInstrument] = useState<string>('');
   const [showCustomForm, setShowCustomForm] = useState(false);
@@ -48,9 +51,9 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
       exchange: '',
       currency: '',
     },
-    onSubmit: ({ value }) => {
+    onSubmit: () => {
       // TODO: Implement custom asset creation API call
-      toast.info(`Adding custom asset ${value.symbol} - Coming soon!`);
+      toast.info(t('manage.addAssetDialog.addingCustomAsset'));
       customForm.reset();
       setShowCustomForm(false);
       setDialogOpen(false);
@@ -69,7 +72,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
     setSelectedInstrument(value);
     if (value) {
       // TODO: Implement asset creation API call
-      toast.info(`Adding ${value} to portfolio - Coming soon!`);
+      toast.info(t('manage.addAssetDialog.addingAsset'));
       setSelectedInstrument('');
       setDialogOpen(false);
     }
@@ -95,19 +98,23 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
         <Card className="flex h-full min-h-[180px] cursor-pointer items-center justify-center border-2 border-dashed transition-colors hover:border-primary hover:bg-muted/50">
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
             <Plus className="size-8" />
-            <span className="font-medium">Add Asset</span>
+            <span className="font-medium">
+              {t('manage.addAssetDialog.trigger')}
+            </span>
           </div>
         </Card>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {showCustomForm ? 'Add a custom asset' : 'Add a new asset'}
+            {showCustomForm
+              ? t('manage.addAssetDialog.titleCustom')
+              : t('manage.addAssetDialog.title')}
           </DialogTitle>
           <DialogDescription>
             {showCustomForm
-              ? 'Manually enter the details of your asset.'
-              : 'Search for a stock, ETF, or other instrument to add to your portfolio.'}
+              ? t('manage.addAssetDialog.descriptionCustom')
+              : t('manage.addAssetDialog.description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -122,13 +129,15 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
           >
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="symbol">Symbol *</Label>
+                <Label htmlFor="symbol">
+                  {t('manage.addAssetDialog.symbol')} *
+                </Label>
                 <customForm.Field name="symbol">
                   {(field) => (
                     <Input
                       id="symbol"
                       onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="e.g. AAPL"
+                      placeholder={t('manage.addAssetDialog.symbolPlaceholder')}
                       required
                       value={field.state.value}
                     />
@@ -137,13 +146,15 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="name">
+                  {t('manage.addAssetDialog.name')} *
+                </Label>
                 <customForm.Field name="name">
                   {(field) => (
                     <Input
                       id="name"
                       onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="e.g. Apple Inc."
+                      placeholder={t('manage.addAssetDialog.namePlaceholder')}
                       required
                       value={field.state.value}
                     />
@@ -153,7 +164,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label htmlFor="type">Type *</Label>
+              <Label htmlFor="type">{t('manage.addAssetDialog.type')} *</Label>
               <customForm.Field name="type">
                 {(field) => (
                   <Select
@@ -161,7 +172,9 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
                     value={field.state.value}
                   >
                     <SelectTrigger id="type">
-                      <SelectValue placeholder="Select a type" />
+                      <SelectValue
+                        placeholder={t('manage.addAssetDialog.typePlaceholder')}
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {INSTRUMENT_TYPES.map((type) => (
@@ -177,13 +190,17 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="exchange">Exchange</Label>
+                <Label htmlFor="exchange">
+                  {t('manage.addAssetDialog.exchange')}
+                </Label>
                 <customForm.Field name="exchange">
                   {(field) => (
                     <Input
                       id="exchange"
                       onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="e.g. NASDAQ"
+                      placeholder={t(
+                        'manage.addAssetDialog.exchangePlaceholder'
+                      )}
                       value={field.state.value}
                     />
                   )}
@@ -191,13 +208,17 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label htmlFor="currency">Currency</Label>
+                <Label htmlFor="currency">
+                  {t('manage.addAssetDialog.currency')}
+                </Label>
                 <customForm.Field name="currency">
                   {(field) => (
                     <Input
                       id="currency"
                       onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="e.g. USD"
+                      placeholder={t(
+                        'manage.addAssetDialog.currencyPlaceholder'
+                      )}
                       value={field.state.value}
                     />
                   )}
@@ -211,7 +232,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
                 type="button"
                 variant="outline"
               >
-                Back
+                {t('manage.addAssetDialog.back')}
               </Button>
               <Button
                 disabled={
@@ -221,7 +242,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
                 }
                 type="submit"
               >
-                Add asset
+                {t('manage.addAssetDialog.addAsset')}
               </Button>
             </div>
           </form>
@@ -232,24 +253,24 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
               fetcher={fetchInstruments}
               getDisplayValue={(option) => (
                 <span>
-                  {option.symbol} - {option.shortname || option.longname}
+                  {option.symbol} - {option.name}
                 </span>
               )}
               getOptionValue={(option) => option.symbol}
               label="Instrument"
-              noResultsMessage="No instruments found. Try a different search."
+              noResultsMessage={t('manage.addAssetDialog.noResults')}
               onChange={handleInstrumentSelect}
-              placeholder="Search by symbol or name..."
+              placeholder={t('manage.addAssetDialog.searchPlaceholder')}
               renderOption={(option) => (
                 <div className="flex flex-1 items-center justify-between">
                   <div>
                     <div className="font-medium">{option.symbol}</div>
                     <div className="text-muted-foreground text-xs">
-                      {option.shortname || option.longname}
+                      {option.name}
                     </div>
                   </div>
                   <span className="text-muted-foreground text-xs">
-                    {option.exchDisp} • {option.typeDisp}
+                    {option.exchange} • {option.type}
                   </span>
                 </div>
               )}
@@ -260,7 +281,9 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
 
             <div className="flex items-center gap-2">
               <div className="h-px flex-1 bg-border" />
-              <span className="text-muted-foreground text-xs">or</span>
+              <span className="text-muted-foreground text-xs">
+                {t('manage.addAssetDialog.or')}
+              </span>
               <div className="h-px flex-1 bg-border" />
             </div>
 
@@ -270,7 +293,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
               variant="outline"
             >
               <Plus className="size-4" />
-              Add custom asset
+              {t('manage.addAssetDialog.addCustomAsset')}
             </Button>
           </div>
         )}

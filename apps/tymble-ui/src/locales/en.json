@@ -165,6 +165,32 @@
       "addAsset": "Add asset",
       "edit": "Edit",
       "delete": "Delete"
+    },
+    "addAssetDialog": {
+      "trigger": "Add Asset",
+      "title": "Add a new asset",
+      "titleCustom": "Add a custom asset",
+      "description": "Search for a stock, ETF, or other instrument to add to your portfolio.",
+      "descriptionCustom": "Manually enter the details of your asset.",
+      "searchPlaceholder": "Search by symbol or name...",
+      "noResults": "No instruments found. Try a different search.",
+      "or": "or",
+      "addCustomAsset": "Add custom asset",
+      "symbol": "Symbol",
+      "symbolPlaceholder": "e.g. AAPL",
+      "name": "Name",
+      "namePlaceholder": "e.g. Apple Inc.",
+      "type": "Type",
+      "typePlaceholder": "Select a type",
+      "exchange": "Exchange",
+      "exchangePlaceholder": "e.g. NASDAQ",
+      "currency": "Currency",
+      "currencyPlaceholder": "e.g. USD",
+      "back": "Back",
+      "addAsset": "Add asset",
+      "addingAsset": "Adding to portfolio - Coming soon!",
+      "addingCustomAsset": "Adding custom asset - Coming soon!",
+      "searchFailed": "Failed to search stocks"
     }
   }
 }

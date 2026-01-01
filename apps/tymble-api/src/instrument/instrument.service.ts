@@ -123,14 +123,14 @@ export class InstrumentService {
     );
 
     // Map DB results to a consistent format
+    // TODO: Type this
     const dbQuotes = dbResults.map((instrument) => ({
       symbol: instrument.symbol,
-      shortname: instrument.name,
-      longname: instrument.name,
-      quoteType: instrument.type,
-      exchange: instrument.exchange ?? '',
-      isYahooFinance: false,
-      ...((instrument.metadata as Record<string, unknown>) ?? {}),
+      name: instrument.name,
+      type: instrument.type,
+      exchange: instrument.exchange,
+      isLocalData: false,
+      metadata: instrument.metadata,
     }));
 
     // If we have enough results from DB, return them
@@ -143,6 +143,8 @@ export class InstrumentService {
 
     let yfQuotes: SearchResult['quotes'] = [];
     try {
+      // TODO: Handle metadata from Yahoo Finance
+      // TODO: Use the stock service to search for instruments by symbol
       const yfRes = await this.yf.search(name, {
         enableCb: false,
         lang: 'en-US',
@@ -163,7 +165,7 @@ export class InstrumentService {
       )
       .map((quote) => ({
         ...quote,
-        isYahooFinance: true,
+        isLocalData: true,
       }));
 
     // Combine results, DB first, then Yahoo Finance (excluding duplicates)

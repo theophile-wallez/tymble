@@ -165,6 +165,32 @@
       "addAsset": "Ajouter un actif",
       "edit": "Modifier",
       "delete": "Supprimer"
+    },
+    "addAssetDialog": {
+      "trigger": "Ajouter un actif",
+      "title": "Ajouter un nouvel actif",
+      "titleCustom": "Ajouter un actif personnalisé",
+      "description": "Recherchez une action, un ETF ou un autre instrument à ajouter à votre portefeuille.",
+      "descriptionCustom": "Saisissez manuellement les détails de votre actif.",
+      "searchPlaceholder": "Rechercher par symbole ou nom...",
+      "noResults": "Aucun instrument trouvé. Essayez une autre recherche.",
+      "or": "ou",
+      "addCustomAsset": "Ajouter un actif personnalisé",
+      "symbol": "Symbole",
+      "symbolPlaceholder": "ex. AAPL",
+      "name": "Nom",
+      "namePlaceholder": "ex. Apple Inc.",
+      "type": "Type",
+      "typePlaceholder": "Sélectionnez un type",
+      "exchange": "Place boursière",
+      "exchangePlaceholder": "ex. NASDAQ",
+      "currency": "Devise",
+      "currencyPlaceholder": "ex. USD",
+      "back": "Retour",
+      "addAsset": "Ajouter l'actif",
+      "addingAsset": "Ajout au portefeuille - Bientôt disponible !",
+      "addingCustomAsset": "Ajout de l'actif personnalisé - Bientôt disponible !",
+      "searchFailed": "Échec de la recherche d'actions"
     }
   }
 }

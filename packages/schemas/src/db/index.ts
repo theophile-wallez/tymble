@@ -3,6 +3,18 @@
  * This allows consumers to only depend on @tymble/schemas
  */
 
+// Database types (with Date objects)
+export type {
+  AssetInsert,
+  AssetSelect,
+  AssetUpdate,
+  InstrumentInsert,
+  InstrumentSelect,
+  InstrumentUpdate,
+  PortfolioInsert,
+  PortfolioSelect,
+  PortfolioUpdate,
+} from '@tymble/db';
 // Schemas
 export {
   assetInsertSchema,
@@ -17,19 +29,6 @@ export {
   portfolioSelectSchema,
   portfoliosTable,
   portfolioUpdateSchema,
-} from '@tymble/db';
-
-// Database types (with Date objects)
-export type {
-  AssetInsert,
-  AssetSelect,
-  AssetUpdate,
-  InstrumentInsert,
-  InstrumentSelect,
-  InstrumentUpdate,
-  PortfolioInsert,
-  PortfolioSelect,
-  PortfolioUpdate,
 } from '@tymble/db';
 
 /**

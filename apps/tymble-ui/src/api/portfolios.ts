@@ -29,12 +29,14 @@ export const deletePortfolio = (id: string) =>
   });
 
 // Stock search
+// TODO: Use shared types from @tymble/schemas
 export type StockSearchResult = {
   symbol: string;
-  shortname: string;
-  longname: string;
-  exchDisp: string;
-  typeDisp: string;
+  name: string;
+  type: string;
+  exchange: string;
+  isLocalData: boolean;
+  metadata: unknown;
 };
 
 export const searchStocks = (name: string) =>

@@ -114,7 +114,7 @@ export class StocksService {
         symbol: instrument.symbol,
         shortname: instrument.name,
         longname: instrument.name,
-        quoteType: instrument.type?.toUpperCase() ?? 'EQUITY',
+        quoteType: instrument.type?.toUpperCase() ?? 'unknown',
         exchange: instrument.exchange ?? '',
         isYahooFinance: false,
         // Include metadata for additional info
