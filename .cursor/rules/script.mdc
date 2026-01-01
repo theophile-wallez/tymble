@@ -1,0 +1,28 @@
+---
+alwaysApply: false
+---
+
+# Overview
+
+Insert overview text here. The agent will only see this should they choose to apply the rule.
+
+## Script
+
+When writing a script, follow these steps:
+
+1. Create a new file in the `scripts` directory.
+2. Write the script in the file.
+3. Export the script.
+
+## Execution
+
+When executing a script, follow these steps:
+
+1. Run the script using `bun run scripts/<script-name>.ts`.
+2. If the script requires arguments, pass them as follows: `bun run scripts/<script-name>.ts <arguments>`.
+3. If the script requires environment variables, set them as follows: `export <variable-name>=<value> && bun run scripts/<script-name>.ts`.
+4. If the script requires input from the user, prompt the user for input.
+5. If the script requires output to the user, print the output to the console.
+6. If the script requires output to a file, write the output to a file.
+7. If the script requires output to a database, write the output to a database.
+8. If the script requires output to a web service, write the output to a web service.

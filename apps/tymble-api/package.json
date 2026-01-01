@@ -23,6 +23,7 @@
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
     "db:seed": "bun run src/drizzle/seed/index.ts",
+    "db:seed:instruments": "bun run src/drizzle/seed/instruments/run.ts",
     "env:init": "[ -f .env ] || cp .env.sample .env"
   },
   "dependencies": {
