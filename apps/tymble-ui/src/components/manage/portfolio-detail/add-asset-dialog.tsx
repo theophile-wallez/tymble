@@ -1,19 +1,11 @@
 import { useForm } from '@tanstack/react-form';
 import { Plus } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { type StockSearchResult, searchStocks } from '@/api/portfolios';
+import { AsyncSelect } from '@/ui/async-select';
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from '@/ui/command';
 import {
   Dialog,
   DialogContent,
@@ -24,7 +16,6 @@ import {
 } from '@/ui/dialog';
 import { Input } from '@/ui/input';
 import { Label } from '@/ui/label';
-import { Popover, PopoverAnchor, PopoverContent } from '@/ui/popover';
 import {
   Select,
   SelectContent,
@@ -40,20 +31,14 @@ const INSTRUMENT_TYPES = [
   { value: 'crypto', label: 'Crypto' },
 ] as const;
 
-const DEBOUNCE_MS = 300;
-
 type Props = {
   portfolioId: string;
 };
 
 export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [popoverOpen, setPopoverOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState<StockSearchResult[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedInstrument, setSelectedInstrument] = useState<string>('');
   const [showCustomForm, setShowCustomForm] = useState(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const customForm = useForm({
     defaultValues: {
@@ -72,60 +57,22 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
     },
   });
 
-  const executeSearch = useCallback(async (query: string) => {
-    if (query.length < 2) {
-      setSearchResults([]);
-      return;
+  const fetchInstruments = async (query?: string) => {
+    if (!query || query.length < 2) {
+      return [];
     }
-
-    setIsSearching(true);
-    try {
-      const result = await searchStocks(query);
-      setSearchResults(result.quotes || []);
-    } catch {
-      toast.error('Failed to search stocks');
-      setSearchResults([]);
-    } finally {
-      setIsSearching(false);
-    }
-  }, []);
-
-  // Debounced search effect
-  useEffect(() => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-
-    debounceRef.current = setTimeout(() => {
-      executeSearch(searchQuery);
-    }, DEBOUNCE_MS);
-
-    return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
-    };
-  }, [searchQuery, executeSearch]);
-
-  const handleSearchChange = (value: string) => {
-    setSearchQuery(value);
-    if (value.length < 2) {
-      setSearchResults([]);
-    }
+    const result = await searchStocks(query);
+    return result.quotes || [];
   };
 
-  const addAsset = (stock: StockSearchResult) => {
-    // TODO: Implement asset creation API call
-    toast.info(`Adding ${stock.symbol} to portfolio - Coming soon!`);
-    setSearchQuery('');
-    setSearchResults([]);
-    setPopoverOpen(false);
-    setDialogOpen(false);
-  };
-
-  const openCustomForm = () => {
-    setPopoverOpen(false);
-    setShowCustomForm(true);
+  const handleInstrumentSelect = (value: string) => {
+    setSelectedInstrument(value);
+    if (value) {
+      // TODO: Implement asset creation API call
+      toast.info(`Adding ${value} to portfolio - Coming soon!`);
+      setSelectedInstrument('');
+      setDialogOpen(false);
+    }
   };
 
   const cancelCustomForm = () => {
@@ -136,10 +83,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
   const handleDialogChange = (open: boolean) => {
     setDialogOpen(open);
     if (!open) {
-      // Reset state when dialog closes
-      setSearchQuery('');
-      setSearchResults([]);
-      setPopoverOpen(false);
+      setSelectedInstrument('');
       setShowCustomForm(false);
       customForm.reset();
     }
@@ -262,7 +206,11 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
             </div>
 
             <div className="flex justify-end gap-2 pt-2">
-              <Button onClick={cancelCustomForm} type="button" variant="outline">
+              <Button
+                onClick={cancelCustomForm}
+                type="button"
+                variant="outline"
+              >
                 Back
               </Button>
               <Button
@@ -278,70 +226,53 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
             </div>
           </form>
         ) : (
-          <Popover onOpenChange={setPopoverOpen} open={popoverOpen}>
-            <PopoverAnchor asChild>
-              <Command className="rounded-md border" shouldFilter={false}>
-                <CommandInput
-                  onFocus={() => setPopoverOpen(true)}
-                  onValueChange={handleSearchChange}
-                  placeholder="Search by symbol or name..."
-                  value={searchQuery}
-                />
-              </Command>
-            </PopoverAnchor>
-            <PopoverContent
-              align="start"
-              className="w-[--radix-popover-trigger-width] p-0"
-              onOpenAutoFocus={(e) => e.preventDefault()}
-              sideOffset={0}
+          <div className="flex flex-col gap-4">
+            <AsyncSelect<StockSearchResult>
+              clearable={false}
+              fetcher={fetchInstruments}
+              getDisplayValue={(option) => (
+                <span>
+                  {option.symbol} - {option.shortname || option.longname}
+                </span>
+              )}
+              getOptionValue={(option) => option.symbol}
+              label="Instrument"
+              noResultsMessage="No instruments found. Try a different search."
+              onChange={handleInstrumentSelect}
+              placeholder="Search by symbol or name..."
+              renderOption={(option) => (
+                <div className="flex flex-1 items-center justify-between">
+                  <div>
+                    <div className="font-medium">{option.symbol}</div>
+                    <div className="text-muted-foreground text-xs">
+                      {option.shortname || option.longname}
+                    </div>
+                  </div>
+                  <span className="text-muted-foreground text-xs">
+                    {option.exchDisp} • {option.typeDisp}
+                  </span>
+                </div>
+              )}
+              triggerClassName="w-full"
+              value={selectedInstrument}
+              width="100%"
+            />
+
+            <div className="flex items-center gap-2">
+              <div className="h-px flex-1 bg-border" />
+              <span className="text-muted-foreground text-xs">or</span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+
+            <Button
+              className="w-full"
+              onClick={() => setShowCustomForm(true)}
+              variant="outline"
             >
-              <Command shouldFilter={false}>
-                <CommandList>
-                  <CommandGroup>
-                    <CommandItem onSelect={openCustomForm}>
-                      <Plus className="size-4" />
-                      <span>Custom asset</span>
-                    </CommandItem>
-                  </CommandGroup>
-
-                  {searchResults.length > 0 && (
-                    <>
-                      <CommandSeparator />
-                      <CommandGroup heading="Search results">
-                        {searchResults.map((stock) => (
-                          <CommandItem
-                            key={stock.symbol}
-                            onSelect={() => addAsset(stock)}
-                            value={stock.symbol}
-                          >
-                            <div className="flex flex-1 items-center justify-between">
-                              <div>
-                                <div className="font-medium">{stock.symbol}</div>
-                                <div className="text-muted-foreground text-xs">
-                                  {stock.shortname || stock.longname}
-                                </div>
-                              </div>
-                              <span className="text-muted-foreground text-xs">
-                                {stock.exchDisp} • {stock.typeDisp}
-                              </span>
-                            </div>
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </>
-                  )}
-
-                  {isSearching && <CommandEmpty>Searching...</CommandEmpty>}
-
-                  {!isSearching &&
-                    searchQuery.length >= 2 &&
-                    searchResults.length === 0 && (
-                      <CommandEmpty>No results found.</CommandEmpty>
-                    )}
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
+              <Plus className="size-4" />
+              Add custom asset
+            </Button>
+          </div>
         )}
       </DialogContent>
     </Dialog>
