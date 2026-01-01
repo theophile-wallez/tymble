@@ -10,17 +10,34 @@ import {
 
 /**
  * Metadata schema for an instrument, typically populated from Yahoo Finance.
+ * Uses passthrough() to allow additional Yahoo Finance fields beyond the core ones.
  */
-export const instrumentMetadataSchema = z.object({
-  source: z.enum(['yahoo', 'manual']),
-  sector: z.string().optional(),
-  industry: z.string().optional(),
-  country: z.string().optional(),
-  website: z.url().optional(),
-  logoUrl: z.url().optional(),
-  marketCap: z.number().optional(),
-  lastSyncedAt: z.iso.datetime().optional(),
-});
+export const instrumentMetadataSchema = z
+  .object({
+    source: z.enum(['yahoo', 'manual']),
+    lastSyncedAt: z.string().optional(),
+    // Core fields
+    sector: z.string().optional(),
+    industry: z.string().optional(),
+    country: z.string().optional(),
+    website: z.string().optional(),
+    logoUrl: z.string().optional(),
+    marketCap: z.number().optional(),
+    // Financial metrics
+    trailingPE: z.number().optional(),
+    forwardPE: z.number().optional(),
+    dividendYield: z.number().optional(),
+    beta: z.number().optional(),
+    fiftyTwoWeekHigh: z.number().optional(),
+    fiftyTwoWeekLow: z.number().optional(),
+    averageVolume: z.number().optional(),
+    // Company info
+    fullTimeEmployees: z.number().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    longBusinessSummary: z.string().optional(),
+  })
+  .loose(); // Allow additional Yahoo Finance fields
 
 export type InstrumentMetadata = z.infer<typeof instrumentMetadataSchema>;
 

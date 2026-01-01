@@ -41,7 +41,7 @@ export class InstrumentController {
 
   @Get('search')
   search(@Query('q') query: string) {
-    return this.instrumentService.fuzzySearch(query);
+    return this.instrumentService.searchByName(query);
   }
 
   @Get(':id')

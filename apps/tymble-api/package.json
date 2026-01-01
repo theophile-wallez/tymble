@@ -24,6 +24,8 @@
     "db:migrate": "npx drizzle-kit migrate",
     "db:seed": "bun run src/drizzle/seed/index.ts",
     "db:seed:instruments": "bun run src/drizzle/seed/instruments/run.ts",
+    "db:seed:instruments:py": "python src/drizzle/seed/instruments/seed_instruments.py",
+    "db:seed:instruments:py:static": "python src/drizzle/seed/instruments/seed_instruments.py --static",
     "env:init": "[ -f .env ] || cp .env.sample .env"
   },
   "dependencies": {

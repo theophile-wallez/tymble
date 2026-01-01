@@ -39,5 +39,5 @@ export type StockSearchResult = {
 
 export const searchStocks = (name: string) =>
   apiRequest<{ quotes: StockSearchResult[] }>(
-    `/stocks/search?name=${encodeURIComponent(name)}`
+    `/instrument/search?q=${encodeURIComponent(name)}`
   );

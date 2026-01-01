@@ -3,15 +3,20 @@ import type { ChartOptions } from 'yahoo-finance2/modules/chart';
 import { PredefinedScreenerModules } from 'yahoo-finance2/modules/screener';
 import type { SearchResult } from 'yahoo-finance2/modules/search';
 import { TymbleException } from '@/errors/tymble.exception';
+import { InstrumentService } from '@/instrument/instrument.service';
 import type { YahooFinanceType } from './yahoo-finance.provider';
 
 const HOST_REGEX = /^www\./;
+const MIN_DB_RESULTS = 3;
 
 @Injectable()
 export class StocksService {
   private readonly logger = new Logger(StocksService.name);
 
-  constructor(@Inject('YAHOO_FINANCE') private readonly yf: YahooFinanceType) {}
+  constructor(
+    @Inject('YAHOO_FINANCE') private readonly yf: YahooFinanceType,
+    private readonly instrumentService: InstrumentService
+  ) {}
 
   async getQuote(ticker: string) {
     return await this.yf.quote(ticker);
@@ -98,14 +103,56 @@ export class StocksService {
 
   async searchTickersByName(name: string) {
     try {
-      const res = await this.yf.search(name, {
+      // First, search our database
+      const dbResults = await this.instrumentService.fuzzySearch(name);
+      this.logger.log(
+        `Found ${dbResults.length} results in database for "${name}"`
+      );
+
+      // Map DB results to match Yahoo Finance quote format
+      const dbQuotes = dbResults.map((instrument) => ({
+        symbol: instrument.symbol,
+        shortname: instrument.name,
+        longname: instrument.name,
+        quoteType: instrument.type?.toUpperCase() ?? 'EQUITY',
+        exchange: instrument.exchange ?? '',
+        isYahooFinance: false,
+        // Include metadata for additional info
+        ...((instrument.metadata as Record<string, unknown>) ?? {}),
+      }));
+
+      // If we have enough results from DB, return them
+      if (dbResults.length >= MIN_DB_RESULTS) {
+        return { quotes: dbQuotes };
+      }
+
+      // Otherwise, supplement with Yahoo Finance
+      this.logger.log(`Supplementing with Yahoo Finance search for "${name}"`);
+      const yfRes = await this.yf.search(name, {
         enableCb: false,
         lang: 'en-US',
         newsCount: 0,
         enableFuzzyQuery: true,
       });
-      const quotes: SearchResult['quotes'] = res?.quotes ?? [];
-      return { quotes };
+      const yfQuotes: SearchResult['quotes'] = yfRes?.quotes ?? [];
+
+      // Filter for quotes with symbols and mark as Yahoo Finance results
+      const quotesWithSymbol = yfQuotes.filter(
+        (quote): quote is typeof quote & { symbol: string } =>
+          'symbol' in quote && typeof quote.symbol === 'string'
+      );
+      const markedYfQuotes = quotesWithSymbol.map((quote) => ({
+        ...quote,
+        isYahooFinance: true,
+      }));
+
+      // Combine results, DB first, then Yahoo Finance (excluding duplicates)
+      const dbSymbols = new Set(dbQuotes.map((q) => q.symbol.toUpperCase()));
+      const uniqueYfQuotes = markedYfQuotes.filter(
+        (q) => !dbSymbols.has(q.symbol.toUpperCase())
+      );
+
+      return { quotes: [...dbQuotes, ...uniqueYfQuotes] };
     } catch (error) {
       throw new TymbleException(
         this.logger,
