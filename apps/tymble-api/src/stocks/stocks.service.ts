@@ -2,6 +2,7 @@ import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import type { ChartOptions } from 'yahoo-finance2/modules/chart';
 import { PredefinedScreenerModules } from 'yahoo-finance2/modules/screener';
 import type { SearchResult } from 'yahoo-finance2/modules/search';
+import { TymbleException } from '@/errors/tymble.exception';
 import type { YahooFinanceType } from './yahoo-finance.provider';
 
 const HOST_REGEX = /^www\./;
@@ -96,13 +97,22 @@ export class StocksService {
   }
 
   async searchTickersByName(name: string) {
-    const res = await this.yf.search(name, {
-      enableCb: false,
-      lang: 'en-US',
-      newsCount: 0,
-      enableFuzzyQuery: true,
-    });
-    const quotes: SearchResult['quotes'] = res?.quotes ?? [];
-    return quotes;
+    try {
+      const res = await this.yf.search(name, {
+        enableCb: false,
+        lang: 'en-US',
+        newsCount: 0,
+        enableFuzzyQuery: true,
+      });
+      const quotes: SearchResult['quotes'] = res?.quotes ?? [];
+      return { quotes };
+    } catch (error) {
+      throw new TymbleException(
+        this.logger,
+        `Error searching tickers by name ${name}`,
+        500,
+        error
+      );
+    }
   }
 }

@@ -1,47 +1,74 @@
 import { useForm } from '@tanstack/react-form';
-import { Search } from 'lucide-react';
-import { useState } from 'react';
+import { Plus, X } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { searchStocks, type StockSearchResult } from '@/api/portfolios';
+import { type StockSearchResult, searchStocks } from '@/api/portfolios';
 import { Button } from '@/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/ui/card';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from '@/ui/command';
 import { Input } from '@/ui/input';
 import { Label } from '@/ui/label';
+import { Popover, PopoverAnchor, PopoverContent } from '@/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/ui/select';
+
+const INSTRUMENT_TYPES = [
+  { value: 'stock', label: 'Stock' },
+  { value: 'bond', label: 'Bond' },
+  { value: 'etf', label: 'ETF' },
+  { value: 'crypto', label: 'Crypto' },
+] as const;
+
+const DEBOUNCE_MS = 300;
 
 type Props = {
   portfolioId: string;
 };
 
 export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
+  const [open, setOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<StockSearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [selectedStock, setSelectedStock] = useState<StockSearchResult | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showCustomForm, setShowCustomForm] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const form = useForm({
+  const customForm = useForm({
     defaultValues: {
-      search: '',
-      quantity: '',
-      price: '',
+      symbol: '',
+      name: '',
+      type: '',
+      exchange: '',
+      currency: '',
     },
     onSubmit: ({ value }) => {
-      if (!selectedStock) {
-        toast.error('Please select a stock first');
-        return;
-      }
-
-      // TODO: Implement asset creation
-      toast.info(
-        `Adding ${value.quantity} shares of ${selectedStock.symbol} at $${value.price} - Coming soon!`
-      );
-
-      // Reset form
-      setSelectedStock(null);
-      setSearchResults([]);
-      form.reset();
+      // TODO: Implement custom asset creation API call
+      toast.info(`Adding custom asset ${value.symbol} - Coming soon!`);
+      customForm.reset();
+      setShowCustomForm(false);
     },
   });
 
-  const handleSearch = async (query: string) => {
+  const executeSearch = useCallback(async (query: string) => {
     if (query.length < 2) {
       setSearchResults([]);
       return;
@@ -57,13 +84,184 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
     } finally {
       setIsSearching(false);
     }
+  }, []);
+
+  // Debounced search effect
+  useEffect(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      executeSearch(searchQuery);
+    }, DEBOUNCE_MS);
+
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, [searchQuery, executeSearch]);
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    if (value.length < 2) {
+      setSearchResults([]);
+    }
   };
 
-  const selectStock = (stock: StockSearchResult) => {
-    setSelectedStock(stock);
+  const addAsset = (stock: StockSearchResult) => {
+    // TODO: Implement asset creation API call
+    toast.info(`Adding ${stock.symbol} to portfolio - Coming soon!`);
+    setSearchQuery('');
     setSearchResults([]);
-    form.setFieldValue('search', stock.symbol);
+    setOpen(false);
   };
+
+  const openCustomForm = () => {
+    setOpen(false);
+    setShowCustomForm(true);
+  };
+
+  const cancelCustomForm = () => {
+    setShowCustomForm(false);
+    customForm.reset();
+  };
+
+  if (showCustomForm) {
+    return (
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Add a custom asset</CardTitle>
+              <CardDescription>
+                Manually enter the details of your asset.
+              </CardDescription>
+            </div>
+            <Button onClick={cancelCustomForm} size="icon-sm" variant="ghost">
+              <X className="size-4" />
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              customForm.handleSubmit();
+            }}
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="symbol">Symbol *</Label>
+                <customForm.Field name="symbol">
+                  {(field) => (
+                    <Input
+                      id="symbol"
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="e.g. AAPL"
+                      required
+                      value={field.state.value}
+                    />
+                  )}
+                </customForm.Field>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="name">Name *</Label>
+                <customForm.Field name="name">
+                  {(field) => (
+                    <Input
+                      id="name"
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="e.g. Apple Inc."
+                      required
+                      value={field.state.value}
+                    />
+                  )}
+                </customForm.Field>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="type">Type *</Label>
+              <customForm.Field name="type">
+                {(field) => (
+                  <Select
+                    onValueChange={(value) => field.handleChange(value)}
+                    value={field.state.value}
+                  >
+                    <SelectTrigger id="type">
+                      <SelectValue placeholder="Select a type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {INSTRUMENT_TYPES.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </customForm.Field>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="exchange">Exchange</Label>
+                <customForm.Field name="exchange">
+                  {(field) => (
+                    <Input
+                      id="exchange"
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="e.g. NASDAQ"
+                      value={field.state.value}
+                    />
+                  )}
+                </customForm.Field>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="currency">Currency</Label>
+                <customForm.Field name="currency">
+                  {(field) => (
+                    <Input
+                      id="currency"
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="e.g. USD"
+                      value={field.state.value}
+                    />
+                  )}
+                </customForm.Field>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2">
+              <Button
+                onClick={cancelCustomForm}
+                type="button"
+                variant="outline"
+              >
+                Cancel
+              </Button>
+              <Button
+                disabled={
+                  customForm.state.values.symbol === '' ||
+                  customForm.state.values.name === '' ||
+                  customForm.state.values.type === ''
+                }
+                type="submit"
+              >
+                Add asset
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -74,130 +272,70 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            form.handleSubmit();
-          }}
-          className="flex flex-col gap-4"
-        >
-          {/* Stock Search */}
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="search">Search instrument</Label>
-            <div className="relative">
-              <form.Field name="search">
-                {(field) => (
-                  <>
-                    <div className="relative">
-                      <Search className="-translate-y-1/2 absolute top-1/2 left-3 size-4 text-muted-foreground" />
-                      <Input
-                        id="search"
-                        className="pl-9"
-                        placeholder="Search by symbol or name..."
-                        value={field.state.value}
-                        onChange={(e) => {
-                          field.handleChange(e.target.value);
-                          handleSearch(e.target.value);
-                          if (selectedStock && e.target.value !== selectedStock.symbol) {
-                            setSelectedStock(null);
-                          }
-                        }}
-                      />
-                    </div>
+        <Popover onOpenChange={setOpen} open={open}>
+          <PopoverAnchor asChild>
+            <Command className="rounded-md border" shouldFilter={false}>
+              <CommandInput
+                onFocus={() => setOpen(true)}
+                onValueChange={handleSearchChange}
+                placeholder="Search by symbol or name..."
+                value={searchQuery}
+              />
+            </Command>
+          </PopoverAnchor>
+          <PopoverContent
+            align="start"
+            className="w-[--radix-popover-trigger-width] p-0"
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            sideOffset={0}
+          >
+            <Command shouldFilter={false}>
+              <CommandList>
+                <CommandGroup>
+                  <CommandItem onSelect={openCustomForm}>
+                    <Plus className="size-4" />
+                    <span>Custom asset</span>
+                  </CommandItem>
+                </CommandGroup>
 
-                    {/* Search Results Dropdown */}
-                    {searchResults.length > 0 && !selectedStock && (
-                      <div className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-popover p-1 shadow-md">
-                        {searchResults.map((stock) => (
-                          <button
-                            key={stock.symbol}
-                            type="button"
-                            className="flex w-full cursor-pointer items-center justify-between rounded-sm px-3 py-2 text-left hover:bg-accent"
-                            onClick={() => selectStock(stock)}
-                          >
+                {searchResults.length > 0 && (
+                  <>
+                    <CommandSeparator />
+                    <CommandGroup heading="Search results">
+                      {searchResults.map((stock) => (
+                        <CommandItem
+                          key={stock.symbol}
+                          onSelect={() => addAsset(stock)}
+                          value={stock.symbol}
+                        >
+                          <div className="flex flex-1 items-center justify-between">
                             <div>
                               <div className="font-medium">{stock.symbol}</div>
-                              <div className="text-muted-foreground text-sm">
+                              <div className="text-muted-foreground text-xs">
                                 {stock.shortname || stock.longname}
                               </div>
                             </div>
-                            <div className="text-muted-foreground text-xs">
+                            <span className="text-muted-foreground text-xs">
                               {stock.exchDisp} • {stock.typeDisp}
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                            </span>
+                          </div>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
                   </>
                 )}
-              </form.Field>
 
-              {isSearching && (
-                <div className="-translate-y-1/2 absolute top-1/2 right-3">
-                  <div className="size-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                </div>
-              )}
-            </div>
+                {isSearching && <CommandEmpty>Searching...</CommandEmpty>}
 
-            {selectedStock && (
-              <div className="flex items-center gap-2 rounded-md bg-muted/50 p-2 text-sm">
-                <span className="font-medium">{selectedStock.symbol}</span>
-                <span className="text-muted-foreground">
-                  {selectedStock.shortname || selectedStock.longname}
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* Quantity and Price */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="quantity">Quantity</Label>
-              <form.Field name="quantity">
-                {(field) => (
-                  <Input
-                    id="quantity"
-                    type="number"
-                    step="0.000001"
-                    placeholder="0.00"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                )}
-              </form.Field>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="price">Average price</Label>
-              <form.Field name="price">
-                {(field) => (
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    placeholder="0.00"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                )}
-              </form.Field>
-            </div>
-          </div>
-
-          <div className="flex justify-end">
-            <Button
-              type="submit"
-              disabled={
-                selectedStock === null ||
-                form.state.values.quantity === '' ||
-                form.state.values.price === ''
-              }
-            >
-              Add asset
-            </Button>
-          </div>
-        </form>
+                {!isSearching &&
+                  searchQuery.length >= 2 &&
+                  searchResults.length === 0 && (
+                    <CommandEmpty>No results found.</CommandEmpty>
+                  )}
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
       </CardContent>
     </Card>
   );

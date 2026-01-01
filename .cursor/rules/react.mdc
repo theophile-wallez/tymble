@@ -25,6 +25,21 @@ When defining props for a component, follow these steps:
 2. Only export the props if needed.
 3. Name the props type "Props" if it's not exported.
 
+## Component
+
+Use shadcn/ui components whenever possible, if the component is not available, add it using the associated `npx shadcn@latest add <component>` command.
+For example, to add a button, you can use the following command:
+
+```bash
+npx shadcn@latest add button
+```
+
+This will add the button component to the `components` directory and import it into the file where it is used. Do not overwrite existing components, only add new ones.
+
+## Icons
+
+Use Lucide React for icons.
+
 ## Language
 
 When writing code, you should not write any text directly in the code, you should use the `useTranslation` hook to get the text.
