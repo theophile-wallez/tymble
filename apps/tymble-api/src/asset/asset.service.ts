@@ -17,19 +17,43 @@ export class AssetService {
 
   async create(createAssetDto: CreateAssetDto) {
     try {
+      const instrumentId =
+        'instrumentId' in createAssetDto
+          ? createAssetDto.instrumentId
+          : undefined;
+      const instrumentDto =
+        'instrument' in createAssetDto ? createAssetDto.instrument : undefined;
+
       this.logger.log(
-        `Creating asset for portfolioId: "${createAssetDto.portfolioId}" with symbol: "${createAssetDto.instrumentSymbol}"`
+        `Creating asset for portfolioId: "${createAssetDto.portfolioId}"`
       );
 
-      const instrument = await this.db.query.instrumentTable.findFirst({
-        where: eq(schema.instrumentTable.symbol, createAssetDto.instrumentSymbol),
-      });
+      let resolvedInstrumentId = instrumentId ?? null;
 
-      if (!instrument) {
+      if (!resolvedInstrumentId && instrumentDto) {
+        const existingInstrument = await this.db.query.instrumentTable.findFirst(
+          {
+            where: eq(schema.instrumentTable.symbol, instrumentDto.symbol),
+          }
+        );
+
+        if (existingInstrument) {
+          resolvedInstrumentId = existingInstrument.id;
+        } else {
+          const insertedInstrument = await this.db
+            .insert(schema.instrumentTable)
+            .values(instrumentDto)
+            .returning();
+
+          resolvedInstrumentId = insertedInstrument[0]?.id ?? null;
+        }
+      }
+
+      if (!resolvedInstrumentId) {
         throw new TymbleException(
           this.logger,
-          `Instrument with symbol "${createAssetDto.instrumentSymbol}" not found`,
-          HttpStatus.NOT_FOUND
+          'Missing instrument identifier or instrument payload',
+          HttpStatus.BAD_REQUEST
         );
       }
 
@@ -37,7 +61,7 @@ export class AssetService {
         .insert(schema.assetsTable)
         .values({
           portfolioId: createAssetDto.portfolioId,
-          instrumentId: instrument.id,
+          instrumentId: resolvedInstrumentId,
           quantity: createAssetDto.quantity ?? '0',
           averagePrice: createAssetDto.averagePrice ?? '0',
           fee: createAssetDto.fee ?? '0',

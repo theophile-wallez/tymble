@@ -108,9 +108,16 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
   });
 
   const addAsset = (stock: StockSearchResult) => {
+    const instrumentPayload = {
+      symbol: stock.symbol,
+      name: stock.name,
+      type: stock.type,
+      exchange: stock.exchange || undefined,
+    };
+
     createAssetMutation.mutate({
       portfolioId,
-      instrumentSymbol: stock.symbol,
+      instrument: instrumentPayload,
     });
   };
 
