@@ -35,7 +35,7 @@ function PortfolioDetailPage() {
       <ContentLayout cy="portfolio-detail">
         <ContentHeader cy="portfolio-detail">
           <ContentTitle cy="portfolio-detail">
-            <Icon className="size-4" icon={Briefcase01Icon} />
+            <Icon icon={Briefcase01Icon} />
             Loading...
           </ContentTitle>
         </ContentHeader>
@@ -54,7 +54,7 @@ function PortfolioDetailPage() {
       <ContentLayout cy="portfolio-detail">
         <ContentHeader cy="portfolio-detail">
           <ContentTitle cy="portfolio-detail">
-            <Icon className="size-4" icon={Briefcase01Icon} />
+            <Icon icon={Briefcase01Icon} />
             Portfolio not found
           </ContentTitle>
         </ContentHeader>
@@ -87,11 +87,11 @@ function PortfolioDetailPage() {
           <div className="flex items-center gap-4">
             <Link to="/manage">
               <Button size="icon-sm" variant="ghost">
-                <Icon className="size-4" icon={ArrowLeft01Icon} />
+                <Icon icon={ArrowLeft01Icon} />
               </Button>
             </Link>
             <ContentTitle cy="portfolio-detail">
-              <Icon className="size-4" icon={Briefcase01Icon} />
+              <Icon icon={Briefcase01Icon} />
               {portfolio.name}
               <Badge className="ml-2" variant="outline">
                 {portfolio.type}
@@ -115,7 +115,7 @@ function PortfolioDetailPage() {
 
       <ContentBody className="flex flex-1 flex-col gap-6" cy="portfolio-detail">
         <div className="flex items-center gap-2">
-          <Icon className="size-4" icon={PackageIcon} />
+          <Icon icon={PackageIcon} />
           <h2 className="font-medium text-lg">
             Assets{' '}
             {portfolio.assets &&

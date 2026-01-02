@@ -41,7 +41,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isBold}
         size="sm"
       >
-        <Icon className="size-4" icon={TextBoldIcon} />
+        <Icon icon={TextBoldIcon} />
       </Toggle>
       <Toggle
         aria-label="Toggle italic"
@@ -49,7 +49,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isItalic}
         size="sm"
       >
-        <Icon className="size-4" icon={TextItalicIcon} />
+        <Icon icon={TextItalicIcon} />
       </Toggle>
       <Toggle
         aria-label="Toggle strikethrough"
@@ -57,7 +57,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isStrikethrough}
         size="sm"
       >
-        <Icon className="size-4" icon={TextStrikethroughIcon} />
+        <Icon icon={TextStrikethroughIcon} />
       </Toggle>
       <Toggle
         aria-label="Toggle code"
@@ -65,7 +65,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isCode}
         size="sm"
       >
-        <Icon className="size-4" icon={CodeIcon} />
+        <Icon icon={CodeIcon} />
       </Toggle>
       <Toggle
         aria-label="Toggle heading 1"
@@ -75,7 +75,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isHeading1}
         size="sm"
       >
-        <Icon className="size-4" icon={Heading01Icon} />
+        <Icon icon={Heading01Icon} />
       </Toggle>
       <Toggle
         aria-label="Toggle heading 2"
@@ -85,7 +85,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isHeading2}
         size="sm"
       >
-        <Icon className="size-4" icon={Heading02Icon} />
+        <Icon icon={Heading02Icon} />
       </Toggle>
       <Toggle
         aria-label="Toggle bullet list"
@@ -93,7 +93,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isBulletList}
         size="sm"
       >
-        <Icon className="size-4" icon={LeftToRightListBulletIcon} />
+        <Icon icon={LeftToRightListBulletIcon} />
       </Toggle>
       <Toggle
         aria-label="Toggle ordered list"
@@ -101,7 +101,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isOrderedList}
         size="sm"
       >
-        <Icon className="size-4" icon={LeftToRightListNumberIcon} />
+        <Icon icon={LeftToRightListNumberIcon} />
       </Toggle>
       <Toggle
         aria-label="Toggle blockquote"
@@ -109,7 +109,7 @@ export const EditorToolbar = ({ editor }: Props) => {
         pressed={editorState.isBlockquote}
         size="sm"
       >
-        <Icon className="size-4" icon={LeftToRightBlockQuoteIcon} />
+        <Icon icon={LeftToRightBlockQuoteIcon} />
       </Toggle>
     </div>
   );

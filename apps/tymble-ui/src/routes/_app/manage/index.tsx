@@ -92,7 +92,7 @@ function ManagePage() {
       <ContentLayout cy="manage">
         <ContentHeader cy="manage">
           <ContentTitle cy="manage">
-            <Icon className="size-4" icon={Briefcase01Icon} />
+            <Icon icon={Briefcase01Icon} />
             {t('manage.title')}
           </ContentTitle>
         </ContentHeader>
@@ -110,7 +110,7 @@ function ManagePage() {
     <ContentLayout cy="manage">
       <ContentHeader cy="manage">
         <ContentTitle cy="manage">
-          <Icon className="size-4" icon={Briefcase01Icon} />
+          <Icon icon={Briefcase01Icon} />
           {t('manage.pageTitle')}
           {portfolios && portfolios.length > 0 && (
             <Badge variant="outline">{portfolios.length}</Badge>
@@ -121,7 +121,7 @@ function ManagePage() {
         <Dialog onOpenChange={setIsCreateDialogOpen} open={isCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button size="sm" variant="outline">
-              <Icon className="size-4" icon={Add01Icon} />
+              <Icon icon={Add01Icon} />
               {t('manage.addPortfolio')}
             </Button>
           </DialogTrigger>

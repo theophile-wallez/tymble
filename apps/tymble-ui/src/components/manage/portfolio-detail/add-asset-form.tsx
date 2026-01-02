@@ -141,7 +141,7 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
               </CardDescription>
             </div>
             <Button onClick={cancelCustomForm} size="icon-sm" variant="ghost">
-              <Icon className="size-4" icon={Cancel01Icon} />
+              <Icon icon={Cancel01Icon} />
             </Button>
           </div>
         </CardHeader>
@@ -294,7 +294,7 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
               <CommandList>
                 <CommandGroup>
                   <CommandItem onSelect={openCustomForm}>
-                    <Icon className="size-4" icon={Add01Icon} />
+                    <Icon icon={Add01Icon} />
                     <span>Custom asset</span>
                   </CommandItem>
                 </CommandGroup>

@@ -152,7 +152,7 @@ export const AppSidebar = ({
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex h-header-height flex-row items-center gap-4 p-4">
         <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary-background text-primary">
-          <Icon className="size-4" icon={Image01Icon} />
+          <Icon icon={Image01Icon} />
         </div>
         <div className="grid flex-1 text-left text-normal leading-tight">
           <span className="truncate font-medium">Tymble</span>

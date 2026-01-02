@@ -9,5 +9,5 @@ type IconProps = Omit<ComponentProps<typeof HugeiconsIcon>, 'icon'> & {
 };
 
 export const Icon = ({ icon, ...props }: IconProps) => (
-  <HugeiconsIcon icon={icon} {...props} />
+  <HugeiconsIcon icon={icon} size={16} {...props} />
 );
