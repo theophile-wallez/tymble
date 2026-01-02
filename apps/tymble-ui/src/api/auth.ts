@@ -1,48 +1,29 @@
-import type { UpdateUser } from '@tymble/schemas';
+import {
+  getUserSchema,
+  type Login,
+  loginSchema,
+  type UpdateUser,
+  updateUserSchema,
+} from '@tymble/schemas';
 import { apiRequest } from '@/lib/api';
 
-export type LoginRequest = {
-  email: string;
-  password: string;
-};
-
-export type LoginResponse = {
-  user: {
-    id: string;
-    email: string;
-  };
-};
-
-export type User = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  birthdate: string;
-  bio: string | null;
-  isSuperuser: boolean;
-  avatarUrl: string | null;
-  emailVerifiedAt: string | null;
-  countryCode: string | null;
-  theme: string;
-  language: string;
-  updatedAt: string;
-  createdAt: string;
-  deletedAt: string | null;
-};
-
-export const loginUser = (credentials: LoginRequest) => {
-  return apiRequest<LoginResponse>('/auth/login', {
+export const loginUser = (credentials: Login['dto']) =>
+  apiRequest('/auth/login', {
     method: 'POST',
-    body: JSON.stringify(credentials),
-    credentials: 'include', // Important: send cookies with the request
+    body: credentials,
+    bodySchema: loginSchema.dto,
+    schema: loginSchema.res,
   });
-};
 
-export const fetchUser = () => apiRequest<User>('/user/profile');
+export const fetchUser = () =>
+  apiRequest('/user/profile', {
+    schema: getUserSchema.res,
+  });
 
 export const updateUser = (data: UpdateUser['dto']) =>
-  apiRequest<User>('/user/profile', {
+  apiRequest('/user/profile', {
     method: 'PATCH',
-    body: JSON.stringify(data),
+    body: data,
+    bodySchema: updateUserSchema.dto,
+    schema: updateUserSchema.res,
   });

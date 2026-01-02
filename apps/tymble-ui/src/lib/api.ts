@@ -27,8 +27,12 @@ export class ApiValidationError extends Error {
 }
 
 type GenericParams = Record<string, string | number | boolean>;
-
-type ApiRequestOptions<T, P extends GenericParams, B> = RequestInit & {
+type GenericBody = Record<string, unknown>;
+type ApiRequestOptions<
+  T,
+  P extends GenericParams,
+  B extends GenericBody,
+> = Omit<RequestInit, 'body'> & {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   params?: P;
   schema?: ZodType<T>;
@@ -40,7 +44,7 @@ type ApiRequestOptions<T, P extends GenericParams, B> = RequestInit & {
 export async function apiRequest<
   T,
   P extends GenericParams = GenericParams,
-  B = Record<string, unknown>,
+  B extends GenericBody = GenericBody,
 >(endpoint: string, options?: ApiRequestOptions<T, P, B>): Promise<T> {
   const { schema, paramSchema, bodySchema, body, ...fetchOptions } =
     options ?? {};

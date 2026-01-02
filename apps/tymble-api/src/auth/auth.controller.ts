@@ -11,7 +11,7 @@ export class AuthController {
   @Post('login')
   login(@Request() req, @Response() res: ExpressResponse) {
     const { id, token } = this.authService.login(req.user);
-    
+
     // Set HttpOnly cookie with the JWT token
     res.cookie('auth_token', token, {
       httpOnly: true,
@@ -32,7 +32,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('logout')
-  logout(@Request() req, @Response() res: ExpressResponse) {
+  logout(@Response() res: ExpressResponse) {
     // Clear the auth cookie
     res.clearCookie('auth_token');
     return res.json({ message: 'Logged out successfully' });
