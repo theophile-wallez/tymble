@@ -9,13 +9,20 @@ import { useTranslation } from '@/hooks/use-translation';
 import { Badge } from '@/ui/badge';
 import { Card } from '@/ui/card';
 import {
-  CommandDialog,
+  CommandBase,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
 } from '@/ui/command';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/ui/dialog';
 import { Icon } from '@/ui/icon';
 import { Skeleton } from '@/ui/skeleton';
 
@@ -138,23 +145,23 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
   const searchQueryResult = useQuery({
     queryKey: ['instrument-search', debouncedQuery],
     queryFn: () => searchStocks(debouncedQuery),
-    enabled: dialogOpen && debouncedQuery.length >= 2,
+    enabled: dialogOpen && debouncedQuery.length >= 1,
     retry: false,
   });
 
   let searchResults: StockSearchResult[] = [];
   if (searchQuery.length === 0) {
     searchResults = suggestionsQuery.data?.quotes ?? [];
-  } else if (searchQuery.length >= 2) {
+  } else if (searchQuery.length >= 1) {
     searchResults = searchQueryResult.data?.quotes ?? [];
   }
 
   const isLoadingSuggestions =
     searchQuery.length === 0 && suggestionsQuery.isFetching;
   const isLoadingSearch =
-    searchQuery.length >= 2 && searchQueryResult.isFetching;
+    searchQuery.length >= 1 && searchQueryResult.isFetching;
   const isTypingWithoutResults =
-    searchQuery.length > 0 && searchQuery.length < 2;
+    searchQuery.length > 0 && searchQuery.length < 1;
 
   useEffect(() => {
     if (suggestionsQuery.isError) {
@@ -200,73 +207,77 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
         </div>
       </Card>
 
-      <CommandDialog
-        className="top-[12vh] translate-y-0 sm:top-[18vh]"
-        commandProps={{
-          shouldFilter: false,
-        }}
-        description={t('manage.addAssetDialog.description')}
-        onOpenChange={handleDialogChange}
-        open={dialogOpen}
-        title={t('manage.addAssetDialog.title')}
-      >
-        <CommandInput
-          onValueChange={handleSearchChange}
-          placeholder={t('manage.addAssetDialog.searchPlaceholder')}
-          value={searchQuery}
-        />
-        <CommandList>
-          {(isLoadingSuggestions ||
-            isTypingWithoutResults ||
-            isLoadingSearch) && (
-            <CommandGroup>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <CommandItem disabled key={`suggested-skeleton-${index}`}>
-                  <div className="flex flex-1 items-center justify-between">
-                    <div className="space-y-2">
-                      <Skeleton className="h-4 w-16" />
-                      <Skeleton className="h-3 w-32" />
+      <Dialog onOpenChange={handleDialogChange} open={dialogOpen}>
+        <DialogHeader className="sr-only">
+          <DialogTitle>{t('manage.addAssetDialog.title')}</DialogTitle>
+          <DialogDescription>
+            {t('manage.addAssetDialog.description')}
+          </DialogDescription>
+        </DialogHeader>
+        <DialogContent
+          className="top-[12vh] translate-y-0 overflow-hidden bg-accent p-0 sm:top-[18vh]"
+          showCloseButton={false}
+        >
+          <CommandBase shouldFilter={false}>
+            <CommandInput
+              onValueChange={handleSearchChange}
+              placeholder={t('manage.addAssetDialog.searchPlaceholder')}
+              value={searchQuery}
+            />
+            <CommandList>
+              {(isLoadingSuggestions ||
+                isTypingWithoutResults ||
+                isLoadingSearch) && (
+                <CommandGroup>
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <CommandItem disabled key={`suggested-skeleton-${index}`}>
+                      <div className="flex flex-1 items-center justify-between">
+                        <div className="space-y-2">
+                          <Skeleton className="h-4 w-16" />
+                          <Skeleton className="h-3 w-32" />
+                        </div>
+                        <Skeleton className="h-3 w-20" />
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+              <CommandGroup>
+                {searchResults.map((stock) => (
+                  <CommandItem
+                    key={stock.symbol}
+                    onSelect={() => addAsset(stock)}
+                    value={stock.symbol}
+                  >
+                    <div className="flex flex-1 items-center justify-between">
+                      <div>
+                        <div className="font-medium">{stock.symbol}</div>
+                        <div className="text-muted-foreground text-xs">
+                          {stock.name}
+                        </div>
+                      </div>
+                      <span className="text-muted-foreground text-xs">
+                        {stock.exchange} •{' '}
+                        <Badge className="capitalize" variant="outline">
+                          {stock.type}
+                        </Badge>
+                      </span>
                     </div>
-                    <Skeleton className="h-3 w-20" />
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          )}
-          <CommandGroup>
-            {searchResults.map((stock) => (
-              <CommandItem
-                key={stock.symbol}
-                onSelect={() => addAsset(stock)}
-                value={stock.symbol}
-              >
-                <div className="flex flex-1 items-center justify-between">
-                  <div>
-                    <div className="font-medium">{stock.symbol}</div>
-                    <div className="text-muted-foreground text-xs">
-                      {stock.name}
-                    </div>
-                  </div>
-                  <span className="text-muted-foreground text-xs">
-                    {stock.exchange} •{' '}
-                    <Badge className="capitalize" variant="outline">
-                      {stock.type}
-                    </Badge>
-                  </span>
-                </div>
-              </CommandItem>
-            ))}
-          </CommandGroup>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
 
-          {!isLoadingSearch &&
-            searchQuery.length >= 2 &&
-            searchResults.length === 0 && (
-              <CommandEmpty>
-                {t('manage.addAssetDialog.noResults')}
-              </CommandEmpty>
-            )}
-        </CommandList>
-      </CommandDialog>
+              {!isLoadingSearch &&
+                searchQuery.length >= 2 &&
+                searchResults.length === 0 && (
+                  <CommandEmpty>
+                    {t('manage.addAssetDialog.noResults')}
+                  </CommandEmpty>
+                )}
+            </CommandList>
+          </CommandBase>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
