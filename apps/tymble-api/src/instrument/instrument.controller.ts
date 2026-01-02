@@ -9,7 +9,9 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ZodResponse } from 'nestjs-zod';
+import { searchInstrumentSchema } from '@tymble/schemas';
+import { ZodResponse, ZodValidationPipe } from 'nestjs-zod';
+import z from 'zod';
 import { JwtAuthGuard } from '@/auth/guards/jwt.guard';
 import {
   CreateInstrumentDto,
@@ -40,8 +42,11 @@ export class InstrumentController {
   }
 
   @Get('search')
-  search(@Query('q') query: string) {
-    return this.instrumentService.searchByName(query);
+  search(
+    @Query(new ZodValidationPipe(searchInstrumentSchema.dto))
+    query: z.infer<typeof searchInstrumentSchema.dto>
+  ) {
+    return this.instrumentService.searchByName(query.name);
   }
 
   @Get(':id')

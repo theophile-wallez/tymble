@@ -26,18 +26,41 @@ export class ApiValidationError extends Error {
   }
 }
 
-type ApiRequestOptions<T> = RequestInit & {
+type GenericParams = Record<string, string | number | boolean>;
+
+type ApiRequestOptions<T, P extends GenericParams> = RequestInit & {
+  params?: P;
   schema?: ZodType<T>;
+  paramSchema?: ZodType<P>;
+  bodySchema?: ZodType<unknown>;
 };
 
-export async function apiRequest<T>(
+export async function apiRequest<T, P extends GenericParams = GenericParams>(
   endpoint: string,
-  options?: ApiRequestOptions<T>
+  options?: ApiRequestOptions<T, P>
 ): Promise<T> {
-  const { schema, ...fetchOptions } = options ?? {};
-  const url = `${API_BASE_URL}${endpoint}`;
+  const { schema, paramSchema, ...fetchOptions } = options ?? {};
 
-  const response = await fetch(url, {
+  const finalUrl = new URLSearchParams(`${API_BASE_URL}${endpoint}`);
+
+  if (paramSchema) {
+    const result = paramSchema.safeParse(options?.params);
+    if (!result.success) {
+      throw new ApiValidationError(
+        'Invalid parameters',
+        options?.params,
+        result.error.issues
+      );
+    }
+  }
+
+  if (options?.params) {
+    for (const [key, value] of Object.entries(options.params)) {
+      finalUrl.set(key, String(value));
+    }
+  }
+
+  const response = await fetch(finalUrl.toString(), {
     headers: {
       'Content-Type': 'application/json',
       ...fetchOptions?.headers,

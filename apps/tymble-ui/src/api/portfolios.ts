@@ -1,4 +1,4 @@
-import type { CreatePortfolio } from '@tymble/schemas';
+import { type CreatePortfolio, searchInstrumentSchema } from '@tymble/schemas';
 import { apiRequest } from '@/lib/api';
 
 // Re-export types from @tymble/schemas for convenience
@@ -11,6 +11,7 @@ export type {
 
 // Import types for use in this file
 import type { Portfolio, PortfolioWithAssets } from '@tymble/schemas';
+import type z from 'zod';
 
 export const fetchPortfolios = () => apiRequest<Portfolio[]>('/portfolio');
 
@@ -40,6 +41,9 @@ export type StockSearchResult = {
 };
 
 export const searchStocks = (name: string) =>
-  apiRequest<{ quotes: StockSearchResult[] }>(
-    `/instrument/search?q=${encodeURIComponent(name)}`
+  apiRequest<z.infer<typeof searchInstrumentSchema.res>>(
+    `/instrument/search?name=${encodeURIComponent(name)}`,
+    {
+      schema: searchInstrumentSchema.res,
+    }
   );
