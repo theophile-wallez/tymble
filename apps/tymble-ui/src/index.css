@@ -17,6 +17,8 @@ html,
 @theme inline {
   --font-sans: "Geist", sans-serif;
   --font-mono: "Geist Mono", monospace;
+  --text-2xs: 10px;
+  --text-3xs: 8px;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

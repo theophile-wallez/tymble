@@ -8,11 +8,13 @@ import { Icon } from '@/ui/icon';
 import { cn } from "@/ui/utils"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/ui/dialog"
+import { Badge } from "./badge";
 
 function Command({
   className,
@@ -50,8 +52,9 @@ function CommandDialog({
         <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
       <DialogContent
-        className={cn("overflow-hidden p-0", className)}
+        className={cn("overflow-hidden p-0 bg-accent", className)}
         showCloseButton={showCloseButton}
+        customCloseComponent={<Badge variant="outline" className="cursor-pointer">ESC</Badge>}
       >
         <Command className="[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]]:px-2 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
           {children}
@@ -68,17 +71,21 @@ function CommandInput({
   return (
     <div
       data-slot="command-input-wrapper"
-      className="flex h-9 items-center gap-2 border-b px-3"
+      className="flex h-9 items-center gap-2 relative"
     >
-      <Icon icon={Search01Icon} className="size-4 shrink-0 opacity-50" />
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(
-          "placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+          "placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 px-9 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
         {...props}
       />
+      <Icon icon={Search01Icon} className="size-4 shrink-0 opacity-50 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+      <DialogClose className="absolute right-3 top-1/2 -translate-y-1/2">
+        <Badge variant="keyboard" className="cursor-pointer" rounding="sm">ESC</Badge>
+        <span className="sr-only">Close</span>
+      </DialogClose>
     </div>
   )
 }
@@ -91,7 +98,7 @@ function CommandList({
     <CommandPrimitive.List
       data-slot="command-list"
       className={cn(
-        "max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto",
+        "max-h-[300px] bg-background shadow-2xl rounded-t-lg outline-border outline-1 scroll-py-10 py-1 overflow-x-hidden overflow-y-auto",
         className
       )}
       {...props}
