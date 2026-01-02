@@ -1,10 +1,10 @@
-import type { DTOStructure, InferDto } from '@schemas/types';
 import {
   instrumentInsertSchema,
   instrumentSelectSchema,
   instrumentUpdateSchema,
 } from '@tymble/db';
 import z from 'zod';
+import type { DTOStructure, InferDto } from '../types';
 
 /**
  * Create Instrument Schema
@@ -41,7 +41,8 @@ export const searchInstrumentSchema = {
     name: z.string(),
   }),
   res: z.object({
-    instruments: z.array(instrumentSelectSchema),
+    localInstruments: z.array(instrumentSelectSchema),
+    remoteInstruments: z.array(instrumentSelectSchema),
   }),
 } as const satisfies DTOStructure;
 

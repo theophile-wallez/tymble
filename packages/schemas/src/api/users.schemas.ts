@@ -1,7 +1,7 @@
-import type { DTOStructure, InferDto } from '@schemas/types';
-import { userInsertSchema } from '@tymble/db';
+import { userInsertSchema, userUpdateSchema } from '@tymble/db';
 import z from 'zod';
-import { passwordSchema } from '../../misc';
+import { passwordSchema } from '../misc';
+import type { DTOStructure, InferDto } from '../types';
 
 export const createLocalUserSchema = {
   dto: userInsertSchema
@@ -25,3 +25,16 @@ export const createLocalUserSchema = {
 } satisfies DTOStructure;
 
 export type CreateUserLocal = InferDto<typeof createLocalUserSchema>;
+
+export const updateUserSchema = {
+  dto: userUpdateSchema
+    .omit({
+      emailVerifiedAt: true,
+      isSuperuser: true,
+      id: true,
+    })
+    .partial(),
+  res: z.object({}).strict(),
+} as const satisfies DTOStructure;
+
+export type UpdateUser = InferDto<typeof updateUserSchema>;

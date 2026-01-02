@@ -1,7 +1,7 @@
 import { searchInstrumentSchema } from '@tymble/schemas';
 import { apiRequest } from '@/lib/api';
 
-export const searchStocks = (name: number) =>
+export const searchStocks = (name: string) =>
   apiRequest('/instrument/search', {
     params: {
       name,

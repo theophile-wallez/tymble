@@ -28,20 +28,22 @@ export class ApiValidationError extends Error {
 
 type GenericParams = Record<string, string | number | boolean>;
 
-type ApiRequestOptions<T, P extends GenericParams> = RequestInit & {
+type ApiRequestOptions<T, P extends GenericParams, B> = RequestInit & {
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   params?: P;
   schema?: ZodType<T>;
   paramSchema?: ZodType<P>;
-  bodySchema?: ZodType<unknown>;
+  body?: B;
+  bodySchema?: ZodType<B>;
 };
 
-export async function apiRequest<T, P extends GenericParams = GenericParams>(
-  endpoint: string,
-  options?: ApiRequestOptions<T, P>
-): Promise<T> {
-  const { schema, paramSchema, ...fetchOptions } = options ?? {};
-
-  const finalUrl = new URLSearchParams(`${API_BASE_URL}${endpoint}`);
+export async function apiRequest<
+  T,
+  P extends GenericParams = GenericParams,
+  B = Record<string, unknown>,
+>(endpoint: string, options?: ApiRequestOptions<T, P, B>): Promise<T> {
+  const { schema, paramSchema, bodySchema, body, ...fetchOptions } =
+    options ?? {};
 
   if (paramSchema) {
     const result = paramSchema.safeParse(options?.params);
@@ -54,9 +56,17 @@ export async function apiRequest<T, P extends GenericParams = GenericParams>(
     }
   }
 
+  const finalUrl = new URLSearchParams(`${API_BASE_URL}${endpoint}`);
   if (options?.params) {
     for (const [key, value] of Object.entries(options.params)) {
       finalUrl.set(key, String(value));
+    }
+  }
+
+  if (bodySchema && body) {
+    const result = bodySchema.safeParse(body);
+    if (!result.success) {
+      throw new ApiValidationError('Invalid body', body, result.error.issues);
     }
   }
 
@@ -66,6 +76,7 @@ export async function apiRequest<T, P extends GenericParams = GenericParams>(
       ...fetchOptions?.headers,
     },
     credentials: 'include', // Always send cookies
+    body: body ? JSON.stringify(body) : undefined,
     ...fetchOptions,
   });
 

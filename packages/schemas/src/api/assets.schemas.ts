@@ -1,11 +1,12 @@
-import type { DTOStructure, InferDto } from '@schemas/types';
 import {
   assetInsertSchema,
   assetSelectSchema,
+  assetUpdateSchema,
   instrumentSelectSchema,
 } from '@tymble/db';
 import z from 'zod';
-import { createInstrumentSchema } from '../instruments';
+import type { DTOStructure, InferDto } from '../types';
+import { createInstrumentSchema } from './instruments.schemas';
 
 const createAssetDtoSchema = assetInsertSchema
   .omit({
@@ -35,3 +36,10 @@ export const createAssetSchema = {
 } satisfies DTOStructure;
 
 export type CreateAsset = InferDto<typeof createAssetSchema>;
+
+export const updateAssetSchema = {
+  dto: assetUpdateSchema,
+  res: assetSelectSchema,
+} satisfies DTOStructure;
+
+export type UpdateAsset = InferDto<typeof updateAssetSchema>;

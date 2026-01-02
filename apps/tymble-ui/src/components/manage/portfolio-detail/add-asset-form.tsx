@@ -1,5 +1,6 @@
 import { Add01Icon, Cancel01Icon } from '@hugeicons/core-free-icons';
 import { useForm } from '@tanstack/react-form';
+import type { SearchInstrument } from '@tymble/schemas';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { type StockSearchResult, searchStocks } from '@/api/portfolios';
@@ -47,7 +48,9 @@ type Props = {
 
 export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
   const [open, setOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState<StockSearchResult[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchInstrument['res']>(
+    []
+  );
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showCustomForm, setShowCustomForm] = useState(false);
@@ -78,7 +81,7 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
     setIsSearching(true);
     try {
       const result = await searchStocks(query);
-      setSearchResults(result.quotes || []);
+      setSearchResults(result);
     } catch {
       toast.error('Failed to search stocks');
       setSearchResults([]);
