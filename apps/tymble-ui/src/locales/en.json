@@ -190,7 +190,9 @@
       "addAsset": "Add asset",
       "addingAsset": "Adding to portfolio - Coming soon!",
       "addingCustomAsset": "Adding custom asset - Coming soon!",
-      "searchFailed": "Failed to search stocks"
+      "searchFailed": "Failed to search stocks",
+      "addedAsset": "Asset added to portfolio.",
+      "addAssetFailed": "Failed to add asset to portfolio."
     }
   }
 }

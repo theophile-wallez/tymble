@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateAssetDto } from './create-asset.dto';
+import { updateAssetSchema } from '@tymble/schemas';
+import { createZodDto } from 'nestjs-zod';
 
-export class UpdateAssetDto extends PartialType(CreateAssetDto) {}
+export class UpdateAssetDto extends createZodDto(updateAssetSchema.dto) {}

@@ -115,7 +115,7 @@ export const AssetsList = ({ assets }: Props) => {
         quantity: asset.quantity,
         price: asset.averagePrice,
         executedAt: asset.createdAt,
-        fees: asset.lastFees,
+        fees: asset.fee,
       },
     ];
 

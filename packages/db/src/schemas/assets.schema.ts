@@ -20,10 +20,9 @@ export const assetsTable = d.pgTable('assets', {
   id: d.uuid().primaryKey().defaultRandom(),
   instrumentId: drizzleRef(instrumentTable.id, 'no action'),
   portfolioId: drizzleRef(portfoliosTable.id, 'cascade'),
-  quantity: d.numeric({ precision: 28, scale: 18 }).notNull(),
+  quantity: d.numeric({ precision: 28, scale: 18 }).notNull().default('0'),
   averagePrice: d.numeric({ precision: 18, scale: 18 }).notNull(),
-  lastFees: d.numeric({ precision: 18, scale: 18 }).notNull().default('0'),
-  lastTaxes: d.numeric({ precision: 18, scale: 8 }).notNull().default('0'),
+  fee: d.numeric({ precision: 18, scale: 18 }).notNull().default('0'),
   ...withTimestamps,
 });
 

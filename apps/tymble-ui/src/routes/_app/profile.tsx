@@ -1,10 +1,15 @@
+import {
+  Cancel01Icon,
+  Mail01Icon,
+  MapPinIcon,
+  PencilEdit01Icon,
+  UserIcon,
+} from '@hugeicons/core-free-icons';
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { updateUserSchema } from '@tymble/schemas';
 import { format } from 'date-fns';
-import { Cancel01Icon, Mail01Icon, MapPinIcon, PencilEdit01Icon, UserIcon } from '@hugeicons/core-free-icons';
-import { Icon } from '@/ui/icon';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { updateUser } from '@/api/auth';
@@ -20,6 +25,7 @@ import {
   CardTitle,
 } from '@/ui/card';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/ui/field';
+import { Icon } from '@/ui/icon';
 import { Input } from '@/ui/input';
 import { Label } from '@/ui/label';
 import { Separator } from '@/ui/separator';
@@ -101,7 +107,7 @@ function RouteComponent() {
                     {user.firstName} {user.lastName}
                   </CardTitle>
                   <CardDescription className="mt-1 flex items-center gap-2 text-base">
-                    <Icon icon={Mail01Icon} className="size-4" />
+                    <Icon className="size-4" icon={Mail01Icon} />
                     {user.email}
                     {user.emailVerifiedAt && (
                       <Badge className="text-xs" variant="secondary">
@@ -116,12 +122,12 @@ function RouteComponent() {
                 >
                   {isEditing ? (
                     <>
-                      <Icon icon={Cancel01Icon} className="mr-1 size-4" />
+                      <Icon className="mr-1 size-4" icon={Cancel01Icon} />
                       Cancel
                     </>
                   ) : (
                     <>
-                      <Icon icon={PencilEdit01Icon} className="mr-1 size-4" />
+                      <Icon className="mr-1 size-4" icon={PencilEdit01Icon} />
                       Edit Profile
                     </>
                   )}
@@ -227,14 +233,14 @@ function RouteComponent() {
             <div className="grid gap-6 sm:grid-cols-2">
               {user.countryCode && (
                 <div className="flex items-center gap-2 text-sm">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <Icon className="text-muted-foreground" icon={MapPinIcon} />
                   <span className="text-muted-foreground">Country:</span>
                   <span className="font-medium">{user.countryCode}</span>
                 </div>
               )}
               {user.birthdate && (
                 <div className="flex items-center gap-2 text-sm">
-                  <Icon icon={UserIcon} className="size-4 text-muted-foreground" />
+                  <Icon className="text-muted-foreground" icon={UserIcon} />
                   <span className="text-muted-foreground">Born:</span>
                   <span className="font-medium">
                     {format(new Date(user.birthdate), 'PP')}

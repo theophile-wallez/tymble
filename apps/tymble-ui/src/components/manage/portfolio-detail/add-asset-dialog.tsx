@@ -1,7 +1,8 @@
 import { Add01Icon } from '@hugeicons/core-free-icons';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { createAsset } from '@/api/assets';
 import { type StockSearchResult, searchStocks } from '@/api/portfolios';
 import { useCommand } from '@/hooks/use-command';
 import { useTranslation } from '@/hooks/use-translation';
@@ -24,7 +25,7 @@ type Props = {
   portfolioId: string;
 };
 
-export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
+export const AddAssetDialog = ({ portfolioId }: Props) => {
   const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,6 +34,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
   const resetRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const suggestionErrorRef = useRef(false);
   const searchErrorRef = useRef(false);
+  const queryClient = useQueryClient();
 
   const toggleDialogOpen = useCallback(() => {
     setDialogOpen((open) => !open);
@@ -89,11 +91,27 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
     setSearchQuery(value);
   };
 
+  const createAssetMutation = useMutation({
+    mutationFn: createAsset,
+    mutationKey: ['createAsset'],
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['portfolio', portfolioId],
+      });
+      toast.success(t('manage.addAssetDialog.addedAsset'));
+      setDialogOpen(false);
+      resetSearchState();
+    },
+    onError: (error) => {
+      toast.error(error.message || t('manage.addAssetDialog.addAssetFailed'));
+    },
+  });
+
   const addAsset = (stock: StockSearchResult) => {
-    // TODO: Implement asset creation API call
-    toast.info(t('manage.addAssetDialog.addingAsset'));
-    setDialogOpen(false);
-    resetSearchState();
+    createAssetMutation.mutate({
+      portfolioId,
+      instrumentSymbol: stock.symbol,
+    });
   };
 
   const handleDialogChange = (open: boolean) => {

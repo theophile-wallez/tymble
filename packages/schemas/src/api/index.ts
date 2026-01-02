@@ -1,4 +1,5 @@
 export * from './instruments';
+export * from './assets';
 export * from './portfolios';
 export * from './stocks';
 export * from './transactions';

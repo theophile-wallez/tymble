@@ -1,26 +1,143 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import * as schema from '@tymble/db';
+import { eq } from 'drizzle-orm';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { DrizzleAsyncProvider } from '@/drizzle/drizzle.provider';
+import { TymbleException } from '@/errors/tymble.exception';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
 
 @Injectable()
 export class AssetService {
-  create(createAssetDto: CreateAssetDto) {
-    return 'This action adds a new asset';
+  private readonly logger = new Logger(AssetService.name);
+  constructor(
+    @Inject(DrizzleAsyncProvider)
+    private readonly db: NodePgDatabase<typeof schema>
+  ) {}
+
+  async create(createAssetDto: CreateAssetDto) {
+    try {
+      this.logger.log(
+        `Creating asset for portfolioId: "${createAssetDto.portfolioId}" with symbol: "${createAssetDto.instrumentSymbol}"`
+      );
+
+      const instrument = await this.db.query.instrumentTable.findFirst({
+        where: eq(schema.instrumentTable.symbol, createAssetDto.instrumentSymbol),
+      });
+
+      if (!instrument) {
+        throw new TymbleException(
+          this.logger,
+          `Instrument with symbol "${createAssetDto.instrumentSymbol}" not found`,
+          HttpStatus.NOT_FOUND
+        );
+      }
+
+      const result = await this.db
+        .insert(schema.assetsTable)
+        .values({
+          portfolioId: createAssetDto.portfolioId,
+          instrumentId: instrument.id,
+          quantity: createAssetDto.quantity ?? '0',
+          averagePrice: createAssetDto.averagePrice ?? '0',
+          fee: createAssetDto.fee ?? '0',
+        })
+        .returning();
+
+      return result[0];
+    } catch (error: unknown) {
+      if (error instanceof TymbleException) {
+        throw error;
+      }
+      throw new TymbleException(
+        this.logger,
+        `Failed to create asset for portfolioId: "${createAssetDto.portfolioId}"`,
+        HttpStatus.BAD_REQUEST,
+        error
+      );
+    }
   }
 
   findAll() {
-    return 'This action returns all asset';
+    this.logger.log('Finding all assets');
+    return this.db.query.assetsTable.findMany({
+      with: {
+        instrument: true,
+        portfolio: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} asset`;
+  async findOne(id: string) {
+    this.logger.log(`Finding asset with id ${id}`);
+    const result = await this.db.query.assetsTable.findFirst({
+      where: eq(schema.assetsTable.id, id),
+      with: {
+        instrument: true,
+        portfolio: true,
+        transactions: true,
+      },
+    });
+
+    if (!result) {
+      throw new TymbleException(
+        this.logger,
+        `Asset with id "${id}" not found`,
+        HttpStatus.NOT_FOUND
+      );
+    }
+
+    return result;
   }
 
-  update(id: number, updateAssetDto: UpdateAssetDto) {
-    return `This action updates a #${id} asset`;
+  async update(id: string, updateAssetDto: UpdateAssetDto) {
+    this.logger.log(`Updating asset with id ${id}`);
+
+    try {
+      const result = await this.db
+        .update(schema.assetsTable)
+        .set({ ...updateAssetDto, updatedAt: new Date().toISOString() })
+        .where(eq(schema.assetsTable.id, id))
+        .returning();
+
+      if (result.length === 0) {
+        throw new TymbleException(
+          this.logger,
+          `Asset with id "${id}" not found`,
+          HttpStatus.NOT_FOUND
+        );
+      }
+
+      return result[0];
+    } catch (error: unknown) {
+      if (error instanceof TymbleException) {
+        throw error;
+      }
+      throw new TymbleException(
+        this.logger,
+        `Failed to update asset with id: "${id}"`,
+        HttpStatus.BAD_REQUEST,
+        error
+      );
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} asset`;
+  async remove(id: string) {
+    this.logger.log(`Removing asset with id ${id}`);
+
+    const result = await this.db
+      .delete(schema.assetsTable)
+      .where(eq(schema.assetsTable.id, id))
+      .returning({ id: schema.assetsTable.id });
+
+    if (result.length === 0) {
+      throw new TymbleException(
+        this.logger,
+        `Asset with id "${id}" not found`,
+        HttpStatus.NOT_FOUND
+      );
+    }
+
+    return result[0];
   }
 }

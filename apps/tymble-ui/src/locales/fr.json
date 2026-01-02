@@ -190,7 +190,9 @@
       "addAsset": "Ajouter l'actif",
       "addingAsset": "Ajout au portefeuille - Bientôt disponible !",
       "addingCustomAsset": "Ajout de l'actif personnalisé - Bientôt disponible !",
-      "searchFailed": "Échec de la recherche d'actions"
+      "searchFailed": "Échec de la recherche d'actions",
+      "addedAsset": "Actif ajouté au portefeuille.",
+      "addAssetFailed": "Impossible d'ajouter l'actif au portefeuille."
     }
   }
 }
