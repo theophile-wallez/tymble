@@ -11,19 +11,21 @@ const createAssetDtoSchema = assetInsertSchema
   .omit({
     id: true,
   })
+  .extend({
+    averagePrice: assetInsertSchema.shape.averagePrice.optional(),
+    quantity: assetInsertSchema.shape.quantity.optional(),
+    fee: assetInsertSchema.shape.fee.optional(),
+  })
   .and(
     z.discriminatedUnion('instrumentPayloadType', [
       z.object({
         instrumentPayloadType: z.literal('id'),
         instrumentId: instrumentSelectSchema.shape.id,
       }),
-      z
-        .object({
-          instrumentPayloadType: z.literal('dto'),
-        })
-        .extend({
-          instrument: createInstrumentSchema.dto,
-        }),
+      z.object({
+        instrumentPayloadType: z.literal('symbol'),
+        instrumentSymbol: createInstrumentSchema.dto.shape.symbol,
+      }),
     ])
   );
 
