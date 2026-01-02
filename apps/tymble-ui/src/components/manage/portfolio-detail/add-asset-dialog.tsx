@@ -156,7 +156,7 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
   return (
     <>
       <Card
-        className="flex h-full min-h-[180px] cursor-pointer items-center justify-center border-2 border-dashed transition-colors hover:border-primary hover:bg-muted/50"
+        className="flex h-full min-h-[180px] cursor-pointer items-center justify-center border-2 border-dashed shadow-none transition-colors hover:border-primary-background hover:bg-muted/50"
         onClick={() => setDialogOpen(true)}
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
