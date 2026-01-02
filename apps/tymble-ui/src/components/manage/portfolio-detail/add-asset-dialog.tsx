@@ -177,6 +177,9 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
 
       <CommandDialog
         className="top-[12vh] translate-y-0 sm:top-[18vh]"
+        commandProps={{
+          shouldFilter: false,
+        }}
         description={t('manage.addAssetDialog.description')}
         onOpenChange={handleDialogChange}
         open={dialogOpen}
