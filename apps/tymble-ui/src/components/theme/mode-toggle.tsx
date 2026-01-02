@@ -1,5 +1,4 @@
 import { Moon01Icon, Sun01Icon } from '@hugeicons/core-free-icons';
-import { Icon } from '@/ui/icon';
 import { Button } from '@/ui/button';
 import {
   DropdownMenu,
@@ -7,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/ui/dropdown-menu';
+import { Icon } from '@/ui/icon';
 import { useTheme } from './theme-provider';
 
 export function ModeToggle() {
@@ -16,8 +16,14 @@ export function ModeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="outline">
-          <Sun className="dark:-rotate-90 h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:scale-0" />
-          <Icon icon={Moon01Icon} className="absolute size-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <Icon
+            className="dark:-rotate-90 size-[1.2rem] rotate-0 scale-100 transition-all dark:scale-0"
+            icon={Sun01Icon}
+          />
+          <Icon
+            className="absolute size-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+            icon={Moon01Icon}
+          />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

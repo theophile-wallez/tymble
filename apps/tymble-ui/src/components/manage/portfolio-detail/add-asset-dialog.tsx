@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { type StockSearchResult, searchStocks } from '@/api/portfolios';
+import { useCommand } from '@/hooks/use-command';
 import { useTranslation } from '@/hooks/use-translation';
 import { Badge } from '@/ui/badge';
 import { Card } from '@/ui/card';
@@ -32,6 +33,10 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
   const resetRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const suggestionErrorRef = useRef(false);
   const searchErrorRef = useRef(false);
+
+  const toggleDialogOpen = useCallback(() => {
+    setDialogOpen((open) => !open);
+  }, []);
 
   const resetSearchState = useCallback(() => {
     if (resetRef.current) {
@@ -63,19 +68,13 @@ export const AddAssetDialog = ({ portfolioId: _portfolioId }: Props) => {
     };
   }, [searchQuery, dialogOpen]);
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-        event.preventDefault();
-        setDialogOpen((open) => !open);
-      }
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => {
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, []);
+  useCommand({
+    onToggle: toggleDialogOpen,
+    shortcut: {
+      key: 'a',
+    },
+    enabled: !dialogOpen,
+  });
 
   useEffect(
     () => () => {
