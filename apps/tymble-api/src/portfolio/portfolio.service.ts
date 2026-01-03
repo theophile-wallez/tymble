@@ -1,6 +1,7 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import * as schema from '@tymble/db';
-import { eq } from 'drizzle-orm';
+import { GetPortfolio, GetPortfolios } from '@tymble/schemas';
+import { count, eq, getTableColumns } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DrizzleAsyncProvider } from '@/drizzle/drizzle.provider';
 import { TymbleException } from '@/errors/tymble.exception';
@@ -42,23 +43,43 @@ export class PortfolioService {
     }
   }
 
-  findAllByUserId(userId: string) {
+  async findAllByUserId(userId: string): Promise<GetPortfolios['res']> {
     this.logger.log(`Finding all portfolios for user with id ${userId}`);
-    return this.db
-      .select()
+    return await this.db
+      .select({
+        ...getTableColumns(schema.portfoliosTable),
+        assetsCount: count(schema.assetsTable.id),
+      })
       .from(schema.portfoliosTable)
-      .where(eq(schema.portfoliosTable.userId, userId));
+      .leftJoin(
+        schema.assetsTable,
+        eq(schema.assetsTable.portfolioId, schema.portfoliosTable.id)
+      )
+      .where(eq(schema.portfoliosTable.userId, userId))
+      .groupBy(schema.portfoliosTable.id);
   }
 
-  findOne(id: string) {
+  async findOne(id: string): Promise<GetPortfolio['res']> {
     this.logger.log(`Finding portfolio with id ${id}`);
-    return this.db.query.portfoliosTable.findFirst({
+    const result = await this.db.query.portfoliosTable.findFirst({
       where: eq(schema.portfoliosTable.id, id),
       with: {
-        assets: true,
+        assets: {
+          with: {
+            instrument: true,
+          },
+        },
       },
-      extras: {},
     });
+    if (!result) {
+      throw new TymbleException(
+        this.logger,
+        `Portfolio with id "${id}" not found`,
+        HttpStatus.NOT_FOUND,
+        null
+      );
+    }
+    return result;
   }
 
   update(id: string, updatePortfolioDto: UpdatePortfolioDto) {

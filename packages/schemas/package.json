@@ -19,6 +19,7 @@
     "lint:fix": "npx ultracite fix",
     "check-types": "tsc --noEmit",
     "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
     "watch": "tsc -p tsconfig.json --watch"
   },
   "dependencies": {

@@ -16,6 +16,11 @@ import {
   CreatePortfolioDto,
   CreatePortfolioResponseDto,
 } from './dto/create-portfolio.dto';
+import {
+  GetPortfolioDto,
+  GetPortfolioResponseDto,
+} from './dto/get-portfolio.dto';
+import { GetUserPortfoliosResponseDto } from './dto/get-user-portfolios.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import { PortfolioService } from './portfolio.service';
 
@@ -36,13 +41,18 @@ export class PortfolioController {
   }
 
   @Get()
+  @ZodResponse({
+    type: GetUserPortfoliosResponseDto,
+  })
   findAll(@Req() req: GuardedRequest) {
     return this.portfolioService.findAllByUserId(req.user.id);
   }
-
+  @ZodResponse({
+    type: GetPortfolioResponseDto,
+  })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.portfolioService.findOne(id);
+  findOne(@Param() params: GetPortfolioDto) {
+    return this.portfolioService.findOne(params.id);
   }
 
   @Patch(':id')

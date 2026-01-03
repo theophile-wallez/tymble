@@ -22,8 +22,7 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/*": ["./src/*"],
-      "@schemas/*": ["../../packages/schemas/src/*"]
+      "@/*": ["./src/*"]
     }
   }
 }
