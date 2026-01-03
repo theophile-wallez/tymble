@@ -1,11 +1,11 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
+import { loginSchema } from '@tymble/schemas';
 import { toast } from 'sonner';
 import { loginUser } from '@/api/auth';
 import placeholderImage from '@/assets/placeholder.svg';
 import { useTranslation } from '@/hooks/use-translation';
-import { loginSchema } from '@/schemas/login';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
 import {
@@ -62,7 +62,7 @@ export function LoginForm({
       password: '',
     },
     validators: {
-      onSubmit: loginSchema,
+      onSubmit: loginSchema.dto,
     },
     onSubmit: ({ value }) => {
       loginMutation.mutate({

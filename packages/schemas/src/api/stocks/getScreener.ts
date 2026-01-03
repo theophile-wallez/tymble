@@ -1,6 +1,6 @@
-import type { DTOStructure, InferDto } from '@schemas/types';
 import type * as screener from 'yahoo-finance2/modules/screener';
 import { z } from 'zod';
+import type { DTOStructure, InferDto } from '../../types';
 
 const screenerModules = [
   'aggressive_small_caps',
