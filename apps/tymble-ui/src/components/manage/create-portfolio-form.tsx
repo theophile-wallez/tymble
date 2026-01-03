@@ -44,6 +44,8 @@ const { useAppForm } = createFormHook({
   formContext,
 });
 
+const createPortfolioFormSchema = createPortfolioSchema.dto;
+
 type Props = {
   hideCard?: boolean;
   onSuccess?: () => void;
@@ -75,7 +77,7 @@ export const CreatePortfolioForm = ({ hideCard, onSuccess }: Props) => {
       description: '',
     },
     validators: {
-      onSubmit: createPortfolioSchema.dto,
+      onSubmit: createPortfolioFormSchema.parse,
     },
     onSubmit: ({ value }) => {
       createMutation.mutate({
