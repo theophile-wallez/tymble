@@ -10,7 +10,6 @@ export const loginSchema = {
     user: z.object({
       id: z.uuid(),
       email: z.email(),
-      name: z.string(),
     }),
   }),
 } as const satisfies DTOStructure;

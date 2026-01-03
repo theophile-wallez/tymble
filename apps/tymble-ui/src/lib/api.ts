@@ -60,10 +60,13 @@ export async function apiRequest<
     }
   }
 
-  const finalUrl = new URLSearchParams(`${API_BASE_URL}${endpoint}`);
+  const urlString = `${API_BASE_URL}${endpoint}`;
+  const url = API_BASE_URL.startsWith('http')
+    ? new URL(urlString)
+    : new URL(urlString, window.location.origin);
   if (options?.params) {
     for (const [key, value] of Object.entries(options.params)) {
-      finalUrl.set(key, String(value));
+      url.searchParams.set(key, String(value));
     }
   }
 
@@ -74,7 +77,7 @@ export async function apiRequest<
     }
   }
 
-  const response = await fetch(finalUrl.toString(), {
+  const response = await fetch(url.toString(), {
     headers: {
       'Content-Type': 'application/json',
       ...fetchOptions?.headers,
@@ -99,7 +102,7 @@ export async function apiRequest<
   if (schema) {
     const result = schema.safeParse(data);
     if (!result.success) {
-      console.error('API response validation failed:', result.error);
+      console.error('API response validation failed:', result.error, data);
       throw new ApiValidationError(
         'Invalid API response format',
         data,
