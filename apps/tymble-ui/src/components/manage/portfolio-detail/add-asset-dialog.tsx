@@ -1,9 +1,10 @@
 import { Add01Icon } from '@hugeicons/core-free-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { SearchedInstrument } from '@tymble/schemas';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { createAsset } from '@/api/assets';
-import { type StockSearchResult, searchStocks } from '@/api/portfolios';
+import { searchStocks } from '@/api/instruments';
 import { useCommand } from '@/hooks/use-command';
 import { useTranslation } from '@/hooks/use-translation';
 import { Badge } from '@/ui/badge';
@@ -98,7 +99,8 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
     setSearchQuery(value);
   };
 
-  const createAssetMutation = useMutation({
+  // @ts-expect-error - TODO: Implement asset creation API call
+  const _createAssetMutation = useMutation({
     mutationFn: createAsset,
     mutationKey: ['createAsset'],
     onSuccess: async () => {
@@ -114,18 +116,8 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
     },
   });
 
-  const addAsset = (stock: StockSearchResult) => {
-    const instrumentPayload = {
-      symbol: stock.symbol,
-      name: stock.name,
-      type: stock.type,
-      exchange: stock.exchange || undefined,
-    };
-
-    createAssetMutation.mutate({
-      portfolioId,
-      instrument: instrumentPayload,
-    });
+  const addAsset = () => {
+    // TODO: Implement asset creation API call
   };
 
   const handleDialogChange = (open: boolean) => {
@@ -149,11 +141,11 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
     retry: false,
   });
 
-  let searchResults: StockSearchResult[] = [];
+  let searchResults: SearchedInstrument[] = [];
   if (searchQuery.length === 0) {
-    searchResults = suggestionsQuery.data?.quotes ?? [];
+    searchResults = suggestionsQuery.data?.instruments ?? [];
   } else if (searchQuery.length >= 1) {
-    searchResults = searchQueryResult.data?.quotes ?? [];
+    searchResults = searchQueryResult.data?.instruments ?? [];
   }
 
   const isLoadingSuggestions =
@@ -246,7 +238,7 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
                 {searchResults.map((stock) => (
                   <CommandItem
                     key={stock.symbol}
-                    onSelect={() => addAsset(stock)}
+                    onSelect={() => addAsset()}
                     value={stock.symbol}
                   >
                     <div className="flex flex-1 items-center justify-between">

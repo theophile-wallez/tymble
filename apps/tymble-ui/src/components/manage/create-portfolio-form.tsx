@@ -1,8 +1,7 @@
+import { Add01Icon } from '@hugeicons/core-free-icons';
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPortfolioSchema } from '@tymble/schemas';
-import { Add01Icon } from '@hugeicons/core-free-icons';
-import { Icon } from '@/ui/icon';
 import { toast } from 'sonner';
 import { createPortfolio } from '@/api/portfolios';
 import { useTranslation } from '@/hooks/use-translation';
@@ -21,6 +20,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/ui/field';
+import { Icon } from '@/ui/icon';
 import { Input } from '@/ui/input';
 import {
   Select,
@@ -224,7 +224,7 @@ export const CreatePortfolioForm = ({ hideCard, onSuccess }: Props) => {
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Icon icon={Add01Icon} className="size-4" />
+          <Icon className="size-4" icon={Add01Icon} />
           {t('manage.portfolio.createTitle')}
         </CardTitle>
         <CardDescription>
