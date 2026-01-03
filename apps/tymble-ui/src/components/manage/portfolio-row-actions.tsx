@@ -1,7 +1,10 @@
-import { Delete01Icon, MoreHorizontalIcon, PencilEdit01Icon } from '@hugeicons/core-free-icons';
-import { Icon } from '@/ui/icon';
+import {
+  Delete01Icon,
+  MoreHorizontalIcon,
+  PencilEdit01Icon,
+} from '@hugeicons/core-free-icons';
+import type { PortfolioWithSimpleRelations } from '@tymble/schemas';
 import { toast } from 'sonner';
-import type { Portfolio } from '@/api/portfolios';
 import { useTranslation } from '@/hooks/use-translation';
 import { Button } from '@/ui/button';
 import {
@@ -11,10 +14,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/ui/dropdown-menu';
+import { Icon } from '@/ui/icon';
 
 type Props = {
-  portfolio: Portfolio;
-  onDelete: (e: React.MouseEvent, portfolio: Portfolio) => void;
+  portfolio: PortfolioWithSimpleRelations;
+  onDelete: (
+    e: React.MouseEvent,
+    portfolio: PortfolioWithSimpleRelations
+  ) => void;
 };
 
 export const PortfolioRowActions = ({ portfolio, onDelete }: Props) => {
@@ -29,7 +36,7 @@ export const PortfolioRowActions = ({ portfolio, onDelete }: Props) => {
             size="icon-sm"
             variant="ghost"
           >
-            <Icon icon={MoreHorizontalIcon} className="size-4" />
+            <Icon className="size-4" icon={MoreHorizontalIcon} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -40,7 +47,7 @@ export const PortfolioRowActions = ({ portfolio, onDelete }: Props) => {
               toast.info('Edit coming soon!');
             }}
           >
-            <Icon icon={PencilEdit01Icon} className="size-4" />
+            <Icon className="size-4" icon={PencilEdit01Icon} />
             {t('manage.table.edit')}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -48,7 +55,7 @@ export const PortfolioRowActions = ({ portfolio, onDelete }: Props) => {
             onClick={(e) => onDelete(e, portfolio)}
             variant="destructive"
           >
-            <Icon icon={Delete01Icon} className="size-4" />
+            <Icon className="size-4" icon={Delete01Icon} />
             {t('manage.table.delete')}
           </DropdownMenuItem>
         </DropdownMenuContent>

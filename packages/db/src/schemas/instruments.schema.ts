@@ -59,9 +59,15 @@ export const instrumentTable = d.pgTable('instruments', {
   ...withTimestamps,
 });
 
-export const instrumentSelectSchema = zodSelectGenerator(instrumentTable);
-export const instrumentInsertSchema = zodInsertGenerator(instrumentTable);
-export const instrumentUpdateSchema = zodUpdateGenerator(instrumentTable);
+export const instrumentSelectSchema = zodSelectGenerator(
+  instrumentTable
+).extend({});
+export const instrumentInsertSchema = zodInsertGenerator(
+  instrumentTable
+).extend({});
+export const instrumentUpdateSchema = zodUpdateGenerator(
+  instrumentTable
+).extend({});
 
 export type InstrumentSelect = z.infer<typeof instrumentSelectSchema>;
 export type InstrumentInsert = z.infer<typeof instrumentInsertSchema>;

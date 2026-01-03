@@ -1,21 +1,24 @@
-import type { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
 import { Delete01Icon, PencilEdit01Icon } from '@hugeicons/core-free-icons';
-import { Icon } from '@/ui/icon';
+import type { ColumnDef } from '@tanstack/react-table';
+import type { PortfolioWithSimpleRelations } from '@tymble/schemas';
+import { format } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
-import type { Portfolio } from '@/api/portfolios';
 import { DataTable } from '@/components/table/data-table';
 import { useTranslation } from '@/hooks/use-translation';
 import { Badge } from '@/ui/badge';
 import { ContextMenuItem, ContextMenuSeparator } from '@/ui/context-menu';
+import { Icon } from '@/ui/icon';
 import { getProviderLabel } from './portfolio-constants';
 import { PortfolioRowActions } from './portfolio-row-actions';
 
 type Props = {
-  portfolios: Portfolio[];
-  onDeleteClick: (e: React.MouseEvent, portfolio: Portfolio) => void;
-  onRowClick: (portfolio: Portfolio) => void;
+  portfolios: PortfolioWithSimpleRelations[];
+  onDeleteClick: (
+    e: React.MouseEvent,
+    portfolio: PortfolioWithSimpleRelations
+  ) => void;
+  onRowClick: (portfolio: PortfolioWithSimpleRelations) => void;
 };
 
 export const PortfolioTable = ({
@@ -25,7 +28,7 @@ export const PortfolioTable = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const columns = useMemo<ColumnDef<Portfolio>[]>(
+  const columns = useMemo<ColumnDef<PortfolioWithSimpleRelations>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -78,7 +81,7 @@ export const PortfolioTable = ({
   );
 
   const renderContextMenu = useCallback(
-    (portfolio: Portfolio) => (
+    (portfolio: PortfolioWithSimpleRelations) => (
       <>
         <ContextMenuItem
           onClick={(e) => {
@@ -86,7 +89,7 @@ export const PortfolioTable = ({
             toast.info('Edit coming soon!');
           }}
         >
-          <Icon icon={PencilEdit01Icon} className="size-4" />
+          <Icon className="size-4" icon={PencilEdit01Icon} />
           {t('manage.table.edit')}
         </ContextMenuItem>
         <ContextMenuSeparator />
@@ -94,7 +97,7 @@ export const PortfolioTable = ({
           onClick={(e) => onDeleteClick(e, portfolio)}
           variant="destructive"
         >
-          <Icon icon={Delete01Icon} className="size-4" />
+          <Icon className="size-4" icon={Delete01Icon} />
           {t('manage.table.delete')}
         </ContextMenuItem>
       </>

@@ -3,9 +3,9 @@ import {
   ChartIncreaseIcon,
 } from '@hugeicons/core-free-icons';
 import type { ColumnDef } from '@tanstack/react-table';
+import type { PortfolioWithRelations } from '@tymble/schemas';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
-import type { Asset } from '@/api/portfolios';
 import { DataTable } from '@/components/table/data-table';
 import { Badge } from '@/ui/badge';
 import {
@@ -17,6 +17,7 @@ import {
 } from '@/ui/card';
 import { Icon } from '@/ui/icon';
 
+type Asset = PortfolioWithRelations['assets'][number];
 type Props = {
   assets: Asset[];
 };

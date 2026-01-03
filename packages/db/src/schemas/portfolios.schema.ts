@@ -46,9 +46,15 @@ export const portfoliosTable = d.pgTable(
   })
 );
 
-export const portfolioSelectSchema = zodSelectGenerator(portfoliosTable);
-export const portfolioInsertSchema = zodInsertGenerator(portfoliosTable);
-export const portfolioUpdateSchema = zodUpdateGenerator(portfoliosTable);
+export const portfolioSelectSchema = zodSelectGenerator(portfoliosTable).extend(
+  {}
+);
+export const portfolioInsertSchema = zodInsertGenerator(portfoliosTable).extend(
+  {}
+);
+export const portfolioUpdateSchema = zodUpdateGenerator(portfoliosTable).extend(
+  {}
+);
 
 export type PortfolioSelect = z.infer<typeof portfolioSelectSchema>;
 export type PortfolioInsert = z.infer<typeof portfolioInsertSchema>;

@@ -47,9 +47,15 @@ export const transactionsTable = d.pgTable(
   ]
 );
 
-export const transactionSelectSchema = zodSelectGenerator(transactionsTable);
-export const transactionInsertSchema = zodInsertGenerator(transactionsTable);
-export const transactionUpdateSchema = zodUpdateGenerator(transactionsTable);
+export const transactionSelectSchema = zodSelectGenerator(
+  transactionsTable
+).extend({});
+export const transactionInsertSchema = zodInsertGenerator(
+  transactionsTable
+).extend({});
+export const transactionUpdateSchema = zodUpdateGenerator(
+  transactionsTable
+).extend({});
 
 export type TransactionSelect = z.infer<typeof transactionSelectSchema>;
 export type TransactionInsert = z.infer<typeof transactionInsertSchema>;

@@ -1,5 +1,8 @@
+import type {
+  PortfolioWithRelations,
+  PortfolioWithSimpleRelations,
+} from '@tymble/schemas';
 import { useEffect, useState } from 'react';
-import type { Portfolio } from '@/api/portfolios';
 import { useTranslation } from '@/hooks/use-translation';
 import {
   AlertDialog,
@@ -15,7 +18,7 @@ import { Input } from '@/ui/input';
 import { Label } from '@/ui/label';
 
 type Props = {
-  portfolio: Portfolio | null;
+  portfolio: PortfolioWithSimpleRelations | PortfolioWithRelations | null;
   isDeleting: boolean;
   onClose: () => void;
   onConfirm: () => void;

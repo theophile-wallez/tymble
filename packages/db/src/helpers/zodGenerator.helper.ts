@@ -2,6 +2,7 @@ import type { Table } from 'drizzle-orm';
 import type {
   BuildRefine,
   CreateInsertSchema,
+  CreateUpdateSchema,
   NoUnknownKeys,
 } from 'drizzle-zod';
 import {
@@ -10,7 +11,14 @@ import {
   createUpdateSchema,
 } from 'drizzle-zod';
 export const zodSelectGenerator = createSelectSchema;
-export const zodUpdateGenerator = createUpdateSchema;
+export const zodUpdateGenerator = (<TTable extends Table>(table: TTable) => {
+  const schema = createUpdateSchema(table).strict();
+  return schema.omit({
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  });
+}) satisfies CreateUpdateSchema<undefined>;
 
 export const zodInsertGenerator = (<
   TTable extends Table,

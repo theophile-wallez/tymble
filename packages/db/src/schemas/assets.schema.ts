@@ -26,9 +26,9 @@ export const assetsTable = d.pgTable('assets', {
   ...withTimestamps,
 });
 
-export const assetSelectSchema = zodSelectGenerator(assetsTable);
-export const assetInsertSchema = zodInsertGenerator(assetsTable);
-export const assetUpdateSchema = zodUpdateGenerator(assetsTable);
+export const assetSelectSchema = zodSelectGenerator(assetsTable).extend({});
+export const assetInsertSchema = zodInsertGenerator(assetsTable).extend({});
+export const assetUpdateSchema = zodUpdateGenerator(assetsTable).extend({});
 
 export type AssetSelect = z.infer<typeof assetSelectSchema>;
 export type AssetInsert = z.infer<typeof assetInsertSchema>;

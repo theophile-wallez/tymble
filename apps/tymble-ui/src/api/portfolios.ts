@@ -1,25 +1,22 @@
-import { createPortfolioSchema, deletePortfolioSchema } from '@tymble/schemas';
+// Import types for use in this file
+import type { CreatePortfolio } from '@tymble/schemas';
+import {
+  createPortfolioSchema,
+  deletePortfolioSchema,
+  getPortfolioSchema,
+  getPortfoliosSchema,
+} from '@tymble/schemas';
 import { apiRequest } from '@/lib/api';
 
-// Re-export types from @tymble/schemas for convenience
-export type {
-  Asset,
-  Portfolio,
-  PortfolioWithAssets,
-  SearchedInstrument as Instrument,
-} from '@tymble/schemas';
-
-// Import types for use in this file
-import type {
-  CreatePortfolio,
-  Portfolio,
-  PortfolioWithAssets,
-} from '@tymble/schemas';
-
-export const fetchPortfolios = () => apiRequest<Portfolio[]>('/portfolio');
+export const fetchUserPortfolios = () =>
+  apiRequest('/portfolio', {
+    schema: getPortfoliosSchema.res,
+  });
 
 export const fetchPortfolio = (id: string) =>
-  apiRequest<PortfolioWithAssets>(`/portfolio/${id}`);
+  apiRequest(`/portfolio/${id}`, {
+    schema: getPortfolioSchema.res,
+  });
 
 export const createPortfolio = (data: CreatePortfolio['dto']) =>
   apiRequest('/portfolio', {

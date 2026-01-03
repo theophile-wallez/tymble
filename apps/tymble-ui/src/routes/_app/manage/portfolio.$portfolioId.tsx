@@ -75,8 +75,8 @@ function PortfolioDetailPage() {
     portfolio.assets?.reduce(
       (sum, asset) =>
         sum +
-        Number.parseFloat(asset.quantity) *
-          Number.parseFloat(asset.averagePrice),
+        Number.parseFloat(asset.averagePrice) *
+          Number.parseFloat(asset.quantity),
       0
     ) ?? 0;
 

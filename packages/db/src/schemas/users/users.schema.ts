@@ -5,6 +5,7 @@ import {
   withTimestamps,
   zodInsertGenerator,
   zodSelectGenerator,
+  zodUpdateGenerator,
 } from '../../helpers';
 
 export const usersTable = d.pgTable(
@@ -71,7 +72,7 @@ const birthdateSchema = z.string().superRefine((dateString, ctx) => {
   }
 });
 
-export const userSelectSchema = zodSelectGenerator(usersTable);
+export const userSelectSchema = zodSelectGenerator(usersTable).extend({});
 export const userInsertSchema = zodInsertGenerator(usersTable, {
   email: z
     .email()
@@ -89,9 +90,9 @@ export const userInsertSchema = zodInsertGenerator(usersTable, {
     .meta({ example: 'https://example.com/avatar.png' }),
   firstName: (s) => s.describe("User's first name").meta({ example: 'John' }),
   lastName: (s) => s.describe("User's last name").meta({ example: 'Doe' }),
-});
+}).extend({});
 
-export const userUpdateSchema = userInsertSchema.partial();
+export const userUpdateSchema = zodUpdateGenerator(usersTable).extend({});
 
 export type UserSelect = z.infer<typeof userSelectSchema>;
 export type UserInsert = z.infer<typeof userInsertSchema>;

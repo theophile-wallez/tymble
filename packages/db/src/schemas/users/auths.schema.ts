@@ -53,9 +53,9 @@ export const authsTable = d.pgTable(
   ]
 );
 
-export const authSelectSchema = zodSelectGenerator(authsTable);
-export const authInsertSchema = zodInsertGenerator(authsTable);
-export const authUpdateSchema = zodUpdateGenerator(authsTable);
+export const authSelectSchema = zodSelectGenerator(authsTable).extend({});
+export const authInsertSchema = zodInsertGenerator(authsTable).extend({});
+export const authUpdateSchema = zodUpdateGenerator(authsTable).extend({});
 
 export type AuthSelect = z.infer<typeof authSelectSchema>;
 export type AuthInsert = z.infer<typeof authInsertSchema>;

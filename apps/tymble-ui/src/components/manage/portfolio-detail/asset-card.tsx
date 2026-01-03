@@ -1,7 +1,8 @@
-import type { Asset } from '@/api/portfolios';
+import type { PortfolioWithRelations } from '@tymble/schemas';
 import { Badge } from '@/ui/badge';
 import { Card, CardContent, CardHeader } from '@/ui/card';
 
+type Asset = PortfolioWithRelations['assets'][number];
 type Props = {
   asset: Asset;
 };
@@ -16,16 +17,12 @@ export const AssetCard = ({ asset }: Props) => {
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="font-semibold text-lg">
-              {asset.instrument?.symbol || 'Unknown'}
-            </h3>
+            <h3 className="font-semibold text-lg">{asset.instrument.symbol}</h3>
             <p className="line-clamp-1 text-muted-foreground text-sm">
-              {asset.instrument?.name || 'Unknown instrument'}
+              {asset.instrument.name}
             </p>
           </div>
-          <Badge variant="outline">
-            {asset.instrument?.type || 'stock'}
-          </Badge>
+          <Badge variant="outline">{asset.instrument.type}</Badge>
         </div>
       </CardHeader>
       <CardContent>

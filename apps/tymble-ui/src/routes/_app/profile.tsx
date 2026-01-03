@@ -8,7 +8,7 @@ import {
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { updateUserSchema } from '@tymble/schemas';
+import { type UpdateUser, updateUserSchema } from '@tymble/schemas';
 import { format } from 'date-fns';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -47,14 +47,6 @@ const { useAppForm } = createFormHook({
   formContext,
 });
 
-const profileFormSchema = updateUserSchema.dto
-  .pick({
-    firstName: true,
-    lastName: true,
-    bio: true,
-  })
-  .required();
-
 function RouteComponent() {
   const { data: user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
@@ -75,18 +67,18 @@ function RouteComponent() {
 
   const form = useAppForm({
     defaultValues: {
-      firstName: user?.firstName ?? '',
-      lastName: user?.lastName ?? '',
-      bio: user?.bio ?? '',
-    },
+      firstName: user?.firstName ?? undefined,
+      lastName: user?.lastName,
+      bio: user?.bio,
+    } satisfies UpdateUser['dto'] as UpdateUser['dto'],
     validators: {
-      onSubmit: profileFormSchema,
+      onSubmit: updateUserSchema.dto,
     },
     onSubmit: ({ value }) => {
       updateMutation.mutate({
         firstName: value.firstName,
         lastName: value.lastName,
-        bio: value.bio || null,
+        bio: value.bio ?? null,
       });
     },
   });
@@ -197,7 +189,7 @@ function RouteComponent() {
                             field.handleChange(e.target.value)
                           }
                           placeholder="Tell us about yourself..."
-                          value={field.state.value}
+                          value={field.state.value ?? undefined}
                         />
                         <FieldError errors={field.state.meta.errors} />
                       </Field>

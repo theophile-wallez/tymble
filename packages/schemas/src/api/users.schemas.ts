@@ -44,5 +44,7 @@ export type UpdateUser = InferDto<typeof updateUserSchema>;
 
 export const getUserSchema = {
   dto: z.undefined(),
-  res: userSelectSchema,
+  res: userSelectSchema.extend({}),
 } satisfies DTOStructure;
+
+export type User = InferDto<typeof getUserSchema>;

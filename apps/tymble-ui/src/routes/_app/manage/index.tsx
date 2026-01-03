@@ -1,19 +1,16 @@
 import { Add01Icon, Briefcase01Icon } from '@hugeicons/core-free-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import type { PortfolioWithSimpleRelations } from '@tymble/schemas';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import {
-  deletePortfolio,
-  fetchPortfolios,
-  type Portfolio,
-} from '@/api/portfolios';
+import { deletePortfolio, fetchUserPortfolios } from '@/api/portfolios';
 import {
   CreatePortfolioForm,
-  DeletePortfolioDialog,
   EmptyState,
   PortfolioTable,
 } from '@/components/manage';
+import { DeletePortfolioDialog } from '@/components/manage/delete-portfolio-dialog';
 import { useTranslation } from '@/hooks/use-translation';
 import {
   ContentBody,
@@ -38,6 +35,8 @@ export const Route = createFileRoute('/_app/manage/')({
   component: ManagePage,
 });
 
+type Portfolio = PortfolioWithSimpleRelations;
+
 function ManagePage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -49,7 +48,7 @@ function ManagePage() {
 
   const { data: portfolios, isLoading } = useQuery({
     queryKey: ['portfolios'],
-    queryFn: fetchPortfolios,
+    queryFn: fetchUserPortfolios,
   });
 
   const deleteMutation = useMutation({

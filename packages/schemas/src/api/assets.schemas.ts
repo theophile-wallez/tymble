@@ -3,10 +3,20 @@ import {
   assetSelectSchema,
   assetUpdateSchema,
   instrumentSelectSchema,
+  transactionSelectSchema,
 } from '@tymble/db';
 import z from 'zod';
 import type { DTOStructure, InferDto } from '../types';
 import { createInstrumentSchema } from './instruments.schemas';
+
+export type Asset = z.infer<typeof assetSelectSchema>;
+
+const assetWithRelationsSchema = assetSelectSchema.extend({
+  instrument: instrumentSelectSchema,
+  transactions: transactionSelectSchema.array(),
+});
+
+export type AssetWithRelations = z.infer<typeof assetWithRelationsSchema>;
 
 const createAssetDtoSchema = assetInsertSchema
   .omit({
