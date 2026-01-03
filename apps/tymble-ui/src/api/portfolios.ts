@@ -4,9 +4,9 @@ import { apiRequest } from '@/lib/api';
 // Re-export types from @tymble/schemas for convenience
 export type {
   Asset,
-  Instrument,
   Portfolio,
   PortfolioWithAssets,
+  SearchedInstrument as Instrument,
 } from '@tymble/schemas';
 
 // Import types for use in this file

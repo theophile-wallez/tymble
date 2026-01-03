@@ -47,6 +47,14 @@ const { useAppForm } = createFormHook({
   formContext,
 });
 
+const profileFormSchema = updateUserSchema.dto
+  .pick({
+    firstName: true,
+    lastName: true,
+    bio: true,
+  })
+  .required();
+
 function RouteComponent() {
   const { data: user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
@@ -72,7 +80,7 @@ function RouteComponent() {
       bio: user?.bio ?? '',
     },
     validators: {
-      onSubmit: updateUserSchema.dto,
+      onSubmit: profileFormSchema,
     },
     onSubmit: ({ value }) => {
       updateMutation.mutate({

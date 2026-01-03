@@ -1,9 +1,9 @@
 import { Add01Icon, Cancel01Icon } from '@hugeicons/core-free-icons';
 import { useForm } from '@tanstack/react-form';
-import type { SearchInstrument } from '@tymble/schemas';
+import type { SearchedInstrument } from '@tymble/schemas';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { type StockSearchResult, searchStocks } from '@/api/portfolios';
+import { searchStocks } from '@/api/instruments';
 import { Button } from '@/ui/button';
 import {
   Card,
@@ -48,9 +48,7 @@ type Props = {
 
 export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
   const [open, setOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState<SearchInstrument['res']>(
-    []
-  );
+  const [instruments, setInstruments] = useState<SearchedInstrument[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showCustomForm, setShowCustomForm] = useState(false);
@@ -74,17 +72,17 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
 
   const executeSearch = useCallback(async (query: string) => {
     if (query.length < 2) {
-      setSearchResults([]);
+      setInstruments([]);
       return;
     }
 
     setIsSearching(true);
     try {
       const result = await searchStocks(query);
-      setSearchResults(result);
+      setInstruments(result.instruments);
     } catch {
       toast.error('Failed to search stocks');
-      setSearchResults([]);
+      setInstruments([]);
     } finally {
       setIsSearching(false);
     }
@@ -110,15 +108,15 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
     if (value.length < 2) {
-      setSearchResults([]);
+      setInstruments([]);
     }
   };
 
-  const addAsset = (stock: StockSearchResult) => {
+  const addAsset = (stock: SearchedInstrument) => {
     // TODO: Implement asset creation API call
     toast.info(`Adding ${stock.symbol} to portfolio - Coming soon!`);
     setSearchQuery('');
-    setSearchResults([]);
+    setInstruments([]);
     setOpen(false);
   };
 
@@ -302,11 +300,11 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
                   </CommandItem>
                 </CommandGroup>
 
-                {searchResults.length > 0 && (
+                {instruments.length > 0 && (
                   <>
                     <CommandSeparator />
                     <CommandGroup heading="Search results">
-                      {searchResults.map((stock) => (
+                      {instruments.map((stock) => (
                         <CommandItem
                           key={stock.symbol}
                           onSelect={() => addAsset(stock)}
@@ -333,7 +331,7 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
 
                 {!isSearching &&
                   searchQuery.length >= 2 &&
-                  searchResults.length === 0 && (
+                  instruments.length === 0 && (
                     <CommandEmpty>No results found.</CommandEmpty>
                   )}
               </CommandList>
