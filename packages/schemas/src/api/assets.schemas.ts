@@ -19,6 +19,8 @@ export type AssetWithRelations = z.infer<typeof assetWithRelationsSchema>;
 
 const createAssetDtoSchema = assetInsertSchema.omit({
   id: true,
+  averagePrice: true,
+  quantity: true,
 });
 
 export const createAssetSchema = {

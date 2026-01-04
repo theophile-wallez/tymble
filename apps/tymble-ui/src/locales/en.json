@@ -192,7 +192,15 @@
       "addingCustomAsset": "Adding custom asset - Coming soon!",
       "searchFailed": "Failed to search stocks",
       "addedAsset": "Asset added to portfolio.",
-      "addAssetFailed": "Failed to add asset to portfolio."
+      "addAssetFailed": "Failed to add asset to portfolio.",
+      "fee": "Asset fee",
+      "feePlaceholder": "e.g. 0.05 (5%)",
+      "goBackButton": "Modify asset",
+      "addAssetButton": "Add asset",
+      "addingAssetButton": "Adding asset...",
+      "error": {
+        "noInstrumentSelected": "No instrument selected"
+      }
     }
   },
   "instrument": {

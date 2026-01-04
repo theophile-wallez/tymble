@@ -192,7 +192,15 @@
       "addingCustomAsset": "Ajout de l'actif personnalisé - Bientôt disponible !",
       "searchFailed": "Échec de la recherche d'actions",
       "addedAsset": "Actif ajouté au portefeuille.",
-      "addAssetFailed": "Impossible d'ajouter l'actif au portefeuille."
+      "addAssetFailed": "Impossible d'ajouter l'actif au portefeuille.",
+      "fee": "Frais liés à l'actif",
+      "feePlaceholder": "ex. 0.05 (5%)",
+      "goBackButton": "Modifier l'actif",
+      "addAssetButton": "Ajouter l'actif",
+      "addingAssetButton": "Ajout de l'actif...",
+      "error": {
+        "noInstrumentSelected": "Aucun instrument sélectionné"
+      }
     }
   },
   "instrument": {
