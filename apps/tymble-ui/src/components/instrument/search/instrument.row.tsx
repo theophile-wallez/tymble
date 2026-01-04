@@ -23,7 +23,6 @@ export const InstrumentRow = ({ instrument, onSelect }: Props) => (
         <div className="text-muted-foreground text-xs">{instrument.name}</div>
       </div>
       <span className="text-muted-foreground text-xs">
-        {instrument.exchange} •{' '}
         <Tooltip>
           <TooltipTrigger>
             <Badge variant="outline">

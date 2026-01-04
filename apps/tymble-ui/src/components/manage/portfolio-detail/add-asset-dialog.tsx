@@ -62,7 +62,7 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
     resetRef.current = setTimeout(() => {
       setSearchQuery('');
       setDebouncedQuery('');
-    }, 300);
+    }, 150);
   }, []);
 
   useEffect(() => {
@@ -149,10 +149,15 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
   });
 
   // sorted to match the closest to the search query
+  // TODO: Sort by market capitalization
   const searchResults: SearchedInstrument[] =
     searchQueryResult.data?.instruments.sort((a, b) => {
-      const aDistance = levenshteinDistance(debouncedQuery, a.name);
-      const bDistance = levenshteinDistance(debouncedQuery, b.name);
+      const aDistance =
+        levenshteinDistance(debouncedQuery, a.name) +
+        levenshteinDistance(debouncedQuery, a.symbol);
+      const bDistance =
+        levenshteinDistance(debouncedQuery, b.name) +
+        levenshteinDistance(debouncedQuery, b.symbol);
       return aDistance - bDistance;
     }) ?? [];
 
