@@ -1,18 +1,18 @@
-import type { SearchInstrument } from '@tymble/schemas';
+import type { SearchedInstrument } from '@tymble/schemas';
 import { CommandItem } from '@/ui/command';
 import { InstrumentBadge } from '../instrument.badge';
 
-type Instrument = SearchInstrument['res']['instruments'][number];
+type Instrument = SearchedInstrument;
 
 type Props = {
   instrument: Instrument;
-  onSelect: (instrumentId: string) => void;
+  onSelect: (instrument: Instrument) => void;
 };
 
 export const InstrumentRow = ({ instrument, onSelect }: Props) => (
   <CommandItem
     data-cy={`instrument-row-${instrument.symbol}`}
-    onSelect={() => onSelect(instrument.id)}
+    onSelect={() => onSelect(instrument)}
     value={instrument.symbol}
   >
     <div className="flex flex-1 items-center justify-between">
