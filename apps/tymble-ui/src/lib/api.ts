@@ -59,15 +59,16 @@ export async function apiRequest<
     body,
     query,
     querySchema,
+    params,
     ...fetchOptions
   } = options ?? {};
 
   if (paramSchema) {
-    const result = paramSchema.safeParse(options?.params);
+    const result = paramSchema.safeParse(params);
     if (!result.success) {
       throw new ApiValidationError(
         'Invalid parameters',
-        options?.params,
+        params,
         result.error.issues
       );
     }
@@ -80,14 +81,14 @@ export async function apiRequest<
     }
   }
 
-  if (query) {
+  if (params) {
     /**
      * This will replace {key} with the value of query[key] in the endpoint.
-     * @example /instrument/search/{name} -> /instrument/search/AAPL
+     * @example /instrument/search/{name}/{foo} -> /instrument/search/AAPL/123
      */
     endpoint = endpoint.replace(
       /{(\w+)}/g,
-      (_, key) => `/${query[key] as string}`
+      (_, key) => `${params[key] as string}`
     );
   }
 
@@ -95,8 +96,8 @@ export async function apiRequest<
   const url = API_BASE_URL.startsWith('http')
     ? new URL(urlString)
     : new URL(urlString, window.location.origin);
-  if (options?.params) {
-    for (const [key, value] of Object.entries(options.params)) {
+  if (query) {
+    for (const [key, value] of Object.entries(query)) {
       url.searchParams.set(key, String(value));
     }
   }
