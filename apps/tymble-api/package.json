@@ -52,7 +52,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "swagger-themes": "^1.4.3",
-    "yahoo-finance2": "^3.10.2",
+    "yahoo-finance2": "^3.11.2",
     "zod": "catalog:"
   },
   "devDependencies": {
