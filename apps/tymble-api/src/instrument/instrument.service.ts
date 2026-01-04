@@ -122,23 +122,36 @@ export class InstrumentService {
           );
           return null;
         }
+
+        const instrumentName = String(
+          quote.name || quote.longname || quote.shortname || quote.symbol
+        );
+
+        if (['undefined', 'null'].includes(instrumentName)) {
+          this.logger.warn(
+            `No name for quote: ${JSON.stringify(quote, null, 2)}`
+          );
+          return null;
+        }
+
+        const { symbol, quoteType, exchange, ...metadata } = quote;
+
         const newInstrument = {
-          symbol: quote.symbol as string,
-          name: quote.name as string,
+          symbol: symbol as string,
+          name: instrumentName,
           type: YF_QUOTE_TYPE_TO_TYPE_MAP[
-            quote.quoteType as keyof typeof YF_QUOTE_TYPE_TO_TYPE_MAP
+            quoteType as keyof typeof YF_QUOTE_TYPE_TO_TYPE_MAP
           ],
-          exchange: (quote.exchange as string) ?? null,
-          metadata: {
-            lastSyncedAt: new Date().toISOString(),
-          },
+          exchange: (exchange as string) ?? null,
+          metadata,
         } satisfies CreateInstrument['dto'];
 
         const res = instrumentInsertSchema.safeParse(newInstrument);
         if (!res.success) {
           this.logger.warn(
             `Invalid instrument: ${newInstrument.symbol}`,
-            res.error
+            res.error,
+            JSON.stringify(newInstrument, null, 2)
           );
           return null;
         }
@@ -215,11 +228,6 @@ export class InstrumentService {
       `Found ${dbInstrument.length} results in database for "${query}"`
     );
 
-    // If we have enough results from DB, return them
-    if (dbInstrument.length >= MIN_DB_RESULTS) {
-      return { instruments: dbInstrument };
-    }
-
     // Otherwise, supplement with Yahoo Finance
     this.logger.log(`Supplementing with Yahoo Finance search for "${query}"`);
 
@@ -232,6 +240,7 @@ export class InstrumentService {
         lang: 'en-US',
         newsCount: 0,
         enableFuzzyQuery: true,
+        quotesCount: 10,
       });
       yfQuotes = yfRes?.quotes ?? [];
     } catch (error) {

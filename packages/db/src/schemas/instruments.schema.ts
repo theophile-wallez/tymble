@@ -63,7 +63,9 @@ export const instrumentSelectSchema = zodSelectGenerator(
 ).extend({});
 export const instrumentInsertSchema = zodInsertGenerator(
   instrumentTable
-).extend({});
+).extend({
+  name: z.string().min(1, 'Name should be at least 1 character'),
+});
 export const instrumentUpdateSchema = zodUpdateGenerator(
   instrumentTable
 ).extend({});

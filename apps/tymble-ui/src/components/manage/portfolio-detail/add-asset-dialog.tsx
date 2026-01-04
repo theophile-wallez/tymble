@@ -5,9 +5,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { createAsset } from '@/api/assets';
 import { searchStocks } from '@/api/instruments';
+import { InstrumentRow } from '@/components/instrument/search/instrument.row';
 import { useCommand } from '@/hooks/use-command';
 import { useTranslation } from '@/hooks/use-translation';
-import { Badge } from '@/ui/badge';
 import { Card } from '@/ui/card';
 import {
   CommandBase,
@@ -31,6 +31,13 @@ const DEBOUNCE_MS = 300;
 
 type Props = {
   portfolioId: string;
+};
+
+const levenshteinDistance = (a: string, b: string) => {
+  const matrix = Array.from({ length: a.length + 1 }, () =>
+    Array.from({ length: b.length + 1 }, () => 0)
+  );
+  return matrix[a.length][b.length];
 };
 
 export const AddAssetDialog = ({ portfolioId }: Props) => {
@@ -141,12 +148,13 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
     retry: false,
   });
 
-  let searchResults: SearchedInstrument[] = [];
-  if (searchQuery.length === 0) {
-    searchResults = suggestionsQuery.data?.instruments ?? [];
-  } else if (searchQuery.length >= 1) {
-    searchResults = searchQueryResult.data?.instruments ?? [];
-  }
+  // sorted to match the closest to the search query
+  const searchResults: SearchedInstrument[] =
+    searchQueryResult.data?.instruments.sort((a, b) => {
+      const aDistance = levenshteinDistance(debouncedQuery, a.name);
+      const bDistance = levenshteinDistance(debouncedQuery, b.name);
+      return aDistance - bDistance;
+    }) ?? [];
 
   const isLoadingSuggestions =
     searchQuery.length === 0 && suggestionsQuery.isFetching;
@@ -234,33 +242,31 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
                   ))}
                 </CommandGroup>
               )}
-              <CommandGroup>
-                {searchResults.map((stock) => (
-                  <CommandItem
-                    key={stock.symbol}
-                    onSelect={() => addAsset()}
-                    value={stock.symbol}
-                  >
-                    <div className="flex flex-1 items-center justify-between">
-                      <div>
-                        <div className="font-medium">{stock.symbol}</div>
-                        <div className="text-muted-foreground text-xs">
-                          {stock.name}
-                        </div>
-                      </div>
-                      <span className="text-muted-foreground text-xs">
-                        {stock.exchange} •{' '}
-                        <Badge className="capitalize" variant="outline">
-                          {stock.type}
-                        </Badge>
-                      </span>
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+              {suggestionsQuery.data && searchQuery.length === 0 && (
+                <CommandGroup heading="Suggested results">
+                  {suggestionsQuery.data?.instruments.map((instrument) => (
+                    <InstrumentRow
+                      instrument={instrument}
+                      key={instrument.id}
+                      onSelect={addAsset}
+                    />
+                  ))}
+                </CommandGroup>
+              )}
+              {searchResults.length > 0 && searchQuery.length > 0 && (
+                <CommandGroup heading="Search results">
+                  {searchResults.map((instrument) => (
+                    <InstrumentRow
+                      instrument={instrument}
+                      key={instrument.id}
+                      onSelect={addAsset}
+                    />
+                  ))}
+                </CommandGroup>
+              )}
 
               {!isLoadingSearch &&
-                searchQuery.length >= 2 &&
+                searchQuery.length !== 0 &&
                 searchResults.length === 0 && (
                   <CommandEmpty>
                     {t('manage.addAssetDialog.noResults')}
