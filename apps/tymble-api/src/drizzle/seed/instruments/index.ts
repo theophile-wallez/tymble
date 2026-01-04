@@ -56,7 +56,7 @@ function mapQuoteTypeToInstrumentType(quoteType?: string): InstrumentType {
     case 'CURRENCY':
       return 'currency';
     default:
-      return 'stock';
+      throw new Error(`Unknown quote type: ${quoteType}`);
   }
 }
 

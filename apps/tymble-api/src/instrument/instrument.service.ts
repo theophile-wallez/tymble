@@ -33,8 +33,8 @@ const SUGGESTED_SYMBOLS = [
   'QQQ',
 ];
 
-const QUOTE_TYPE_MAP = {
-  EQUITY: 'stock',
+const YF_QUOTE_TYPE_TO_TYPE_MAP = {
+  EQUITY: 'equity',
   ETF: 'etf',
   CRYPTOCURRENCY: 'crypto',
   MUTUALFUND: 'etf',
@@ -112,7 +112,9 @@ export class InstrumentService {
     const newInstruments = filteredQuotes
       .map((quote) => {
         const type =
-          QUOTE_TYPE_MAP[quote.quoteType as keyof typeof QUOTE_TYPE_MAP];
+          YF_QUOTE_TYPE_TO_TYPE_MAP[
+            quote.quoteType as keyof typeof YF_QUOTE_TYPE_TO_TYPE_MAP
+          ];
         if (!type) {
           this.logger.warn(
             `Unknown quote type: ${quote.quoteType} for quote: ${quote.symbol}`,
@@ -123,7 +125,9 @@ export class InstrumentService {
         const newInstrument = {
           symbol: quote.symbol as string,
           name: quote.name as string,
-          type: QUOTE_TYPE_MAP[quote.quoteType as keyof typeof QUOTE_TYPE_MAP],
+          type: YF_QUOTE_TYPE_TO_TYPE_MAP[
+            quote.quoteType as keyof typeof YF_QUOTE_TYPE_TO_TYPE_MAP
+          ],
           exchange: (quote.exchange as string) ?? null,
           metadata: {
             lastSyncedAt: new Date().toISOString(),

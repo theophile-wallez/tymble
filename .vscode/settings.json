@@ -12,6 +12,7 @@
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
   },
+  "files.readonlyFromPermissions": true,
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true
   },

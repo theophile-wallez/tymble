@@ -112,7 +112,7 @@ def fetch_popular_symbols() -> list[str]:
                 for quote in results.quotes:
                     symbol = quote.get('symbol', '')
                     quote_type = quote.get('quoteType', '')
-                    if symbol and quote_type in ('EQUITY', 'STOCK', ''):
+                    if symbol and quote_type in ('EQUITY'):
                         symbols.add(symbol)
                         stock_count += 1
             time.sleep(0.15)
@@ -137,15 +137,27 @@ def fetch_popular_symbols() -> list[str]:
 def map_quote_type(quote_type: str | None) -> str:
     """Map Yahoo Finance quote type to instrument type."""
     if not quote_type:
-        return 'stock'
+        raise ValueError('No quote type provided')
     qt = quote_type.upper()
     if qt == 'ETF':
         return 'etf'
     if qt in ('CRYPTOCURRENCY', 'CRYPTO'):
         return 'crypto'
-    if qt in ('MUTUALFUND', 'BOND'):
+    if qt in ('BOND'):
         return 'bond'
-    return 'stock'
+    if qt in ('EQUITY'):
+        return 'equity'
+    if qt in ('INDEX'):
+        return 'index'
+    if qt in ('FUTURE'):
+        return 'future'
+    if qt in ('OPTION'):
+        return 'option'
+    if qt in ('MONEY_MARKET'):
+        return 'money_market'
+    if qt in ('CURRENCY'):
+        return 'currency'
+    raise ValueError(f'Unknown quote type: {qt}')
 
 
 def get_logo_url(info: dict) -> str | None:
