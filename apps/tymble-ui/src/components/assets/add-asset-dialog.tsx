@@ -1,5 +1,5 @@
 import { Add01Icon } from '@hugeicons/core-free-icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CreateAsset, SearchedInstrument } from '@tymble/schemas';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
@@ -29,6 +29,7 @@ type Props = {
 
 export const AddAssetDialog = ({ portfolioId }: Props) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedInstrument, setSelectedInstrument] =
     useState<SearchedInstrument>();
@@ -59,6 +60,9 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
     mutationKey: ['createAsset'],
     onSuccess: () => {
       toast.success('Asset created successfully');
+      queryClient.invalidateQueries({
+        queryKey: ['portfolio', portfolioId],
+      });
       setDialogOpen(false);
     },
     onError: (error) => {
