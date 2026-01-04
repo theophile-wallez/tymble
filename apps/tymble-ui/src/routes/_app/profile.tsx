@@ -5,7 +5,6 @@ import {
   PencilEdit01Icon,
   UserIcon,
 } from '@hugeicons/core-free-icons';
-import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { type UpdateUser, updateUserSchema } from '@tymble/schemas';
@@ -13,6 +12,7 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { updateUser } from '@/api/auth';
+import { useAppForm } from '@/form/form';
 import { authQueryOptions, useAuth } from '@/hooks/use-auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/ui/avatar';
 import { Badge } from '@/ui/badge';
@@ -26,25 +26,11 @@ import {
 } from '@/ui/card';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/ui/field';
 import { Icon } from '@/ui/icon';
-import { Input } from '@/ui/input';
 import { Label } from '@/ui/label';
 import { Separator } from '@/ui/separator';
 
 export const Route = createFileRoute('/_app/profile')({
   component: RouteComponent,
-});
-
-const { fieldContext, formContext } = createFormHookContexts();
-
-const { useAppForm } = createFormHook({
-  fieldComponents: {
-    Input,
-  },
-  formComponents: {
-    Button,
-  },
-  fieldContext,
-  formContext,
 });
 
 function RouteComponent() {

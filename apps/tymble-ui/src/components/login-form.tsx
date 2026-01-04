@@ -1,10 +1,10 @@
-import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { loginSchema } from '@tymble/schemas';
 import { toast } from 'sonner';
 import { loginUser } from '@/api/auth';
 import placeholderImage from '@/assets/placeholder.svg';
+import { useAppForm } from '@/form/form';
 import { useTranslation } from '@/hooks/use-translation';
 import { Button } from '@/ui/button';
 import { Card, CardContent } from '@/ui/card';
@@ -16,23 +16,7 @@ import {
   FieldLabel,
   FieldSeparator,
 } from '@/ui/field';
-import { Input } from '@/ui/input';
 import { cn } from '@/ui/utils';
-
-const { fieldContext, formContext } = createFormHookContexts();
-
-// Allow us to bind components to the form to keep type safety but reduce production boilerplate
-// Define this once to have a generator of consistent form instances throughout your app
-const { useAppForm } = createFormHook({
-  fieldComponents: {
-    Input,
-  },
-  formComponents: {
-    Button,
-  },
-  fieldContext,
-  formContext,
-});
 
 export function LoginForm({
   className,

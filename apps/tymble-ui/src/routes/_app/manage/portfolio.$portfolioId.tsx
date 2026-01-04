@@ -6,8 +6,8 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { fetchPortfolio } from '@/api/portfolios';
-import { AddAssetDialog } from '@/components/manage/portfolio-detail/add-asset-dialog';
-import { AssetCard } from '@/components/manage/portfolio-detail/asset-card';
+import { AddAssetDialog } from '@/components/assets/add-asset-dialog';
+import { AssetCard } from '@/components/assets/asset-card';
 import {
   ContentBody,
   ContentHeader,

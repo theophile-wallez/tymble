@@ -1,9 +1,9 @@
 import { Add01Icon } from '@hugeicons/core-free-icons';
-import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPortfolioSchema } from '@tymble/schemas';
 import { toast } from 'sonner';
 import { createPortfolio } from '@/api/portfolios';
+import { useAppForm } from '@/form/form';
 import { useTranslation } from '@/hooks/use-translation';
 import { Button } from '@/ui/button';
 import {
@@ -21,7 +21,6 @@ import {
   FieldLabel,
 } from '@/ui/field';
 import { Icon } from '@/ui/icon';
-import { Input } from '@/ui/input';
 import {
   Select,
   SelectContent,
@@ -30,19 +29,6 @@ import {
   SelectValue,
 } from '@/ui/select';
 import { PORTFOLIO_TYPES, PROVIDERS } from './portfolio-constants';
-
-const { fieldContext, formContext } = createFormHookContexts();
-
-const { useAppForm } = createFormHook({
-  fieldComponents: {
-    Input,
-  },
-  formComponents: {
-    Button,
-  },
-  fieldContext,
-  formContext,
-});
 
 const createPortfolioFormSchema = createPortfolioSchema.dto;
 

@@ -5,9 +5,8 @@ import {
   instrumentSelectSchema,
   transactionSelectSchema,
 } from '@tymble/db';
-import z from 'zod';
+import type z from 'zod';
 import type { DTOStructure, InferDto } from '../types';
-import { createInstrumentSchema } from './instruments.schemas';
 
 export type Asset = z.infer<typeof assetSelectSchema>;
 
@@ -18,27 +17,9 @@ const assetWithRelationsSchema = assetSelectSchema.extend({
 
 export type AssetWithRelations = z.infer<typeof assetWithRelationsSchema>;
 
-const createAssetDtoSchema = assetInsertSchema
-  .omit({
-    id: true,
-  })
-  .extend({
-    averagePrice: assetInsertSchema.shape.averagePrice.optional(),
-    quantity: assetInsertSchema.shape.quantity.optional(),
-    fee: assetInsertSchema.shape.fee.optional(),
-  })
-  .and(
-    z.discriminatedUnion('instrumentPayloadType', [
-      z.object({
-        instrumentPayloadType: z.literal('id'),
-        instrumentId: instrumentSelectSchema.shape.id,
-      }),
-      z.object({
-        instrumentPayloadType: z.literal('symbol'),
-        instrumentSymbol: createInstrumentSchema.dto.shape.symbol,
-      }),
-    ])
-  );
+const createAssetDtoSchema = assetInsertSchema.omit({
+  id: true,
+});
 
 export const createAssetSchema = {
   dto: createAssetDtoSchema,

@@ -1,5 +1,6 @@
 import { Add01Icon } from '@hugeicons/core-free-icons';
-import { useCallback, useRef, useState } from 'react';
+import type { SearchedInstrument } from '@tymble/schemas';
+import { useCallback, useState } from 'react';
 import { SearchInstruments } from '@/components/instrument/search/search.instruments';
 import { useCommand } from '@/hooks/use-command';
 import { useTranslation } from '@/hooks/use-translation';
@@ -20,6 +21,8 @@ type Props = {
 export const AddAssetDialog = ({ portfolioId }: Props) => {
   const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedInstrument, setSelectedInstrument] =
+    useState<SearchedInstrument>();
 
   const toggleDialogOpen = useCallback(() => {
     setDialogOpen((open) => !open);
@@ -32,10 +35,6 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
     },
     enabled: !dialogOpen,
   });
-
-  const addAsset = () => {
-    // TODO: Implement asset creation API call
-  };
 
   const handleDialogChange = (open: boolean) => {
     setDialogOpen(open);
@@ -71,10 +70,25 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
           </DialogDescription>
         </DialogHeader>
         <DialogContent
-          className="top-[12vh] translate-y-0 overflow-hidden bg-accent p-0 sm:top-[18vh]"
+          className="top-[18vh] translate-y-0 overflow-hidden bg-background p-0 transition-all md:top-[12vh]"
           showCloseButton={false}
         >
-          <SearchInstruments isActive={dialogOpen} onSelect={addAsset} />
+          {!selectedInstrument && (
+            <SearchInstruments
+              isActive={dialogOpen}
+              onSelect={setSelectedInstrument}
+            />
+          )}
+          {/* create a fake form with selectedInstrument data */}
+          {selectedInstrument && (
+            <div>
+              <h3>{selectedInstrument.name}</h3>
+              <p>{selectedInstrument.symbol}</p>
+              <p>{selectedInstrument.type}</p>
+              <p>{selectedInstrument.exchange}</p>
+              <p>{selectedInstrument.currency}</p>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </>
