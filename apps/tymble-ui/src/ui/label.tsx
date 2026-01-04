@@ -5,13 +5,18 @@ import { cn } from "@/ui/utils"
 
 function Label({
   className,
+  required = false,
   ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root>) {
+}: React.ComponentProps<typeof LabelPrimitive.Root> & {
+  required?: boolean;
+}) {
   return (
     <LabelPrimitive.Root
       data-slot="label"
+      data-required={required}
       className={cn(
         "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        required && 'after:content-["*"] after:text-red-500',
         className
       )}
       {...props}

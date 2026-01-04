@@ -28,26 +28,39 @@ export class ApiValidationError extends Error {
 
 type GenericParams = Record<string, string | number | boolean>;
 type GenericBody = Record<string, unknown>;
+type GenericQuery = Record<string, string | number | boolean>;
 type ApiRequestOptions<
   T,
   P extends GenericParams,
   B extends GenericBody,
+  Q extends GenericQuery,
 > = Omit<RequestInit, 'body'> & {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   params?: P;
   schema?: ZodType<T>;
   paramSchema?: ZodType<P>;
   body?: B;
-  bodySchema?: ZodType<B>;
+  dtoSchema?: ZodType<B>;
+  query?: Q;
+  querySchema?: ZodType<Q>;
 };
 
 export async function apiRequest<
   T,
   P extends GenericParams = GenericParams,
   B extends GenericBody = GenericBody,
->(endpoint: string, options?: ApiRequestOptions<T, P, B>): Promise<T> {
-  const { schema, paramSchema, bodySchema, body, ...fetchOptions } =
-    options ?? {};
+  Q extends GenericQuery = GenericQuery,
+>(_endpoint: string, options?: ApiRequestOptions<T, P, B, Q>): Promise<T> {
+  let endpoint = _endpoint;
+  const {
+    schema,
+    paramSchema,
+    dtoSchema,
+    body,
+    query,
+    querySchema,
+    ...fetchOptions
+  } = options ?? {};
 
   if (paramSchema) {
     const result = paramSchema.safeParse(options?.params);
@@ -60,6 +73,24 @@ export async function apiRequest<
     }
   }
 
+  if (querySchema) {
+    const result = querySchema.safeParse(query);
+    if (!result.success) {
+      throw new ApiValidationError('Invalid query', query, result.error.issues);
+    }
+  }
+
+  if (query) {
+    /**
+     * This will replace {key} with the value of query[key] in the endpoint.
+     * @example /instrument/search/{name} -> /instrument/search/AAPL
+     */
+    endpoint = endpoint.replace(
+      /{(\w+)}/g,
+      (_, key) => `/${query[key] as string}`
+    );
+  }
+
   const urlString = `${API_BASE_URL}${endpoint}`;
   const url = API_BASE_URL.startsWith('http')
     ? new URL(urlString)
@@ -70,8 +101,8 @@ export async function apiRequest<
     }
   }
 
-  if (bodySchema && body) {
-    const result = bodySchema.safeParse(body);
+  if (dtoSchema && body) {
+    const result = dtoSchema.safeParse(body);
     if (!result.success) {
       throw new ApiValidationError('Invalid body', body, result.error.issues);
     }

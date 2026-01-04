@@ -22,7 +22,7 @@ export const createPortfolio = (data: CreatePortfolio['dto']) =>
   apiRequest('/portfolio', {
     method: 'POST',
     body: data,
-    bodySchema: createPortfolioSchema.dto,
+    dtoSchema: createPortfolioSchema.dto,
     schema: createPortfolioSchema.res,
   });
 

@@ -14,7 +14,6 @@ import {
  */
 export const instrumentMetadataSchema = z
   .object({
-    source: z.enum(['yahoo', 'manual']),
     lastSyncedAt: z.string().optional(),
     // Core fields
     sector: z.string().optional(),

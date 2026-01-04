@@ -1,19 +1,19 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: simple extends */
-
 import type z from 'zod';
 
-export type DTOStructure<
-  T extends z.ZodType<any> = z.ZodType<unknown>,
-  R extends z.ZodType<any> = z.ZodType<unknown>,
-  P extends z.ZodType<any> = z.ZodType<unknown>,
-  Q extends ZodObjectExactlyOneStringKey<z.ZodRawShape> = ZodObjectExactlyOneStringKey<z.ZodRawShape>,
-> = {
-  res: R;
-} & AtLeastOne<{
-  dto: T;
-  params: P;
-  query: Q;
-}>;
+export const defineDto = <
+  T extends z.ZodTypeAny,
+  R extends z.ZodTypeAny,
+  P extends z.ZodTypeAny,
+  Q extends z.ZodRawShape,
+>(
+  schema: {
+    res: R;
+  } & AtLeastOne<{
+    dto: T;
+    params: P;
+    query: z.ZodObject<ExactlyOneStringShape<Q>>;
+  }>
+) => schema;
 
 type AtLeastOne<T, Keys extends keyof T = keyof T> = Partial<T> &
   {

@@ -1,5 +1,6 @@
 import type { InstrumentMetadata } from '@tymble/db';
 import * as schema from '@tymble/db';
+import { InstrumentType } from '@tymble/schemas';
 import { eq } from 'drizzle-orm';
 import YahooFinance from 'yahoo-finance2';
 import type { SeedDatabase } from '../utils/getSeedDatabase.utils';
@@ -33,9 +34,7 @@ async function withRetry<T>(
   throw new Error('Max retries exceeded');
 }
 
-function mapQuoteTypeToInstrumentType(
-  quoteType?: string
-): 'stock' | 'bond' | 'etf' | 'crypto' {
+function mapQuoteTypeToInstrumentType(quoteType?: string): InstrumentType {
   switch (quoteType?.toUpperCase()) {
     case 'ETF':
       return 'etf';
@@ -44,6 +43,18 @@ function mapQuoteTypeToInstrumentType(
     case 'MUTUALFUND':
     case 'BOND':
       return 'bond';
+    case 'EQUITY':
+      return 'equity';
+    case 'INDEX':
+      return 'index';
+    case 'FUTURE':
+      return 'future';
+    case 'OPTION':
+      return 'option';
+    case 'MONEY_MARKET':
+      return 'money_market';
+    case 'CURRENCY':
+      return 'currency';
     default:
       return 'stock';
   }

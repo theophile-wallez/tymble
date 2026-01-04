@@ -36,18 +36,15 @@ export type UpdateInstrument = InferDto<typeof updateInstrumentSchema>;
  * Search Instrument Schema
  */
 
-const searchedinstrumentSchema = instrumentSelectSchema.extend({
-  source: z.enum(['local', 'remote']),
-});
-
 export const searchInstrumentSchema = {
-  dto: z.object({
+  query: z.object({
     name: z.string(),
   }),
   res: z.object({
-    instruments: z.array(searchedinstrumentSchema),
+    instruments: z.array(instrumentSelectSchema),
   }),
 } as const satisfies DTOStructure;
 
 export type SearchInstrument = InferDto<typeof searchInstrumentSchema>;
-export type SearchedInstrument = z.infer<typeof searchedinstrumentSchema>;
+// TODO: Remove this type
+export type SearchedInstrument = z.infer<typeof instrumentSelectSchema>;

@@ -5,6 +5,6 @@ export const createAsset = (data: CreateAsset['dto']) =>
   apiRequest('/asset', {
     method: 'POST',
     body: data,
-    bodySchema: createAssetSchema.dto,
+    dtoSchema: createAssetSchema.dto,
     schema: createAssetSchema.res,
   });

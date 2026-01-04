@@ -1,9 +1,14 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
-import type { InstrumentType } from '@tymble/db';
 import * as schema from '@tymble/db';
+import { type InstrumentType, instrumentInsertSchema } from '@tymble/db';
+import {
+  CreateInstrument,
+  SearchedInstrument,
+  SearchInstrument,
+} from '@tymble/schemas';
 import { eq, ilike, inArray, or } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import type { SearchResult } from 'yahoo-finance2/modules/search';
+import { SearchResult } from 'yahoo-finance2/modules/search';
 import { DrizzleAsyncProvider } from '@/drizzle/drizzle.provider';
 import { TymbleException } from '@/errors/tymble.exception';
 import type { YahooFinanceType } from '@/stocks/yahoo-finance.provider';
@@ -17,6 +22,8 @@ const SUGGESTED_SYMBOLS = [
   'GOOGL',
   'AMZN',
   'NVDA',
+  'BTC-USD',
+  'ETH-USD',
   'META',
   'TSLA',
   'BRK.B',
@@ -24,19 +31,19 @@ const SUGGESTED_SYMBOLS = [
   'V',
   'SPY',
   'QQQ',
-  'BTC-USD',
-  'ETH-USD',
 ];
 
-const QUOTE_TYPE_MAP: Record<string, InstrumentType> = {
+const QUOTE_TYPE_MAP = {
   EQUITY: 'stock',
   ETF: 'etf',
   CRYPTOCURRENCY: 'crypto',
   MUTUALFUND: 'etf',
-  INDEX: 'stock',
-  FUTURE: 'stock',
-  OPTION: 'stock',
-};
+  INDEX: 'index',
+  FUTURE: 'future',
+  OPTION: 'option',
+  MONEY_MARKET: 'money_market',
+  CURRENCY: 'currency',
+} as const satisfies Record<string, InstrumentType>;
 
 @Injectable()
 export class InstrumentService {
@@ -78,7 +85,7 @@ export class InstrumentService {
   async fuzzySearch(query: string) {
     this.logger.log(`Fuzzy searching instruments for query: ${query}`);
 
-    const pattern = `%${query}%`;
+    const pattern = `%${query}%` as const;
 
     return await this.db
       .select()
@@ -89,53 +96,86 @@ export class InstrumentService {
           ilike(schema.instrumentTable.name, pattern)
         )
       )
-      .limit(5);
+      .limit(10);
   }
 
   private async saveYahooFinanceInstruments(
-    quotes: Array<{ symbol: string } & Record<string, unknown>>
-  ) {
-    if (quotes.length === 0) {
-      return;
+    yahooQuotes: SearchResult['quotes']
+  ): Promise<SearchInstrument['res']['instruments']> {
+    const filteredQuotes = yahooQuotes.filter((quote) => {
+      if (!quote.symbol) {
+        this.logger.warn(`No symbol for quote: ${JSON.stringify(quote)}`);
+        return false;
+      }
+      return true;
+    });
+    const newInstruments = filteredQuotes
+      .map((quote) => {
+        const type =
+          QUOTE_TYPE_MAP[quote.quoteType as keyof typeof QUOTE_TYPE_MAP];
+        if (!type) {
+          this.logger.warn(
+            `Unknown quote type: ${quote.quoteType} for quote: ${quote.symbol}`,
+            quote
+          );
+          return null;
+        }
+        const newInstrument = {
+          symbol: quote.symbol as string,
+          name: quote.name as string,
+          type: QUOTE_TYPE_MAP[quote.quoteType as keyof typeof QUOTE_TYPE_MAP],
+          exchange: (quote.exchange as string) ?? null,
+          metadata: {
+            lastSyncedAt: new Date().toISOString(),
+          },
+        } satisfies CreateInstrument['dto'];
+
+        const res = instrumentInsertSchema.safeParse(newInstrument);
+        if (!res.success) {
+          this.logger.warn(
+            `Invalid instrument: ${newInstrument.symbol}`,
+            res.error
+          );
+          return null;
+        }
+
+        this.logger.log(`Saving new instrument: ${newInstrument.symbol}`);
+        return newInstrument;
+      })
+      .filter((instrument): instrument is NonNullable<typeof instrument> =>
+        Boolean(instrument)
+      );
+
+    if (newInstruments.length === 0) {
+      this.logger.log('No new instruments to save');
+      return [];
     }
 
-    const instrumentsToInsert = quotes.map((quote) => ({
-      symbol: quote.symbol,
-      name:
-        (quote.longname as string) ||
-        (quote.shortname as string) ||
-        (quote.name as string) ||
-        quote.symbol,
-      type:
-        QUOTE_TYPE_MAP[(quote.quoteType as string) ?? ''] ?? ('stock' as const),
-      exchange: (quote.exchange as string) ?? null,
-      metadata: {
-        source: 'yahoo' as const,
-        lastSyncedAt: new Date().toISOString(),
-      },
-    }));
-
     try {
-      await this.db
+      const savedInstruments = await this.db
         .insert(schema.instrumentTable)
-        .values(instrumentsToInsert)
-        .onConflictDoNothing({ target: schema.instrumentTable.symbol });
+        .values(newInstruments)
+        .onConflictDoNothing({ target: schema.instrumentTable.symbol })
+        .returning();
 
       this.logger.log(
-        `Saved ${quotes.length} new instruments from Yahoo Finance`
+        `Saved ${savedInstruments.length} new instruments from Yahoo Finance with symbols: 
+        ${savedInstruments.map((instrument) => instrument.symbol).join(', ')}`
       );
+      return savedInstruments;
     } catch (error) {
       this.logger.warn('Failed to save some Yahoo Finance instruments', error);
+      return [];
     }
   }
 
-  private async getSuggestedInstruments() {
+  private async getSuggestedInstruments(): Promise<SearchedInstrument[]> {
     const dbResults = await this.db
       .select()
       .from(schema.instrumentTable)
       .where(inArray(schema.instrumentTable.symbol, SUGGESTED_SYMBOLS));
 
-    const bySymbol = new Map(
+    const instrumentBySymbolMap = new Map(
       dbResults.map((instrument) => [
         instrument.symbol.toUpperCase(),
         instrument,
@@ -143,50 +183,37 @@ export class InstrumentService {
     );
 
     return SUGGESTED_SYMBOLS.map((symbol) => {
-      const instrument = bySymbol.get(symbol.toUpperCase());
+      const instrument = instrumentBySymbolMap.get(symbol.toUpperCase());
       if (!instrument) {
         return null;
       }
       return {
-        symbol: instrument.symbol,
-        name: instrument.name,
-        type: instrument.type,
-        exchange: instrument.exchange,
-        isLocalData: false,
-        metadata: instrument.metadata,
-      };
-    }).filter((quote): quote is NonNullable<typeof quote> => Boolean(quote));
+        ...instrument,
+        source: 'local',
+      } as const;
+    }).filter((instrument): instrument is NonNullable<typeof instrument> =>
+      Boolean(instrument)
+    );
   }
 
-  async searchByName(name: string) {
+  async searchByName(name: string): Promise<SearchInstrument['res']> {
     const query = name?.trim() ?? '';
     if (query.length === 0) {
       this.logger.log('Returning suggested instruments');
-      return { quotes: await this.getSuggestedInstruments() };
+      return { instruments: await this.getSuggestedInstruments() };
     }
 
     this.logger.log(`Searching for instruments by name: ${query}`);
 
     // First, search our database
-    const dbResults = await this.fuzzySearch(query);
+    const dbInstrument = await this.fuzzySearch(query);
     this.logger.log(
-      `Found ${dbResults.length} results in database for "${query}"`
+      `Found ${dbInstrument.length} results in database for "${query}"`
     );
 
-    // Map DB results to a consistent format
-    // TODO: Type this
-    const dbQuotes = dbResults.map((instrument) => ({
-      symbol: instrument.symbol,
-      name: instrument.name,
-      type: instrument.type,
-      exchange: instrument.exchange,
-      isLocalData: false,
-      metadata: instrument.metadata,
-    }));
-
     // If we have enough results from DB, return them
-    if (dbResults.length >= MIN_DB_RESULTS) {
-      return { quotes: dbQuotes };
+    if (dbInstrument.length >= MIN_DB_RESULTS) {
+      return { instruments: dbInstrument };
     }
 
     // Otherwise, supplement with Yahoo Finance
@@ -205,30 +232,29 @@ export class InstrumentService {
       yfQuotes = yfRes?.quotes ?? [];
     } catch (error) {
       this.logger.warn(`Yahoo Finance search failed for "${name}"`, error);
-      return { quotes: dbQuotes };
+      return { instruments: dbInstrument };
     }
 
     // Filter for quotes with symbols and mark as Yahoo Finance results
-    const markedYfQuotes = yfQuotes
-      .filter(
-        (quote): quote is typeof quote & { symbol: string } =>
-          'symbol' in quote && typeof quote.symbol === 'string'
-      )
-      .map((quote) => ({
-        ...quote,
-        isLocalData: true,
-      }));
+    const markedYfQuotes = yfQuotes.filter(
+      (quote): quote is typeof quote & { symbol: string } =>
+        'symbol' in quote && typeof quote.symbol === 'string'
+    );
 
     // Combine results, DB first, then Yahoo Finance (excluding duplicates)
-    const dbSymbols = new Set(dbQuotes.map((q) => q.symbol.toUpperCase()));
+    const dbSymbols = new Set(dbInstrument.map((q) => q.symbol.toUpperCase()));
     const uniqueYfQuotes = markedYfQuotes.filter(
       (q) => !dbSymbols.has(q.symbol.toUpperCase())
     );
 
     // Save new Yahoo Finance instruments to our database
-    await this.saveYahooFinanceInstruments(uniqueYfQuotes);
+    if (uniqueYfQuotes.length > 0) {
+      const newInstruments =
+        await this.saveYahooFinanceInstruments(uniqueYfQuotes);
+      return { instruments: [...dbInstrument, ...newInstruments] };
+    }
 
-    return { quotes: [...dbQuotes, ...uniqueYfQuotes] };
+    return { instruments: dbInstrument };
   }
 
   async findOne(id: string) {

@@ -4,6 +4,7 @@ import type { SearchedInstrument } from '@tymble/schemas';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { searchStocks } from '@/api/instruments';
+import { INSTRUMENT_TYPES } from '@/constants/instrumentType';
 import { Button } from '@/ui/button';
 import {
   Card,
@@ -32,13 +33,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui/select';
-
-const INSTRUMENT_TYPES = [
-  { value: 'stock', label: 'Stock' },
-  { value: 'bond', label: 'Bond' },
-  { value: 'etf', label: 'ETF' },
-  { value: 'crypto', label: 'Crypto' },
-] as const;
 
 const DEBOUNCE_MS = 300;
 
@@ -157,7 +151,9 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
           >
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="symbol">Symbol *</Label>
+                <Label htmlFor="symbol" required>
+                  Symbol
+                </Label>
                 <customForm.Field name="symbol">
                   {(field) => (
                     <Input
@@ -172,7 +168,9 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="name" required>
+                  Name
+                </Label>
                 <customForm.Field name="name">
                   {(field) => (
                     <Input
@@ -188,7 +186,9 @@ export const AddAssetForm = ({ portfolioId: _portfolioId }: Props) => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label htmlFor="type">Type *</Label>
+              <Label htmlFor="type" required>
+                Type
+              </Label>
               <customForm.Field name="type">
                 {(field) => (
                   <Select

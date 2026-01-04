@@ -11,7 +11,7 @@ export const loginUser = (credentials: Login['dto']) =>
   apiRequest('/auth/login', {
     method: 'POST',
     body: credentials,
-    bodySchema: loginSchema.dto,
+    dtoSchema: loginSchema.dto,
     schema: loginSchema.res,
   });
 
@@ -24,6 +24,6 @@ export const updateUser = (data: UpdateUser['dto']) =>
   apiRequest('/user/profile', {
     method: 'PATCH',
     body: data,
-    bodySchema: updateUserSchema.dto,
+    dtoSchema: updateUserSchema.dto,
     schema: updateUserSchema.res,
   });
