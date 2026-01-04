@@ -194,5 +194,45 @@
       "addedAsset": "Asset added to portfolio.",
       "addAssetFailed": "Failed to add asset to portfolio."
     }
+  },
+  "instrument": {
+    "type": {
+      "equity": {
+        "label": "Equity",
+        "description": "A share of ownership in a company. When you own a stock, you own a small part of that company."
+      },
+      "bond": {
+        "label": "Bond",
+        "description": "A financial product where you lend money to a company or government and receive interest in return."
+      },
+      "etf": {
+        "label": "ETF",
+        "description": "A fund that groups many assets together, such as stocks or bonds, and is traded on the stock exchange like a single stock."
+      },
+      "crypto": {
+        "label": "Crypto",
+        "description": "A digital asset that uses cryptography and blockchain technology, such as Bitcoin or Ethereum."
+      },
+      "index": {
+        "label": "Index",
+        "description": "A collection of assets used to represent and track the performance of a market or a specific sector."
+      },
+      "future": {
+        "label": "Future",
+        "description": "A contract that commits you to buy or sell an asset at a set price on a specific future date."
+      },
+      "option": {
+        "label": "Option",
+        "description": "A contract that gives you the right, but not the obligation, to buy or sell an asset at a set price before a certain date."
+      },
+      "money_market": {
+        "label": "Money Market",
+        "description": "Short-term, low-risk investments commonly used to hold cash or earn small returns over a short period."
+      },
+      "currency": {
+        "label": "Currency",
+        "description": "Money issued by a country and used for everyday payments, such as the euro or the US dollar."
+      }
+    }
   }
 }

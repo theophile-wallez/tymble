@@ -229,7 +229,11 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
               placeholder={t('manage.addAssetDialog.searchPlaceholder')}
               value={searchQuery}
             />
-            <CommandList>
+            <CommandList
+              style={{
+                scrollbarGutter: 'stable',
+              }}
+            >
               {(isLoadingSuggestions ||
                 isTypingWithoutResults ||
                 isLoadingSearch) && (

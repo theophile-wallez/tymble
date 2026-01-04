@@ -10,10 +10,22 @@ html,
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  --color-equity: #5e6ad2;
+  --color-crypto: #f53b57;
+  --color-bond: #4cb782;
+  --color-etf: #8e44ad;
+  --color-index: #3c40c6;
+  --color-future: #ef5777;
+  --color-option: #e67e22;
+  --color-money-market: #808e9b;
+  --color-currency: #2c3e50;
 }
 
 @custom-variant dark (&:is(.dark *));
 
+/* Colors */
+
+/* Theme */
 @theme inline {
   --font-sans: "Geist", sans-serif;
   --font-mono: "Geist Mono", monospace;
@@ -172,6 +184,8 @@ html,
 
   &::-webkit-scrollbar-track {
     background: transparent;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {

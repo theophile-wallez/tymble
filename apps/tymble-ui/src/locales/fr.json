@@ -194,5 +194,45 @@
       "addedAsset": "Actif ajouté au portefeuille.",
       "addAssetFailed": "Impossible d'ajouter l'actif au portefeuille."
     }
+  },
+  "instrument": {
+    "type": {
+      "equity": {
+        "label": "Action",
+        "description": "Une part de propriété dans une entreprise. Détenir une action signifie posséder une partie de cette entreprise."
+      },
+      "bond": {
+        "label": "Obligation",
+        "description": "Un produit financier où vous prêtez de l'argent à une entreprise ou à un État, en échange d'intérêts."
+      },
+      "etf": {
+        "label": "ETF",
+        "description": "Un fonds qui regroupe plusieurs actifs, comme des actions ou des obligations, et qui se négocie en bourse comme une action."
+      },
+      "crypto": {
+        "label": "Crypto",
+        "description": "Un actif numérique reposant sur la cryptographie et la blockchain, comme le Bitcoin ou l'Ethereum."
+      },
+      "index": {
+        "label": "Indice",
+        "description": "Un ensemble d'actifs servant à mesurer la performance d'un marché ou d'un secteur particulier."
+      },
+      "future": {
+        "label": "Future",
+        "description": "Un contrat qui engage à acheter ou vendre un actif à un prix fixé, à une date future déterminée."
+      },
+      "option": {
+        "label": "Option",
+        "description": "Un contrat qui donne le droit, mais pas l'obligation, d'acheter ou de vendre un actif à un prix fixé avant une date donnée."
+      },
+      "money_market": {
+        "label": "Marché monétaire",
+        "description": "Des placements à court terme et à faible risque, souvent utilisés pour placer de la trésorerie."
+      },
+      "currency": {
+        "label": "Devise",
+        "description": "La monnaie officielle utilisée dans un pays, comme l'euro ou le dollar américain."
+      }
+    }
   }
 }
