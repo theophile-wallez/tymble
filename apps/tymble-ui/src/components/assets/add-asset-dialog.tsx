@@ -135,6 +135,7 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
         >
           <AnimatePresence custom={direction} initial={false} mode="popLayout">
             {selectedInstrument ? (
+              // STEP 2: Preview the selected instrument and add an optional fee
               <motion.div
                 animate="animate"
                 custom={direction}
@@ -198,6 +199,7 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
                 </DialogFooter>
               </motion.div>
             ) : (
+              // STEP 1: Search for an instrument
               <motion.div
                 animate="animate"
                 custom={direction}
@@ -217,6 +219,12 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
                   }),
                 }}
               >
+                <DialogHeader className="sr-only">
+                  <DialogTitle>{t('manage.addAssetDialog.title')}</DialogTitle>
+                  <DialogDescription>
+                    {t('manage.addAssetDialog.description')}
+                  </DialogDescription>
+                </DialogHeader>
                 <SearchInstruments
                   isActive={dialogOpen}
                   onSelect={setSelectedInstrument}
