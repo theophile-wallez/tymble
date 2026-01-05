@@ -135,28 +135,7 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
           <AnimatePresence custom={direction} initial={false} mode="popLayout">
             {selectedInstrument ? (
               // STEP 2: Preview the selected instrument and add an optional fee
-              <motion.div
-                animate="animate"
-                className="w-full space-y-6 px-4 py-6"
-                custom={direction}
-                exit="exit"
-                initial="initial"
-                key="selected-instrument"
-                transition={{ duration: 0.15, ease: 'easeOut' }}
-                variants={{
-                  initial: (dir: number) => ({
-                    x: `${100 * dir}%`,
-                    opacity: 0,
-                    filter: 'blur(10px)',
-                  }),
-                  animate: { x: '0%', opacity: 1, filter: 'blur(0px)' },
-                  exit: (dir: number) => ({
-                    x: `${-100 * dir}%`,
-                    opacity: 0,
-                    filter: 'blur(10px)',
-                  }),
-                }}
-              >
+              <motion.div className="w-full space-y-6 px-4 py-6">
                 <DialogHeader>
                   <DialogTitle>{t('manage.addAssetDialog.title')}</DialogTitle>
                   <DialogDescription>
@@ -201,29 +180,7 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
                 </DialogFooter>
               </motion.div>
             ) : (
-              // STEP 1: Search for an instrument
-              <motion.div
-                animate="animate"
-                custom={direction}
-                exit="exit"
-                initial="initial"
-                key="search-instruments"
-                transition={{ duration: 0.15, ease: 'easeOut' }}
-                variants={{
-                  initial: (dir: number) => ({
-                    x: `${100 * dir}%`,
-                    opacity: 0,
-                    filter: 'blur(10px)',
-                  }),
-                  animate: { x: '0%', opacity: 1, filter: 'blur(0px)' },
-                  exit: (dir: number) => ({
-                    x: `${-100 * dir}%`,
-                    opacity: 0,
-                    filter: 'blur(10px)',
-                    pointerEvents: 'none',
-                  }),
-                }}
-              >
+              <motion.div>
                 <DialogHeader className="sr-only">
                   <DialogTitle>{t('manage.addAssetDialog.title')}</DialogTitle>
                   <DialogDescription>

@@ -113,6 +113,9 @@ export const SearchInstruments = ({ isActive, onSelect }: Props) => {
     searchErrorRef.current = false;
   }, [searchQueryResult.isError, t]);
 
+  console.log('isLoadingSuggestions: ', isLoadingSuggestions);
+  console.log('isLoadingSearch: ', isLoadingSearch);
+
   return (
     <CommandBase shouldFilter={false}>
       <CommandInput
@@ -144,17 +147,19 @@ export const SearchInstruments = ({ isActive, onSelect }: Props) => {
             ))}
           </CommandGroup>
         )}
-        {suggestionsQuery.data && searchQuery.length === 0 && (
-          <CommandGroup heading="Suggested results">
-            {suggestionsQuery.data?.instruments.map((instrument) => (
-              <InstrumentRow
-                instrument={instrument}
-                key={instrument.id}
-                onSelect={onSelect}
-              />
-            ))}
-          </CommandGroup>
-        )}
+        {!isLoadingSuggestions &&
+          suggestionsQuery.data &&
+          searchQuery.length === 0 && (
+            <CommandGroup heading="Suggested results">
+              {suggestionsQuery.data?.instruments.map((instrument) => (
+                <InstrumentRow
+                  instrument={instrument}
+                  key={instrument.id}
+                  onSelect={onSelect}
+                />
+              ))}
+            </CommandGroup>
+          )}
         {searchResults.length > 0 && searchQuery.length > 0 && (
           <CommandGroup heading="Search results">
             {searchResults.map((instrument) => (
