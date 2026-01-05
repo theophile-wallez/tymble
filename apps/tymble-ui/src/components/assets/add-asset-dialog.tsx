@@ -1,7 +1,8 @@
 import { Add01Icon } from '@hugeicons/core-free-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CreateAsset, SearchedInstrument } from '@tymble/schemas';
-import { useCallback, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { createAsset } from '@/api/assets';
 import { SearchInstruments } from '@/components/instrument/search/search.instruments';
@@ -33,6 +34,8 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedInstrument, setSelectedInstrument] =
     useState<SearchedInstrument>();
+  const [direction, setDirection] = useState(1);
+  const selectedInstrumentRef = useRef(false);
 
   const [data, setData] = useState<Pick<CreateAsset['dto'], 'fee'>>({
     fee: '',
@@ -53,6 +56,14 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
   const handleDialogChange = (open: boolean) => {
     setDialogOpen(open);
   };
+
+  useEffect(() => {
+    const isSelected = Boolean(selectedInstrument);
+    if (selectedInstrumentRef.current !== isSelected) {
+      setDirection(isSelected ? 1 : -1);
+      selectedInstrumentRef.current = isSelected;
+    }
+  }, [selectedInstrument]);
 
   // declare new react query mutation to create an asset
   const createAssetMutation = useMutation({
@@ -117,58 +128,102 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
       <Dialog onOpenChange={handleDialogChange} open={dialogOpen}>
         <DialogContent
           className={cn(
-            'top-[18vh] translate-y-0 overflow-hidden bg-background p-0 transition-all md:top-[12vh]',
+            'top-[18vh] translate-y-0 overflow-hidden bg-background p-0 md:top-[12vh]',
             selectedInstrument && 'p-6'
           )}
           showCloseButton={false}
         >
-          <DialogHeader className={cn(!selectedInstrument && 'sr-only')}>
-            <DialogTitle>{t('manage.addAssetDialog.title')}</DialogTitle>
-            <DialogDescription>
-              {t('manage.addAssetDialog.description')}
-            </DialogDescription>
-          </DialogHeader>
-          {selectedInstrument ? (
-            <>
-              <div className="space-y-6">
-                <InstrumentPreviewCard instrument={selectedInstrument} />
-                <div className="space-y-2">
-                  <Label htmlFor="fee">{t('manage.addAssetDialog.fee')}</Label>
-                  <Input
-                    autoFocus={true}
-                    id="fee"
-                    max={1}
-                    min={0}
-                    name="fee"
-                    onChange={(e) => setData({ ...data, fee: e.target.value })}
-                    placeholder={t('manage.addAssetDialog.feePlaceholder')}
-                    step={0.01}
-                    type="number"
-                    value={data.fee}
-                  />
+          <AnimatePresence custom={direction} initial={false} mode="popLayout">
+            {selectedInstrument ? (
+              <motion.div
+                animate="animate"
+                custom={direction}
+                exit="exit"
+                initial="initial"
+                key="selected-instrument"
+                transition={{ duration: 0.15, ease: 'easeOut' }}
+                variants={{
+                  initial: (dir: number) => ({
+                    x: `${110 * dir}%`,
+                    opacity: 0,
+                  }),
+                  animate: { x: '0%', opacity: 1 },
+                  exit: (dir: number) => ({
+                    x: `${-110 * dir}%`,
+                    opacity: 0,
+                  }),
+                }}
+              >
+                <DialogHeader>
+                  <DialogTitle>{t('manage.addAssetDialog.title')}</DialogTitle>
+                  <DialogDescription>
+                    {t('manage.addAssetDialog.description')}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-6">
+                  <InstrumentPreviewCard instrument={selectedInstrument} />
+                  <div className="space-y-2">
+                    <Label htmlFor="fee">
+                      {t('manage.addAssetDialog.fee')}
+                    </Label>
+                    <Input
+                      autoFocus={true}
+                      id="fee"
+                      max={1}
+                      min={0}
+                      name="fee"
+                      onChange={(e) =>
+                        setData({ ...data, fee: e.target.value })
+                      }
+                      placeholder={t('manage.addAssetDialog.feePlaceholder')}
+                      step={0.01}
+                      type="number"
+                      value={data.fee}
+                    />
+                  </div>
                 </div>
-              </div>
-              <DialogFooter className="mt-4">
-                <Button
-                  onClick={() => setSelectedInstrument(undefined)}
-                  type="button"
-                  variant="outline"
-                >
-                  {t('manage.addAssetDialog.goBackButton')}
-                </Button>
-                <Button onClick={onAddAsset} type="button">
-                  {createAssetMutation.isPending
-                    ? t('manage.addAssetDialog.addingAssetButton')
-                    : t('manage.addAssetDialog.addAssetButton')}
-                </Button>
-              </DialogFooter>
-            </>
-          ) : (
-            <SearchInstruments
-              isActive={dialogOpen}
-              onSelect={setSelectedInstrument}
-            />
-          )}
+                <DialogFooter className="mt-4">
+                  <Button
+                    onClick={() => setSelectedInstrument(undefined)}
+                    type="submit"
+                    variant="outline"
+                  >
+                    {t('manage.addAssetDialog.goBackButton')}
+                  </Button>
+                  <Button onClick={onAddAsset} type="button">
+                    {createAssetMutation.isPending
+                      ? t('manage.addAssetDialog.addingAssetButton')
+                      : t('manage.addAssetDialog.addAssetButton')}
+                  </Button>
+                </DialogFooter>
+              </motion.div>
+            ) : (
+              <motion.div
+                animate="animate"
+                custom={direction}
+                exit="exit"
+                initial="initial"
+                key="search-instruments"
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                variants={{
+                  initial: (dir: number) => ({
+                    x: `${110 * dir}%`,
+                    opacity: 0,
+                  }),
+                  animate: { x: '0%', opacity: 1 },
+                  exit: (dir: number) => ({
+                    x: `${-110 * dir}%`,
+                    opacity: 0,
+                  }),
+                }}
+              >
+                <SearchInstruments
+                  isActive={dialogOpen}
+                  onSelect={setSelectedInstrument}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </DialogContent>
       </Dialog>
     </>
