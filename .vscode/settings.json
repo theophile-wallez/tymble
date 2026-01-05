@@ -32,5 +32,6 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "biomejs.biome"
-  }
+  },
+  "css.lint.vendorPrefix": "ignore"
 }

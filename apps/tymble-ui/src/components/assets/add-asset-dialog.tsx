@@ -2,7 +2,7 @@ import { Add01Icon } from '@hugeicons/core-free-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CreateAsset, SearchedInstrument } from '@tymble/schemas';
 import { AnimatePresence, motion } from 'motion/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { createAsset } from '@/api/assets';
 import { SearchInstruments } from '@/components/instrument/search/search.instruments';
@@ -34,8 +34,8 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedInstrument, setSelectedInstrument] =
     useState<SearchedInstrument>();
-  const [direction, setDirection] = useState(1);
-  const selectedInstrumentRef = useRef(false);
+  const [direction, setDirection] = useState(-1);
+  console.log('direction: ', direction);
 
   const [data, setData] = useState<Pick<CreateAsset['dto'], 'fee'>>({
     fee: '',
@@ -58,11 +58,11 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
   };
 
   useEffect(() => {
-    const isSelected = Boolean(selectedInstrument);
-    if (selectedInstrumentRef.current !== isSelected) {
-      setDirection(isSelected ? 1 : -1);
-      selectedInstrumentRef.current = isSelected;
-    }
+    setDirection(() => {
+      const newDirection = selectedInstrument ? 1 : -1;
+      console.log('newDirection: ', newDirection);
+      return newDirection;
+    });
   }, [selectedInstrument]);
 
   // declare new react query mutation to create an asset
@@ -128,8 +128,7 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
       <Dialog onOpenChange={handleDialogChange} open={dialogOpen}>
         <DialogContent
           className={cn(
-            'top-[18vh] translate-y-0 overflow-hidden bg-background p-0 md:top-[12vh]',
-            selectedInstrument && 'p-6'
+            'top-[18vh] translate-y-0 overflow-hidden bg-background p-0 md:top-[12vh]'
           )}
           showCloseButton={false}
         >
@@ -138,6 +137,7 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
               // STEP 2: Preview the selected instrument and add an optional fee
               <motion.div
                 animate="animate"
+                className="w-full space-y-6 px-4 py-6"
                 custom={direction}
                 exit="exit"
                 initial="initial"
@@ -145,13 +145,15 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
                 transition={{ duration: 0.15, ease: 'easeOut' }}
                 variants={{
                   initial: (dir: number) => ({
-                    x: `${110 * dir}%`,
+                    x: `${100 * dir}%`,
                     opacity: 0,
+                    filter: 'blur(10px)',
                   }),
-                  animate: { x: '0%', opacity: 1 },
+                  animate: { x: '0%', opacity: 1, filter: 'blur(0px)' },
                   exit: (dir: number) => ({
-                    x: `${-110 * dir}%`,
+                    x: `${-100 * dir}%`,
                     opacity: 0,
+                    filter: 'blur(10px)',
                   }),
                 }}
               >
@@ -206,16 +208,19 @@ export const AddAssetDialog = ({ portfolioId }: Props) => {
                 exit="exit"
                 initial="initial"
                 key="search-instruments"
-                transition={{ duration: 0.25, ease: 'easeOut' }}
+                transition={{ duration: 0.15, ease: 'easeOut' }}
                 variants={{
                   initial: (dir: number) => ({
-                    x: `${110 * dir}%`,
+                    x: `${100 * dir}%`,
                     opacity: 0,
+                    filter: 'blur(10px)',
                   }),
-                  animate: { x: '0%', opacity: 1 },
+                  animate: { x: '0%', opacity: 1, filter: 'blur(0px)' },
                   exit: (dir: number) => ({
-                    x: `${-110 * dir}%`,
+                    x: `${-100 * dir}%`,
                     opacity: 0,
+                    filter: 'blur(10px)',
+                    pointerEvents: 'none',
                   }),
                 }}
               >
