@@ -9,12 +9,10 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
 } from '@/ui/command';
-import { Skeleton } from '@/ui/skeleton';
 import { levenshteinDistance } from '@/utils/levenshteinDistance';
-import { InstrumentRow } from './instrument.row';
+import { InstrumentRow, InstrumentRowSkeleton } from './instrument.row';
 
 type Props = {
   isActive: boolean;
@@ -64,6 +62,7 @@ export const SearchInstruments = ({ isActive, onSelect }: Props) => {
     queryFn: () => searchStocks(''),
     enabled: isActive && searchQuery.length === 0,
     retry: false,
+    staleTime: Number.POSITIVE_INFINITY,
   });
 
   const searchQueryResult = useQuery({
@@ -71,6 +70,7 @@ export const SearchInstruments = ({ isActive, onSelect }: Props) => {
     queryFn: () => searchStocks(debouncedQuery),
     enabled: isActive && debouncedQuery.length >= 1,
     retry: false,
+    staleTime: Number.POSITIVE_INFINITY,
   });
 
   // sorted to match the closest to the search query
@@ -135,15 +135,7 @@ export const SearchInstruments = ({ isActive, onSelect }: Props) => {
             }
           >
             {Array.from({ length: 5 }).map((_, index) => (
-              <CommandItem disabled key={`suggested-skeleton-${index}`}>
-                <div className="flex flex-1 items-center justify-between">
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-16" />
-                    <Skeleton className="h-3 w-32" />
-                  </div>
-                  <Skeleton className="h-3 w-20" />
-                </div>
-              </CommandItem>
+              <InstrumentRowSkeleton key={`suggested-skeleton-${index}`} />
             ))}
           </CommandGroup>
         )}
