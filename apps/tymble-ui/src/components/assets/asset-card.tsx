@@ -1,6 +1,6 @@
 import type { PortfolioWithRelations } from '@tymble/schemas';
-import { Badge } from '@/ui/badge';
 import { Card, CardContent, CardHeader } from '@/ui/card';
+import { InstrumentBadge } from '../instrument/instrument.badge';
 
 type Asset = PortfolioWithRelations['assets'][number];
 type Props = {
@@ -22,7 +22,7 @@ export const AssetCard = ({ asset }: Props) => {
               {asset.instrument.name}
             </p>
           </div>
-          <Badge variant="outline">{asset.instrument.type}</Badge>
+          <InstrumentBadge instrumentType={asset.instrument.type} />
         </div>
       </CardHeader>
       <CardContent>
