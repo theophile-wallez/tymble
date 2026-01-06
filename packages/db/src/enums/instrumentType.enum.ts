@@ -1,7 +1,7 @@
 import { pgEnum } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 
-const instrumentTypes = [
+const INSTRUMENT_TYPES = [
   'equity',
   'bond',
   'etf',
@@ -15,8 +15,8 @@ const instrumentTypes = [
 
 export const instrumentTypeDbSchema = pgEnum(
   'instrument_type',
-  instrumentTypes
+  INSTRUMENT_TYPES
 );
 
-export type InstrumentType = (typeof instrumentTypes)[number];
-export const instrumentTypeSchema = z.enum(instrumentTypes);
+export type InstrumentType = (typeof INSTRUMENT_TYPES)[number];
+export const instrumentTypeSchema = z.enum(INSTRUMENT_TYPES);

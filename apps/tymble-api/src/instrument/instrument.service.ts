@@ -109,6 +109,7 @@ export class InstrumentService {
       }
       return true;
     });
+
     const newInstruments = filteredQuotes
       .map((quote) => {
         const type =
@@ -134,15 +135,27 @@ export class InstrumentService {
           return null;
         }
 
-        const { symbol, quoteType, exchange, ...metadata } = quote;
+        const {
+          symbol,
+          quoteType,
+          exchange,
+          exchDisp,
+          sectorDisp,
+          industryDisp,
+          typeDisp: _typeDisp,
+          ...metadata
+        } = quote;
 
+        // ? NOTE: We can be lazy on typing here because we're validating the data using Zod.
         const newInstrument = {
           symbol: symbol as string,
           name: instrumentName,
           type: YF_QUOTE_TYPE_TO_TYPE_MAP[
             quoteType as keyof typeof YF_QUOTE_TYPE_TO_TYPE_MAP
           ],
-          exchange: (exchange as string) ?? null,
+          exchange: (exchDisp ?? exchange) as string,
+          sector: sectorDisp as string,
+          industry: industryDisp as string,
           metadata,
         } satisfies CreateInstrument['dto'];
 
@@ -223,13 +236,13 @@ export class InstrumentService {
     this.logger.log(`Searching for instruments by name: ${query}`);
 
     // First, search our database
-    const dbInstrument = await this.fuzzySearch(query);
+    const dbInstruments = await this.fuzzySearch(query);
     this.logger.log(
-      `Found ${dbInstrument.length} results in database for "${query}"`
+      `Found ${dbInstruments.length} results in database for "${query}"`
     );
 
-    if (dbInstrument.length >= MIN_DB_RESULTS) {
-      return { instruments: dbInstrument };
+    if (dbInstruments.length >= MIN_DB_RESULTS) {
+      return { instruments: dbInstruments };
     }
 
     // Otherwise, supplement with Yahoo Finance
@@ -249,7 +262,7 @@ export class InstrumentService {
       yfQuotes = yfRes?.quotes ?? [];
     } catch (error) {
       this.logger.warn(`Yahoo Finance search failed for "${name}"`, error);
-      return { instruments: dbInstrument };
+      return { instruments: dbInstruments };
     }
 
     // Filter for quotes with symbols and mark as Yahoo Finance results
@@ -259,7 +272,7 @@ export class InstrumentService {
     );
 
     // Combine results, DB first, then Yahoo Finance (excluding duplicates)
-    const dbSymbols = new Set(dbInstrument.map((q) => q.symbol.toUpperCase()));
+    const dbSymbols = new Set(dbInstruments.map((q) => q.symbol.toUpperCase()));
     const uniqueYfQuotes = markedYfQuotes.filter(
       (q) => !dbSymbols.has(q.symbol.toUpperCase())
     );
@@ -268,10 +281,10 @@ export class InstrumentService {
     if (uniqueYfQuotes.length > 0) {
       const newInstruments =
         await this.saveYahooFinanceInstruments(uniqueYfQuotes);
-      return { instruments: [...dbInstrument, ...newInstruments] };
+      return { instruments: [...dbInstruments, ...newInstruments] };
     }
 
-    return { instruments: dbInstrument };
+    return { instruments: dbInstruments };
   }
 
   async findOne(id: string) {

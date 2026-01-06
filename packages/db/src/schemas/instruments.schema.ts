@@ -1,6 +1,6 @@
 import * as d from 'drizzle-orm/pg-core';
 import { z } from 'zod';
-import { instrumentTypeDbSchema } from '../enums';
+import { type InstrumentType, instrumentTypeDbSchema } from '../enums';
 import {
   withTimestamps,
   zodInsertGenerator,
@@ -54,22 +54,81 @@ export const instrumentTable = d.pgTable('instruments', {
   type: instrumentTypeDbSchema('type').notNull(),
   exchange: d.varchar({ length: 100 }),
   metadata: d.jsonb().$type<InstrumentMetadata>(),
+  sector: d.varchar({ length: 100 }),
+  industry: d.varchar({ length: 100 }),
+  website: d.varchar({ length: 255 }),
   currency: d.varchar({ length: 10 }),
   ...withTimestamps,
 });
 
-export const instrumentSelectSchema = zodSelectGenerator(
-  instrumentTable
-).extend({});
-export const instrumentInsertSchema = zodInsertGenerator(
-  instrumentTable
-).extend({
-  name: z.string().min(1, 'Name should be at least 1 character'),
-});
-export const instrumentUpdateSchema = zodUpdateGenerator(
-  instrumentTable
-).extend({});
+/**
+ * Reusable: "if type === 'equity' then sector & industry are required"
+ *
+ * Assumptions:
+ * - Base schema has keys: type, sector, industry
+ * - Base schema's `type` includes 'equity'
+ */
+function withEquityRequirements<S extends z.ZodTypeAny>(base: S) {
+  // biome-ignore lint/suspicious/noExplicitAny: We're getting out of my TypeScript patience
+  return base.superRefine((data: any, ctx) => {
+    if (data?.type === 'equity' && !(data?.sector && data?.industry)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Sector and industry are required for equity',
+      });
+    }
+  });
+}
 
-export type InstrumentSelect = z.infer<typeof instrumentSelectSchema>;
-export type InstrumentInsert = z.infer<typeof instrumentInsertSchema>;
-export type InstrumentUpdate = z.infer<typeof instrumentUpdateSchema>;
+// ---- usage ----
+
+export const instrumentSelectSchema = withEquityRequirements(
+  zodSelectGenerator(instrumentTable)
+);
+
+export const instrumentInsertSchema = withEquityRequirements(
+  zodInsertGenerator(instrumentTable).extend({
+    name: z.string().min(1, 'Name should be at least 1 character'),
+  })
+);
+
+export const instrumentUpdateSchema = withEquityRequirements(
+  zodUpdateGenerator(instrumentTable)
+);
+
+/**
+ * ### Why did I create this horendous helper?
+ *
+ * I basically want to have a type safe way to access the `sector` and `industry` fields *only* if the type is `'equity'`.
+ *
+ * I did not find a way to do this using Zod, since:
+ * - using `zod.superRefine()` does not create a type discriminated union.
+ * - using `schema.and(z.discriminatedUnion('type', [...]))` creates an underlying union zod object,
+ * which makes using `z.object` functions such as `.omit()` or `.extend()` later on impossible.
+ *
+ * This way, my schemas keep being actual *"z.object() like"* objects with their associated functions.
+ */
+
+type WithEquityRequirements<
+  ProvidedType extends {
+    type?: InstrumentType;
+    sector?: string | null;
+    industry?: string | null;
+  },
+> =
+  | ({
+      type: Extract<ProvidedType['type'], 'equity'>;
+    } & Omit<ProvidedType, 'type'>)
+  | ({
+      type: Exclude<ProvidedType['type'], 'equity'>;
+    } & Omit<ProvidedType, 'type' | 'sector' | 'industry'>);
+
+export type InstrumentSelect = WithEquityRequirements<
+  z.infer<typeof instrumentSelectSchema>
+>;
+export type InstrumentInsert = WithEquityRequirements<
+  z.infer<typeof instrumentInsertSchema>
+>;
+export type InstrumentUpdate = WithEquityRequirements<
+  z.infer<typeof instrumentUpdateSchema>
+>;
