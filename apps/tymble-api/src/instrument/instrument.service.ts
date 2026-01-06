@@ -15,7 +15,7 @@ import type { YahooFinanceType } from '@/stocks/yahoo-finance.provider';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 
-const MIN_DB_RESULTS = 3;
+const MIN_DB_RESULTS = 10;
 const SUGGESTED_SYMBOLS = [
   'AAPL',
   'MSFT',
@@ -227,6 +227,10 @@ export class InstrumentService {
     this.logger.log(
       `Found ${dbInstrument.length} results in database for "${query}"`
     );
+
+    if (dbInstrument.length >= MIN_DB_RESULTS) {
+      return { instruments: dbInstrument };
+    }
 
     // Otherwise, supplement with Yahoo Finance
     this.logger.log(`Supplementing with Yahoo Finance search for "${query}"`);
